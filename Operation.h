@@ -12,20 +12,16 @@ namespace Juse
 			size_t size = 0;
 		};
 
+		std::string mnemu;
+		std::string ecal;
 		std::vector<Argument> arguments;
 		OperationFunction code;
 
 	public:
-		Operation(OperationFunction, std::vector<Argument>);
+		Operation(std::string = {}, std::string = {}, OperationFunction = {}, std::vector<Argument> = {});
+		std::string mnemuCode() { return mnemu; }
 		U64 argument(Instruction, size_t = 0);
-		inline size_t length()
-		{
-			size_t size = 2;
-			for (Argument argument : arguments) {
-				size += argument.size;
-			}
-			return size;
-		}
+		size_t length();
 		void operator()(Machine&, Instruction);
 	};
 

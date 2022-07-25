@@ -140,9 +140,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cpu.cpp" />
-    <ClCompile Include="Machine.cpp" />
+    <ClCompile Include="Machine.cpp">
+      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
+    </ClCompile>
     <ClCompile Include="Operation.cpp" />
     <ClCompile Include="operations.cpp" />
+    <ClCompile Include="operations_control.cpp" />
+    <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="VirtualMachine.cpp" />
   </ItemGroup>
   <ItemGroup>

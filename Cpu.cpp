@@ -1,13 +1,14 @@
 
 
+#include "Operation.h"
 #include "Machine.h"
 #include "Cpu.h"
-#include "operations.h"
 
 Juse::Cpu::Cpu() :
 	pool_pointer(0),
 	segment_pointer(0),
-	instruction_pointer(0)
+	instruction_pointer(0),
+	flag_exit(false)
 { }
 
 void Juse::Cpu::forward()
@@ -22,28 +23,76 @@ void Juse::Cpu::forward()
 	} else instruction_pointer++;
 }
 
+Juse::U64 Juse::Cpu::addressPointer()
+{
+	return Address::with(pool_pointer, segment_pointer, instruction_pointer);
+}
+
+void Juse::Cpu::jump(U16 pool, U32 segment, U16 instruction)
+{
+	pool_pointer = pool;
+	segment_pointer = segment;
+	instruction_pointer = instruction;
+}
+void Juse::Cpu::longjump(U64 address)
+{
+	Address a = Address::from(address);
+	pool_pointer = a.pool;
+	segment_pointer = a.segment;
+	instruction_pointer = a.datum;
+}
+
+bool Juse::Cpu::shouldExit()
+{
+	return flag_exit;
+}
+
 void Juse::Cpu::cycle(Machine& machine)
 {
 	U16 identifier = 0;
-	Juse::Operation current = machine.getOperation(identifier);
+	S<Juse::Operation> current = machine.getOperation(identifier);
 	Instruction instruction = {ByteSet{U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier)}};
-	ByteSet toAdd = machine.read(current.length() - 2);
+	ByteSet toAdd = machine.read(current->length() - 2);
 	for (U8 add : toAdd) {
 		instruction.data.push_back(add);
 	}
-	current(machine, instruction);
+	(*current)(machine, instruction);
 }
 
+Juse::U8 Juse::Cpu::dataAt(Memory& memory, U64 address)
+{
+	Address a = Address::from(address);
+	return (*(*memory[a.pool])[a.segment])[a.datum];
+}
+
+Juse::U8 Juse::Cpu::data(Memory& memory)
+{
+	return dataAt(memory, addressPointer());
+}
+
+Juse::U16 Juse::Cpu::pool()
+{
+	return pool_pointer;
+}
+
+Juse::U16 Juse::Cpu::segment()
+{
+	return segment_pointer;
+}
+
+Juse::U16 Juse::Cpu::instruction()
+{
+	return instruction_pointer;
+}
+
+Juse::S<Juse::Operation> Juse::Cpu::NoOp = S<Operation>(new Operation(
+	"NOP",
+	"",
+	[] (Machine& machine, Instruction& instruction, Operation& operation) { },
+	{}
+));
 
 void Juse::Cpu::initOperations()
 {
-	operations[0x0000] = Operations::NoOp;
-	operations[0x0100] = Operations::ShortJump;
-	operations[0x0101] = Operations::SegmentJump;
-	operations[0x0102] = Operations::LongJump;
-	operations[0x0103] = Operations::Return;
-	operations[0x0104] = Operations::FarReturn;
-	operations[0x0105] = Operations::Call;
-	operations[0x0106] = Operations::FarCall;
-
+	operations[0x0000] = NoOp;
 }

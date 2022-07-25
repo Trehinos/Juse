@@ -2,7 +2,6 @@
 
 #include "types.h"
 #include "Cpu.h"
-#include "operations.h"
 
 #include <cstdint>
 #include <utility>
@@ -12,55 +11,40 @@
 namespace Juse
 {
 
-	U64 set2word(ByteSet bytes)
-	{
-		U64 word = 0;
-		for (U8 byte : bytes) {
-			word <<= 8;
-			word += byte;
-		}
-		return word;
-	}
+	U64 set2word(ByteSet bytes);
 
 	class Machine
 	{
 
 	public:
 		Cpu cpu;
-		Memory memory;
+		P<Memory> memory;
 		Stack stack;
+
+		/* Move operations location */
+		U16 dataPool;
+		U32 dataSegment;
+
+		GeneralRegisters<U8> bytes;
+		GeneralRegisters<U16> words;
+		GeneralRegisters<U32> quads;
+		GeneralRegisters<U64> octs;
+
 
 		Machine();
 		static Machine loadFile(std::string);
 
-		void createSegment(U16 pool_index, U32 segment_index)
-		{
-			memory[pool_index][segment_index] = Segment();
-		}
+		void createPool(U16);
+		void createSegment(U16, U32);
 
-		inline void push(U8 byte) { stack.push(byte); }
-		inline U8 pop() { U8 byte = stack.top(); stack.pop(); return byte; }
+		void push(U8);
+		U8 pop();
 
-		inline ByteSet read(size_t nb_bytes)
-		{
-			ByteSet bytes{};
-			for (size_t i = 0; i < nb_bytes; i++) {
-				bytes.push_back(cpu.data(memory));
-				cpu.forward();
-			}
-			return bytes;
-		}
-		
-		inline Operation getOperation(U16& id)
-		{
-			ByteSet identifier = read(2);
+		ByteSet read(size_t);
 
-			try {
-				return cpu.operations.at(id = set2word(identifier));
-			} catch (std::out_of_range) {
-				return Operations::NoOp;
-			}
-		}
+		ByteSet readAt(U64, size_t);
+
+		S<Operation> getOperation(U16&);
 
 		void run();
 

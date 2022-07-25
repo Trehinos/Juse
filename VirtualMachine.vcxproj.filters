@@ -24,10 +24,16 @@
     <ClCompile Include="Operation.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="operations.cpp">
+    <ClCompile Include="operations_control.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Cpu.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="operations_registers.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="operations.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
