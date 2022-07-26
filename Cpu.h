@@ -15,9 +15,10 @@ namespace Juse
 		U32 segment_pointer;
 		U16 instruction_pointer;
 
+	public:
 		bool flag_exit;
 
-	public:
+
 		static S<Operation> NoOp;
 		OperationMap operations;
 
@@ -29,7 +30,7 @@ namespace Juse
 		void longjump(U64 address);
 		bool shouldExit();
 
-		void cycle(Machine&);
+		void cycle(Machine&, bool = false);
 
 		U8 dataAt(Memory& memory, U64 address);
 

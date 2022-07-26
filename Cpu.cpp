@@ -1,4 +1,5 @@
 
+#include <iomanip>
 
 #include "Operation.h"
 #include "Machine.h"
@@ -49,14 +50,30 @@ bool Cpu::shouldExit()
 	return flag_exit;
 }
 
-void Cpu::cycle(Machine& machine)
+void Cpu::cycle(Machine& machine, bool debug)
 {
 	U16 identifier = 0;
+	if (debug) {
+		machine.out << "@" << std::hex << std::right << std::setfill('0') << std::setw(4);
+		machine.out << (int)instruction_pointer << " : ";
+	}
+
 	S<Operation> current = machine.getOperation(identifier);
 	Instruction instruction = {ByteSet{U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier)}};
 	ByteSet toAdd = machine.read(current->length() - 2);
 	for (U8 add : toAdd) {
 		instruction.data.push_back(add);
+	}
+	if (debug) {
+		for (U8 byte : instruction.data) {
+			machine.out << std::setw(2) << std::hex << (int)(unsigned char)byte;
+		}
+		machine.out << " : " << current->getName() << " ";
+		size_t index = 0;
+		for (Argument argument : current->getArgumentDefs()) {
+			machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::hex << current->argument(instruction, index++);
+		}
+		machine.out << std::endl;
 	}
 	(*current)(machine, instruction);
 }
@@ -88,6 +105,7 @@ U16 Cpu::instruction()
 }
 
 S<Operation> Cpu::NoOp = S<Operation>(new Operation(
+	"Nothing",
 	"NOP",
 	"",
 	[] (Machine& machine, Instruction& instruction, Operation& operation) { },

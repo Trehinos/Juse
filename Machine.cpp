@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "Machine.h"
 
 using namespace Juse;
@@ -12,10 +14,12 @@ U64 Juse::set2word(ByteSet bytes)
 	return word;
 }
 
-Machine::Machine() :
+Machine::Machine(std::istream& ins, std::ostream& outs) :
 	memory{},
 	stack(),
 	cpu(),
+	in{ ins },
+	out{ outs },
 
 	dataPool{0},
 	dataSegment{0},
@@ -31,8 +35,17 @@ Machine::Machine() :
 
 Machine Machine::loadFile(std::string filename)
 {
-	// TODO
-	return Machine();
+	return Machine(std::cin, std::cout);
+}
+
+Machine Juse::Machine::fromData(Segment& segment)
+{
+	Machine machine = Machine(std::cin, std::cout);
+
+	S<Segment> current = machine.getSegment(0, 0);
+	std::copy(segment.begin(), segment.end(), current->begin());
+
+	return machine;
 }
 
 void Machine::createPool(U16 pool_index)
@@ -46,6 +59,16 @@ void Machine::createSegment(U16 pool_index, U32 segment_index)
 		createPool(pool_index);
 	}
 	((*memory)[pool_index])->insert({segment_index, makeS<Segment>()});
+}
+
+S<Pool> Juse::Machine::getPool(U16 pool_index)
+{
+	return (*memory)[pool_index];
+}
+
+S<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
+{
+	return (*getPool(pool_index))[segment_index];
 }
 
 void Machine::push(U8 byte)
@@ -93,9 +116,9 @@ S<Operation> Machine::getOperation(U16& id)
 	}
 }
 
-void Machine::run()
+void Machine::run(bool debug)
 {
 	while (!cpu.shouldExit()) {
-		cpu.cycle(*this);
+		cpu.cycle(*this, debug);
 	}
 }

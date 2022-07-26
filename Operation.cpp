@@ -5,11 +5,12 @@
 using namespace Juse;
 
 Operation::Operation(
+	std::string name,
 	std::string mnemu,
 	std::string ecal,
 	OperationFunction code,
 	std::vector<Argument> arguments
-) : mnemu(mnemu), ecal(ecal), code(code), arguments(arguments)
+) : name(name), mnemu(mnemu), ecal(ecal), code(code), arguments(arguments)
 { }
 
 U64 Operation::argument(Instruction instruction, size_t index)
@@ -19,6 +20,11 @@ U64 Operation::argument(Instruction instruction, size_t index)
 		offset += arguments[i].size;
 	}
 	return instruction.argument(offset, arguments[index].size);
+}
+
+std::vector<Argument> Juse::Operation::getArgumentDefs()
+{
+	return arguments;
 }
 
 size_t Operation::length()

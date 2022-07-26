@@ -7,6 +7,7 @@ namespace Juse
 {
 	void createControlOperations(Cpu&);
 	void createRegistersOperations(Cpu&);
+	void createMemoryOperations(Cpu&);
 
 	/* 
 	* Create operations

@@ -9,4 +9,5 @@ void Juse::init(Cpu& cpu)
 	// Creation of all operations
 	createControlOperations(cpu);
 	createRegistersOperations(cpu);
+	createMemoryOperations(cpu);
 }

@@ -1,12 +1,11 @@
 #pragma once
 
+#include <iostream>
+#include <utility>
+#include <stdexcept>
+
 #include "types.h"
 #include "Cpu.h"
-
-#include <cstdint>
-#include <utility>
-#include <stack>
-#include <stdexcept>
 
 namespace Juse
 {
@@ -17,6 +16,9 @@ namespace Juse
 	{
 
 	public:
+		std::ostream& out;
+		std::istream& in;
+
 		Cpu cpu;
 		P<Memory> memory;
 		Stack stack;
@@ -31,11 +33,15 @@ namespace Juse
 		GeneralRegisters<U64> longs;
 
 
-		Machine();
+		Machine(std::istream&, std::ostream&);
 		static Machine loadFile(std::string);
+		static Machine fromData(Segment&);
 
 		void createPool(U16);
 		void createSegment(U16, U32);
+
+		S<Pool> getPool(U16);
+		S<Segment> getSegment(U16, U32);
 
 		void push(U8);
 		U8 pop();
@@ -47,7 +53,7 @@ namespace Juse
 
 		S<Operation> getOperation(U16&);
 
-		void run();
+		void run(bool = false);
 
 	};
 }
