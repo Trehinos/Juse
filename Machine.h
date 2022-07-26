@@ -28,7 +28,7 @@ namespace Juse
 		GeneralRegisters<U8> bytes;
 		GeneralRegisters<U16> words;
 		GeneralRegisters<U32> quads;
-		GeneralRegisters<U64> octs;
+		GeneralRegisters<U64> longs;
 
 
 		Machine();
@@ -43,6 +43,7 @@ namespace Juse
 		ByteSet read(size_t);
 
 		ByteSet readAt(U64, size_t);
+		ByteSet readData(U16, size_t);
 
 		S<Operation> getOperation(U16&);
 

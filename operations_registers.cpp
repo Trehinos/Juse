@@ -37,11 +37,11 @@ namespace Juse
 			));
 		cpu.operations[0x0203] = S<Operation>(new Operation(
 			"SET64",
-			"Set Oct:$1 = $2",
+			"Set Long:$1 = $2",
 			[] (Machine& machine, Instruction& instruction, Operation& operation) {
 				U8 register_index = U8(operation.argument(instruction, 0));
 				U64 value = operation.argument(instruction, 1);
-				machine.octs[register_index] = value;
+				machine.longs[register_index] = value;
 			},
 			{{SIZE8}, {SIZE64}}
 			));
@@ -51,11 +51,11 @@ namespace Juse
 			"Move Byte:$1 = $2",
 			[] (Machine& machine, Instruction& instruction, Operation& operation) {
 				U8 register_index = U8(operation.argument(instruction, 0));
-				U64 address = operation.argument(instruction, 1);
-				U8 value = U8(set2word(machine.readAt(SIZE8, address)));
+				U16 address = U16(operation.argument(instruction, 1));
+				U8 value = U8(set2word(machine.readData(address, SIZE8)));
 				machine.bytes[register_index] = value;
 			},
-			{{SIZE8}, {SIZE64}}
+			{{SIZE8}, {SIZE16}}
 			));
 
 		cpu.operations[0x0205] = S<Operation>(new Operation(
@@ -63,11 +63,11 @@ namespace Juse
 			"Move Word:$1 = $2",
 			[] (Machine& machine, Instruction& instruction, Operation& operation) {
 				U8 register_index = U8(operation.argument(instruction, 0));
-				U64 address = operation.argument(instruction, 1);
-				U16 value = U16(set2word(machine.readAt(SIZE16, address)));
+				U16 address = U16(operation.argument(instruction, 1));
+				U16 value = U16(set2word(machine.readData(address, SIZE16)));
 				machine.words[register_index] = value;
 			},
-			{{SIZE8}, {SIZE64}}
+			{{SIZE8}, {SIZE16}}
 			));
 
 		cpu.operations[0x0206] = S<Operation>(new Operation(
@@ -75,23 +75,23 @@ namespace Juse
 			"Move Quad:$1 = $2",
 			[] (Machine& machine, Instruction& instruction, Operation& operation) {
 				U8 register_index = U8(operation.argument(instruction, 0));
-				U64 address = operation.argument(instruction, 1);
-				U32 value = U32(set2word(machine.readAt(SIZE32, address)));
+				U16 address = U16(operation.argument(instruction, 1));
+				U32 value = U32(set2word(machine.readData(address, SIZE32)));
 				machine.quads[register_index] = value;
 			},
-			{{SIZE8}, {SIZE64}}
+			{{SIZE8}, {SIZE16}}
 			));
 
 		cpu.operations[0x0207] = S<Operation>(new Operation(
 			"MOVE64",
-			"Move Oct:$1 = $2",
+			"Move Long:$1 = $2",
 			[] (Machine& machine, Instruction& instruction, Operation& operation) {
 				U8 register_index = U8(operation.argument(instruction, 0));
-				U64 address = operation.argument(instruction, 1);
-				U64 value = set2word(machine.readAt(SIZE64, address));
-				machine.octs[register_index] = value;
+				U16 address = U16(operation.argument(instruction, 1));
+				U64 value = set2word(machine.readData(address, SIZE64));
+				machine.longs[register_index] = value;
 			},
-			{{SIZE8}, {SIZE64}}
+			{{SIZE8}, {SIZE16}}
 			));
 	}
 }

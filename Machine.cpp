@@ -14,10 +14,14 @@ Juse::Machine::Machine() :
 	memory{},
 	stack(),
 	cpu(),
+
+	dataPool{0},
+	dataSegment{0},
+
 	bytes(),
 	words(),
 	quads(),
-	octs()
+	longs()
 {
 	memory = makeP<Memory>();
 	createSegment(0, 0);
@@ -25,6 +29,7 @@ Juse::Machine::Machine() :
 
 Juse::Machine Juse::Machine::loadFile(std::string filename)
 {
+	// TODO
 	return Machine();
 }
 
@@ -43,12 +48,12 @@ void Juse::Machine::createSegment(U16 pool_index, U32 segment_index)
 
 void Juse::Machine::push(U8 byte)
 {
-	stack.push(byte); 
+	stack.push(byte);
 }
 
 Juse::U8 Juse::Machine::pop()
 {
-	U8 byte = stack.top(); stack.pop(); return byte; 
+	U8 byte = stack.top(); stack.pop(); return byte;
 }
 
 Juse::ByteSet Juse::Machine::read(size_t nb_bytes)
@@ -68,6 +73,11 @@ Juse::ByteSet Juse::Machine::readAt(U64 address, size_t nb_bytes)
 		bytes.push_back(cpu.dataAt(*memory, i));
 	}
 	return bytes;
+}
+
+Juse::ByteSet Juse::Machine::readData(U16 datum, size_t nb_bytes)
+{
+	return readAt(Address::with(dataPool, dataSegment, datum), nb_bytes);
 }
 
 Juse::S<Juse::Operation> Juse::Machine::getOperation(U16& id)
