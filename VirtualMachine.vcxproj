@@ -148,7 +148,7 @@
     <ClCompile Include="operations.cpp" />
     <ClCompile Include="operations_control.cpp" />
     <ClCompile Include="operations_registers.cpp" />
-    <ClCompile Include="VirtualMachine.cpp" />
+    <ClCompile Include="Juse.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cpu.h" />
