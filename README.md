@@ -14,8 +14,8 @@ It may be compared to the JVM or the CLR machines.
 - A **multipurpose virtual machine** written in modern C++
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
 - Addresses are 64 bits long, chunked as : `Pool[U16]:Segment[U32]:U8[U16]`
-- One `Segment` is 64KiB. It is the smallest amount of memory a program takes.
-
+- **One `Segment` is 64KiB**. It is the smallest amount of memory a program takes.
+- 
 
 ## Dependencies
 
