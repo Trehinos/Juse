@@ -158,6 +158,12 @@
     <ClInclude Include="operations.h" />
     <ClInclude Include="types.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="example.ecal" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="ecalv3.xml" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -57,4 +57,10 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="example.ecal" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="ecalv3.xml" />
+  </ItemGroup>
 </Project>
