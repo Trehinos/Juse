@@ -1,0 +1,7 @@
+SJUMP 0x10
+; 0x04
+"Hello world" 0
+; 0x10
+WASCII 0x04
+END
+

@@ -2,42 +2,41 @@
 
 #include "types.h"
 
-namespace Juse
-{
+namespace Juse {
 
-	class Cpu
-	{
+class Cpu {
 
-		/*
-		* Registers
-		*/
-		U16 pool_pointer;
-		U32 segment_pointer;
-		U16 instruction_pointer;
+  /*
+   * Registers
+   */
+  U16 pool_pointer;
+  U32 segment_pointer;
+  U16 instruction_pointer;
 
-	public:
-		bool flag_exit;
+public:
+  bool flag_exit;
+  bool flag_debug;
 
+  static S<Operation> NoOp;
+  OperationMap operations;
 
-		static S<Operation> NoOp;
-		OperationMap operations;
+  Cpu();
+  void initOperations();
+  void forward();
+  U64 addressPointer();
+  void jump(U16, U32, U16);
+  void longjump(U64);
+  bool shouldExit();
 
-		Cpu();
-		void initOperations();
-		void forward();
-		U64 addressPointer();
-		void jump(U16 pool, U32 segment, U16 instruction);
-		void longjump(U64 address);
-		bool shouldExit();
+  void cycle(Machine &, bool = false);
 
-		void cycle(Machine&, bool = false);
+  U8 dataAt(Memory &, U64);
+  U8 data(Memory &);
 
-		U8 dataAt(Memory& memory, U64 address);
+  void set(Memory &, U64, U8);
 
-		U8 data(Memory& memory);
-
-		U16 pool();
-		U16 segment();
-		U16 instruction();
-	};
-}
+  U16 pool();
+  U16 segment();
+  U16 instruction();
+};
+} // namespace Juse

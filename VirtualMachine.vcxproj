@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -147,6 +147,7 @@
     <ClCompile Include="Operation.cpp" />
     <ClCompile Include="operations.cpp" />
     <ClCompile Include="operations_control.cpp" />
+    <ClCompile Include="operations_io.cpp" />
     <ClCompile Include="operations_memory.cpp" />
     <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="Juse.cpp" />
@@ -161,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="example.ecal" />
+    <None Include="LICENSE" />
+    <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="ecalv3.xml" />

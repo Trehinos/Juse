@@ -12,12 +12,12 @@
 ;;;;;;
 #DEFINE message "Hello world" ; #DEFINE is not required, it is an example
 
-@0 goto @start
 #SEGMENT data
+@0 goto @code:@start
 @message #DB~256 message 0
 
 #SEGMENT code
-@start out @message
+@start out S8 @message
 end
 
 ; PROGRAM WITH INCLUDE
@@ -30,8 +30,8 @@ end
 
 ; "FUNCTIONNAL"
 ;;;;;;
-@0 goto @start
 #SEGMENT data
+@0 goto @start
 @printBuffer #DL
 
 #SEGMENT code
@@ -46,6 +46,4 @@ alloc @tmp[8]
 pop @tmp
 out *@tmp
 return
-
-
 
