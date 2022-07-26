@@ -1,6 +1,8 @@
 #include "Machine.h"
 
-Juse::U64 Juse::set2word(Juse::ByteSet bytes)
+using namespace Juse;
+
+U64 Juse::set2word(ByteSet bytes)
 {
 	U64 word = 0;
 	for (U8 byte : bytes) {
@@ -10,7 +12,7 @@ Juse::U64 Juse::set2word(Juse::ByteSet bytes)
 	return word;
 }
 
-Juse::Machine::Machine() :
+Machine::Machine() :
 	memory{},
 	stack(),
 	cpu(),
@@ -27,36 +29,36 @@ Juse::Machine::Machine() :
 	createSegment(0, 0);
 }
 
-Juse::Machine Juse::Machine::loadFile(std::string filename)
+Machine Machine::loadFile(std::string filename)
 {
 	// TODO
 	return Machine();
 }
 
-void Juse::Machine::createPool(U16 pool_index)
+void Machine::createPool(U16 pool_index)
 {
-	memory->insert({pool_index, Juse::makeS<Pool>()});
+	memory->insert({pool_index, makeS<Pool>()});
 }
 
-void Juse::Machine::createSegment(U16 pool_index, U32 segment_index)
+void Machine::createSegment(U16 pool_index, U32 segment_index)
 {
 	if (!memory->contains(pool_index)) {
 		createPool(pool_index);
 	}
-	((*memory)[pool_index])->insert({segment_index, Juse::makeS<Segment>()});
+	((*memory)[pool_index])->insert({segment_index, makeS<Segment>()});
 }
 
-void Juse::Machine::push(U8 byte)
+void Machine::push(U8 byte)
 {
 	stack.push(byte);
 }
 
-Juse::U8 Juse::Machine::pop()
+U8 Machine::pop()
 {
 	U8 byte = stack.top(); stack.pop(); return byte;
 }
 
-Juse::ByteSet Juse::Machine::read(size_t nb_bytes)
+ByteSet Machine::read(size_t nb_bytes)
 {
 	ByteSet bytes{};
 	for (size_t i = 0; i < nb_bytes; i++) {
@@ -66,7 +68,7 @@ Juse::ByteSet Juse::Machine::read(size_t nb_bytes)
 	return bytes;
 }
 
-Juse::ByteSet Juse::Machine::readAt(U64 address, size_t nb_bytes)
+ByteSet Machine::readAt(U64 address, size_t nb_bytes)
 {
 	ByteSet bytes{};
 	for (U64 i = address; i < address + nb_bytes; i++) {
@@ -75,12 +77,12 @@ Juse::ByteSet Juse::Machine::readAt(U64 address, size_t nb_bytes)
 	return bytes;
 }
 
-Juse::ByteSet Juse::Machine::readData(U16 datum, size_t nb_bytes)
+ByteSet Machine::readData(U16 datum, size_t nb_bytes)
 {
 	return readAt(Address::with(dataPool, dataSegment, datum), nb_bytes);
 }
 
-Juse::S<Juse::Operation> Juse::Machine::getOperation(U16& id)
+S<Operation> Machine::getOperation(U16& id)
 {
 	ByteSet identifier = read(2);
 
@@ -91,7 +93,7 @@ Juse::S<Juse::Operation> Juse::Machine::getOperation(U16& id)
 	}
 }
 
-void Juse::Machine::run()
+void Machine::run()
 {
 	while (!cpu.shouldExit()) {
 		cpu.cycle(*this);
