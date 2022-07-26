@@ -1,13 +1,13 @@
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
 #include <map>
-#include <memory>
 #include <stack>
+#include <array>
 #include <string>
 #include <vector>
+#include <memory>
+#include <cstdint>
+#include <functional>
 
 namespace Juse {
 
@@ -31,17 +31,17 @@ using U16 = std::uint16_t;
 using U32 = std::uint32_t;
 using U64 = std::uint64_t;
 
+using I8 = std::int8_t;
+using I16 = std::int16_t;
+using I32 = std::int32_t;
+using I64 = std::int64_t;
+
 const U8 MASK_BOTTOM8 = 0xFF;
 const U16 MASK_16TOP8 = 0xFF00;
 const U16 MASK_BOTTOM16 = 0xFFFF;
 const U32 MASK_32TOP16 = 0xFFFF0000;
 const U32 MASK_BOTTOM32 = 0xFFFFFFFF;
 const U64 MASK_64TOP32 = 0xFFFFFFFF00000000;
-
-using I8 = std::int8_t;
-using I16 = std::int16_t;
-using I32 = std::int32_t;
-using I64 = std::int64_t;
 
 using Segment = std::array<U8, SEGMENT_SIZE>;
 using Pool = std::map<U32, S<Segment>>;
