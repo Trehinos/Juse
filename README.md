@@ -4,19 +4,19 @@ Juse is a virtual machine which executes bytecode.
 
 It is inspired by projects like :
 
-    - [Stack machines](https://en.wikipedia.org/wiki/Stack_machine) : [clarsen impl.](https://github.com/cslarsen/stack-machine)
-    - [Chip-8](https://fr.wikipedia.org/wiki/CHIP-8) : [JamesGriffin impl.](https://github.com/JamesGriffin/CHIP-8-Emulator) or [cookerlyk impl.](https://github.com/cookerlyk/Chip8),
-    - [Chip-16](https://github.com/chip16/chip16) : impl. listed on Github page.
-    - Other virtual chips : [Khepra VM](https://github.com/tykel/khepra-vm) ([impl.](https://github.com/tykel/qpra))
+- [Stack machines](https://en.wikipedia.org/wiki/Stack_machine) : [clarsen impl.](https://github.com/cslarsen/stack-machine)
+- [Chip-8](https://fr.wikipedia.org/wiki/CHIP-8) : [JamesGriffin impl.](https://github.com/JamesGriffin/CHIP-8-Emulator) or [cookerlyk impl.](https://github.com/cookerlyk/Chip8),
+- [Chip-16](https://github.com/chip16/chip16) : impl. listed on Github page.
+- Other virtual chips : [Khepra VM](https://github.com/tykel/khepra-vm) ([impl.](https://github.com/tykel/qpra))
 
 It could be compared to the JVM or the CLR machines.
 
 **Juse is still in early development.**
 
-    - For now, there are only 22 operations implemented.  
-      Nothing to play with... But if you are curious ;)
-    - An assembler language is planned.
-    - Focus is on the C++ code structure for now.
+- For now, there are only 22 operations implemented.  
+    Nothing to play with... But if you are curious ;)
+- An assembler language is planned.
+- Focus is on the C++ code structure for now.
 
 &copy; 2022 Sébastien GELDREICH
 
