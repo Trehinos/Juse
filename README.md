@@ -70,7 +70,7 @@ IN PROGRESS (will be moved in the wiki)
     WASCII      10F0 A(U16)                 : out S8 [DP:DS:A]          ; prints an ASCII '\0' terminated string
 
     ALLOCPOOL   F000 A(U16)                 : alloc A                   ; allocate a new Pool with no Segment
-    ALLOCSEG    F001 A(U16) B(U32)          : alloc B in A              ; allocate a new Segment in an existring Pool
+    ALLOCSEG    F001 A(U16) B(U32)          : alloc B in A              ; allocate a new Segment in an existing Pool
     ```
 
 ## License
