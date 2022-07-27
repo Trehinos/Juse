@@ -13,7 +13,7 @@ It could be compared to the JVM or the CLR machines.
 
 **Juse is still in early development.**
 
-- For now, there are only 22 operations implemented.  
+- For now, there are only 35 operations implemented.  
     Nothing to play with... But if you are curious ;)
 - An assembler language is planned.
 - Focus is on the C++ code structure for now.
@@ -65,32 +65,45 @@ Juse.exe [-d]
     - They are identified by their OpKey, which is 16 bits long (`U16`).
     - Implemented OpCodes :
     ```
-    NOP         0000
-
-    SJUMP       0100 A(U16)                 : goto CP:CS:A          <=> IP = A
-    JUMP        0101 A(U32) B(U16)          : goto CP:A:B           <=> CS = A; IP = B
-    LJUMP       0102 A(U64)                 : goto A                <=> CP:CS:IP = A
-    CALL        0103 A(U16)                 : call A                <=> Stack[] = IP; SJUMP A
-    RET         0104                        : return                <=> IP = Stack(U16)
-    LCALL       0105 A(U64)                 : call! A               <=> Stack[] = CP:CS:IP; LJUMP A
-    LRET        0106                        : return                <=> CP:CS:IP = Stack(U64)
-    DATAPOOL    0110 A(U16)                 : DP = A
-    DATASEG     0111 A(U32)                 : DS = A
-    END         01FF                        : flag_exit = true
-
-    SET8        0200 A(U8) B(U8)            : Byte[A] = B
-    SET16       0201 A(U8) B(U16)           : Word[A] = B
-    SET32       0202 A(U8) B(U32)           : Quad[A] = B
-    SET64       0203 A(U8) B(U64)           : Long[A] = B
-    COPYFROM8   0210 A(U8) B(U16)           : Byte[A] = [DP:DS:B]
-    COPYFROM16  0211 A(U8) B(U16)           : Word[A] = [DP:DS:B]
-    COPYFROM32  0212 A(U8) B(U16)           : Quad[A] = [DP:DS:B]
-    COPYFROM64  0213 A(U8) B(U16)           : Long[A] = [DP:DS:B]
-
-    WASCII      10F0 A(U16)                 : out S8 [DP:DS:A]          ; prints an ASCII '\0' terminated string
-
-    ALLOCPOOL   F000 A(U16)                 : alloc A                   ; allocate a new Pool with no Segment
-    ALLOCSEG    F001 A(U16) B(U32)          : alloc B in A              ; allocate a new Segment in an existing Pool
+    ===============================================================================================================
+    OP   : Mnemu code                                       | Ecal code                        | Operation name
+    ===============================================================================================================
+    0000 : NOP                                              |                                  | Nothing
+    0100 : SHJUMP          A(U16)                           | goto A                           | Short Jump
+    0101 : JUMP            A(U32) B(U16)                    | goto A:B                         | Jump
+    0102 : LJUMP           A(U64)                           | goto! A                          | Long Jump
+    0103 : CALL            A(U16)                           | call A                           | Call
+    0104 : RET                                              | return                           | Return
+    0105 : LCALL           A(U64)                           | call! A                          | Long Call
+    0106 : LRET                                             | return!                          | Long Return
+    0110 : DATAPOOL        A(U16)                           | datapool A                       | Set Data Pool
+    0111 : DATASEG         A(U32)                           | dataset A                        | Set Data Segment
+    01ff : END                                              | end                              | End Program
+    0200 : SET8            A(U8) B(U8)                      | Bytes[A] = B                     | Set Byte
+    0201 : SET16           A(U8) B(U16)                     | Words[A] = B                     | Set Word
+    0202 : SET32           A(U8) B(U32)                     | Quads[A] = B                     | Set Quad
+    0203 : SET64           A(U8) B(U64)                     | Longs[A] = B                     | Set Long
+    0210 : COPYFROM8       A(U8) B(U16)                     | Bytes[A] = [B]                   | Copy Byte From
+    0211 : COPYFROM16      A(U8) B(U16)                     | Words[A] = [B]                   | Copy Word From
+    0212 : COPYFROM32      A(U8) B(U16)                     | Quads[A] = [B]                   | Copy Quad From
+    0213 : COPYFROM64      A(U8) B(U16)                     | Longs[A] = [B]                   | Copy Long From
+    0220 : COPYTO8         A(U16) B(U8)                     | [A] = Bytes[B]                   | Copy Byte To
+    0221 : COPYTO16        A(U16) B(U8)                     | [A] = Words[B]                   | Copy Word To
+    0222 : COPYTO32        A(U16) B(U8)                     | [A] = Quads[B]                   | Copy Quad To
+    0223 : COPYTO64        A(U16) B(U8)                     | [A] = Longs[B]                   | Copy Long To
+    1000 : WINT8           A(U8)                            | out Bytes[A]                     | Write Byte
+    1001 : WINT16          A(U8)                            | out Words[A]                     | Write Word
+    1002 : WINT32          A(U8)                            | out Quads[A]                     | Write Quad
+    1003 : WINT64          A(U8)                            | out Longs[A]                     | Write Long
+    1010 : RINT8           A(U8)                            | in Bytes[A]                      | Read Byte
+    1011 : RINT16          A(U8)                            | in Words[A]                      | Read Word
+    1012 : RINT32          A(U8)                            | in Quads[A]                      | Read Quad
+    1013 : RINT64          A(U8)                            | in Longs[A]                      | Read Long
+    10f0 : WASCII          A(U16)                           | out S8 [A]                       | Write Ascii
+    2000 :                 A(U16)                           |                                  | Not implemented
+    f000 : ALLOCPOOL       A(U16)                           | alloc A                          | Allocate Pool
+    f001 : ALLOCSEG        A(U32) B(U16)                    | alloc A on B                     | Allocate Segment
+    ===============================================================================================================
     ```
 
 ## License
