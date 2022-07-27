@@ -35,7 +35,7 @@ IN PROGRESS (will be moved in the wiki)
 - System registers :
     - `CP` code pool, `CS` code segment, `IP` instruction pointer,
     - `DP` data pool, `DS` data segment,
-    - `exit_flag` (triggered by the `END` OpCode),
+    - `flag_exit` (triggered by the `END` OpCode),
     - `flag_debug` (always `true` for now).
 - Addresses are 64 bits long (`U64`), the memory is chunked as : `Pool[U16]:Segment[U32]:U8[U16]`
 - **One `Segment` is 64KiB**. It is the smallest amount of memory a program takes.
