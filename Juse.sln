@@ -44,6 +44,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIBS", "LIBS", "{453810FB-4
 		operations_control.cpp = operations_control.cpp
 		operations_io.cpp = operations_io.cpp
 		operations_memory.cpp = operations_memory.cpp
+		operations_pointers.cpp = operations_pointers.cpp
 		operations_registers.cpp = operations_registers.cpp
 	EndProjectSection
 EndProject

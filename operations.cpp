@@ -62,9 +62,11 @@ void Juse::dumpProgram(Machine &m, size_t max) {
 
 void Juse::init(Cpu &cpu) {
   cpu.initOperations();
+
   // Creation of all operations
   createControlOperations(cpu);
   createRegistersOperations(cpu);
   createIoOperations(cpu);
+  createPointersOperations(cpu);
   createMemoryOperations(cpu);
 }

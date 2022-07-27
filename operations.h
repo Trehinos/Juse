@@ -12,6 +12,7 @@ void dumpProgram(Machine &, size_t);
 void createControlOperations(Cpu &);
 void createRegistersOperations(Cpu &);
 void createIoOperations(Cpu &);
+void createPointersOperations(Cpu &);
 void createMemoryOperations(Cpu &);
 
 /*

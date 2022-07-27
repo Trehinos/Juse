@@ -149,6 +149,7 @@
     <ClCompile Include="operations_control.cpp" />
     <ClCompile Include="operations_io.cpp" />
     <ClCompile Include="operations_memory.cpp" />
+    <ClCompile Include="operations_pointers.cpp" />
     <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="Juse.cpp" />
   </ItemGroup>
