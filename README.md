@@ -47,13 +47,13 @@ IN PROGRESS (will be moved in the wiki)
     ```
     NOP         0000
 
-    SJUMP       0100 A(U16)                 : goto CP:CS:A
-    JUMP        0101 A(U32) B(U16)          : goto CP:A:B
-    LJUMP       0102 A(U64)                 : goto A
-    CALL        0103 A(U16)                 : call A (push IP; SJUMP A)
-    RET         0104                        : return (pop IP)
-    LCALL       0105 A(U64)                 : call! A (push CP:CS:IP; LJUMP A)
-    LRET        0106                        : return (CP:CS:IP = pop)
+    SJUMP       0100 A(U16)                 : goto CP:CS:A          <=> IP = A
+    JUMP        0101 A(U32) B(U16)          : goto CP:A:B           <=> CS = A; IP = B
+    LJUMP       0102 A(U64)                 : goto A                <=> CP:CS:IP = A
+    CALL        0103 A(U16)                 : call A                <=> Stack[] = IP; SJUMP A
+    RET         0104                        : return                <=> IP = Stack(U16)
+    LCALL       0105 A(U64)                 : call! A               <=> Stack[] = CP:CS:IP; LJUMP A
+    LRET        0106                        : return                <=> CP:CS:IP = Stack(U64)
     DATAPOOL    0110 A(U16)                 : DP = A
     DATASEG     0111 A(U32)                 : DS = A
     END         01FF                        : flag_exit = true
@@ -67,10 +67,10 @@ IN PROGRESS (will be moved in the wiki)
     COPYFROM32  0212 A(U8) B(U16)           : Quad[A] = [DP:DS:B]
     COPYFROM64  0213 A(U8) B(U16)           : Long[A] = [DP:DS:B]
 
-    WASCII      10F0 A(U16)                 : out S8 [DP:DS:A]
+    WASCII      10F0 A(U16)                 : out S8 [DP:DS:A]          ; prints an ASCII '\0' terminated string
 
-    ALLOCPOOL   F000 A(U16)                 : alloc A
-    ALLOCSEG    F001 A(U16) B(U32)          : alloc B in A
+    ALLOCPOOL   F000 A(U16)                 : alloc A                   ; allocate a new Pool with no Segment
+    ALLOCSEG    F001 A(U16) B(U32)          : alloc B in A              ; allocate a new Segment in an existring Pool
     ```
 
 ## License
