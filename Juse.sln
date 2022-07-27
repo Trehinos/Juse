@@ -3,7 +3,49 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VirtualMachine", "VirtualMachine.vcxproj", "{8F2B536B-C0E3-4301-B493-AABC265EDC98}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Juse", "VirtualMachine.vcxproj", "{8F2B536B-C0E3-4301-B493-AABC265EDC98}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MD", "MD", "{8C1C0D13-02D2-4A74-BA15-1834167B6777}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EXAMPLES", "EXAMPLES", "{CDA66F35-875A-475C-AA3C-B2398B97275B}"
+	ProjectSection(SolutionItems) = preProject
+		ecalv3.xml = ecalv3.xml
+		example.asm = example.asm
+		example.ecal = example.ecal
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CODE", "CODE", "{57B43AE3-222E-40D4-8929-458D11DEEDDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAIN", "MAIN", "{6E3FBA32-94D9-448A-B482-E7859CCE3563}"
+	ProjectSection(SolutionItems) = preProject
+		Juse.cpp = Juse.cpp
+		Juse.h = Juse.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HEADERS", "HEADERS", "{2C6C5C89-37E1-4383-B630-DA6759488080}"
+	ProjectSection(SolutionItems) = preProject
+		Cpu.h = Cpu.h
+		Machine.h = Machine.h
+		Operation.h = Operation.h
+		operations.h = operations.h
+		types.h = types.h
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIBS", "LIBS", "{453810FB-4301-4957-9AE3-EE96C29E6FEA}"
+	ProjectSection(SolutionItems) = preProject
+		Cpu.cpp = Cpu.cpp
+		Machine.cpp = Machine.cpp
+		Operation.cpp = Operation.cpp
+		operations.cpp = operations.cpp
+		operations_control.cpp = operations_control.cpp
+		operations_io.cpp = operations_io.cpp
+		operations_memory.cpp = operations_memory.cpp
+		operations_registers.cpp = operations_registers.cpp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +66,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6E3FBA32-94D9-448A-B482-E7859CCE3563} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
+		{2C6C5C89-37E1-4383-B630-DA6759488080} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
+		{453810FB-4301-4957-9AE3-EE96C29E6FEA} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4096B340-490B-4976-BD67-C980DDE55AF2}

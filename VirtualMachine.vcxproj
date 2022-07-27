@@ -161,6 +161,8 @@
     <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
+    <None Include="example.asm" />
     <None Include="example.ecal" />
     <None Include="LICENSE" />
     <None Include="README.md" />

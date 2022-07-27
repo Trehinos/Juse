@@ -10,6 +10,7 @@
 namespace Juse {
 
 U64 set2word(ByteSet bytes);
+template <typename T> ByteSet word2set(T);
 
 class Machine {
 

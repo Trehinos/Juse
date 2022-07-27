@@ -67,6 +67,10 @@
     <None Include="example.ecal" />
     <None Include="LICENSE" />
     <None Include="README.md" />
+    <None Include="example.asm">
+      <Filter>Fichiers sources</Filter>
+    </None>
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <Xml Include="ecalv3.xml" />

@@ -6,7 +6,7 @@ namespace Juse {
 /* 10xx */
 void createIoOperations(Cpu &cpu) {
   cpu.operations[0x10F0] = S<Operation>(new Operation(
-      "Write Ascii", "WASCII", "out S8 *$1",
+      "Write Ascii", "WASCII", "out S8 [$1]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U16 offset = 0;
