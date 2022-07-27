@@ -128,12 +128,13 @@ void Juse::Machine::writeData(U16 address, ByteSet set) {
 
 S<Operation> Machine::getOperation(U16 &id) {
   ByteSet identifier = read(2);
+  id = U16(set2word(identifier));
 
-  try {
-    return cpu.operations.at(id = U16(set2word(identifier)));
-  } catch (std::out_of_range) {
+  if (!cpu.operations.contains(id)) {
     return Cpu::NoOp;
   }
+
+  return cpu.operations[id];
 }
 
 void Machine::run(bool debug) {

@@ -43,7 +43,7 @@ IN PROGRESS (will be moved in the wiki)
     - `DP` data pool, `DS` data segment,
     - `flag_exit` (triggered by the `END` OpCode),
     - `flag_debug` (always `true` for now).
-- Addresses are 64 bits long (`U64`), the memory is chunked as : `Pool[U16]:Segment[U32]:U8[U16]`
+- Addresses are 64 bits long (`U64`), the memory is chunked as : `PooLongs[U16]:Segment[U32]:U8[U16]`
 - **One `Segment` is 64KiB**. It is the smallest amount of memory a program takes.
 - **256 general purpose registers** of each type : `Byte (U8)`, `Word (U16)`, `Quad (U32)`, `Long (U64)`
 - Operations 

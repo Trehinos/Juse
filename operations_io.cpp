@@ -1,60 +1,95 @@
 
+#include <sstream>
+#include <string>
+
 #include "operations.h"
 
 namespace Juse {
 
+void out(std::ostream &os, std::stringstream &ss, bool debug) {
+  if (debug) {
+    os << "  << ";
+  }
+  os << ss.str() << std::flush;
+  if (debug) {
+    os << std::endl;
+  }
+}
+std::string in(std::ostream &os, std::istream &is, bool debug) {
+  std::string str{};
+  if (debug) {
+    os << "  >> ";
+  }
+  std::getline(is >> std::ws, str);
+  is.clear();
+  return str;
+}
+
 /* 10xx */
 void createIoOperations(Cpu &cpu) {
   cpu.operations[0x1000] = S<Operation>(new Operation(
-      "Write Byte", "WINT8", "out B[$1]",
+      "Write Byte", "WINT8", "out Bytes[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
-        machine.out << std::dec << machine.bytes[register_index] << std::flush;
+        std::stringstream buffer{};
+        buffer << std::dec << +machine.bytes[register_index];
+        out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
   cpu.operations[0x1001] = S<Operation>(new Operation(
-      "Write Word", "WINT16", "out W[$1]",
+      "Write Word", "WINT16", "out Words[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
-        machine.out << std::dec << machine.words[register_index] << std::flush;
+        std::stringstream buffer{};
+        buffer << std::dec << machine.words[register_index];
+        out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
   cpu.operations[0x1002] = S<Operation>(new Operation(
-      "Write Quad", "WINT32", "out Q[$1]",
+      "Write Quad", "WINT32", "out Quads[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
-        machine.out << std::dec << machine.quads[register_index] << std::flush;
+        std::stringstream buffer{};
+        buffer << std::dec << machine.quads[register_index];
+        out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
   cpu.operations[0x1003] = S<Operation>(new Operation(
-      "Write Long", "WINT64", "out L[$1]",
+      "Write Long", "WINT64", "out Longs[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
-        machine.out << std::dec << machine.longs[register_index] << std::flush;
+        std::stringstream buffer{};
+        buffer << std::dec << machine.longs[register_index];
+        out(machine.out, buffer, machine.cpu.flag_debug);
+      },
+      {{SIZE8}}));
+  cpu.operations[0x1010] = S<Operation>(new Operation(
+      "Read Byte", "RINT8", "in Bytes[A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        U16 value;
+        std::stringstream buffer;
+        U8 register_index = U8(operation.argument(instruction, 0));
+        buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
+        buffer >> std::dec >> value;
+        machine.bytes[register_index] = U8(value);
       },
       {{SIZE8}}));
 
   cpu.operations[0x10F0] = S<Operation>(new Operation(
-      "Write Ascii", "WASCII", "out S8 [$1]",
+      "Write Ascii", "WASCII", "out S8 [A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U16 offset = 0;
-        std::string buffer{};
+        std::stringstream buffer{};
         U8 character{};
         do {
           character = U8(set2word(machine.readData(address + offset, 1)));
           if (character != '\0') {
-            buffer += character;
+            buffer << character;
           }
           offset++;
         } while (character != '\0');
-        if (machine.cpu.flag_debug) {
-          machine.out << "  > ";
-        }
-        machine.out << buffer << std::flush;
-        if (machine.cpu.flag_debug) {
-          machine.out << std::endl;
-        }
+        out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE16}}));
 }

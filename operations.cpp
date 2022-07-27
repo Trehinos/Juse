@@ -1,5 +1,6 @@
 
 #include <iomanip>
+#include <sstream>
 
 #include "operations.h"
 
@@ -14,23 +15,33 @@ void Juse::dumpOperations(Cpu &cpu) {
   using namespace std;
   cout << cpu.operations.size() << " operations loaded." << endl;
   cout << "===================================================================="
-          "================"
+          "==========================================="
        << endl;
   cout << setfill(' ') << right << setw(4) << "OP  "
-       << " : " << setw(10) << left << "Mnemu code"
-       << " | " << setw(32) << "Ecal code                       Operation name"
+       << " : " << setw(48) << left << "Mnemu code"
+       << " | " << setw(32) << "Ecal code"
+       << " | Operation name"
        << endl;
   cout << "===================================================================="
-          "================"
+          "==========================================="
        << endl;
   for (pair<U16, S<Operation>> operation : cpu.operations) {
+    std::stringstream arguments_str{};
+
+    arguments_str << left << setw(16) << operation.second->mnemuCode();
+    char argIndex = 'A';
+    for (Argument arg : operation.second->getArgumentDefs()) {
+      arguments_str << argIndex++ << "(U" << sizes.at(arg.size) << ") ";
+    }
+
     cout << setfill('0') << right << hex << setw(4) << operation.first << " : "
-         << setfill(' ') << setw(10) << left << operation.second->mnemuCode()
-         << " | " << setw(32) << operation.second->ecalCode()
-         << operation.second->getName() << endl;
+         << setfill(' ') << setw(48) << left << arguments_str.str() << " | "
+         << setw(32) << operation.second->ecalCode();
+
+    cout << " | " << operation.second->getName() << endl;
   }
   cout << "===================================================================="
-          "================\n"
+          "===========================================\n"
        << endl;
 }
 

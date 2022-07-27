@@ -1,13 +1,13 @@
 #pragma once
 
-#include <map>
-#include <stack>
 #include <array>
-#include <string>
-#include <vector>
-#include <memory>
 #include <cstdint>
 #include <functional>
+#include <map>
+#include <memory>
+#include <stack>
+#include <string>
+#include <vector>
 
 namespace Juse {
 
@@ -25,6 +25,9 @@ const size_t SIZE8 = 1;
 const size_t SIZE16 = 2;
 const size_t SIZE32 = 4;
 const size_t SIZE64 = 8;
+
+const std::map<size_t, size_t> sizes = {
+    {SIZE8, 8}, {SIZE16, 16}, {SIZE32, 32}, {SIZE64, 64}};
 
 using U8 = std::uint8_t;
 using U16 = std::uint16_t;
