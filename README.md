@@ -37,6 +37,20 @@ It could be compared to the JVM or the CLR machines.
 
 IN PROGRESS (will be moved in the wiki)
 
+### Usage
+
+- The program run by the VM is defined in the function `array<U8, 256> testProgram()` in `Juse.cpp`.
+    - You can increase the size of this array to a maximum of `SEGMENT_SIZE` (64 Ki = 65536).
+- To run the program, use the command :
+```
+Juse.exe [-d]
+```
+| Option | Description       |
+|--------|-------------------|
+| -d     | enable debug mode |
+
+### Some informations
+
 - The stack can only push/pop `IP` for now.
 - System registers :
     - `CP` code pool, `CS` code segment, `IP` instruction pointer,

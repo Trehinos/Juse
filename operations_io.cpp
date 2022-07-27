@@ -74,6 +74,39 @@ void createIoOperations(Cpu &cpu) {
         machine.bytes[register_index] = U8(value);
       },
       {{SIZE8}}));
+  cpu.operations[0x1011] = S<Operation>(new Operation(
+      "Read Word", "RINT16", "in Words[A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        U16 value;
+        std::stringstream buffer;
+        U8 register_index = U8(operation.argument(instruction, 0));
+        buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
+        buffer >> std::dec >> value;
+        machine.words[register_index] = value;
+      },
+      {{SIZE8}}));
+  cpu.operations[0x1012] = S<Operation>(new Operation(
+      "Read Quad", "RINT32", "in Quads[A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        U32 value;
+        std::stringstream buffer;
+        U8 register_index = U8(operation.argument(instruction, 0));
+        buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
+        buffer >> std::dec >> value;
+        machine.quads[register_index] = value;
+      },
+      {{SIZE8}}));
+  cpu.operations[0x1013] = S<Operation>(new Operation(
+      "Read Long", "RINT64", "in Longs[A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        U64 value;
+        std::stringstream buffer;
+        U8 register_index = U8(operation.argument(instruction, 0));
+        buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
+        buffer >> std::dec >> value;
+        machine.longs[register_index] = value;
+      },
+      {{SIZE8}}));
 
   cpu.operations[0x10F0] = S<Operation>(new Operation(
       "Write Ascii", "WASCII", "out S8 [A]",

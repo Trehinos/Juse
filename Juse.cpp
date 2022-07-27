@@ -11,22 +11,34 @@ array<U8, 256> testProgram() {
           /*018*/ 0x10, 0x10, 0x00, 0x10, 0x00, 0x00, 0x01, 0xFF};
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+  // Command-line arguments parsing
+  std::string program;
+  std::map<std::string, std::string> options;
+  std::tie(program, options) = parseArgs(argc, argv);
+
+  // Options interpretations
+  bool debug = options["mode"] == "debug";
+
   // Load program
   auto segment = makeS<Segment>();
   auto source = testProgram();
   copy(source.begin(), source.end(), segment->begin());
 
   // Init machine
-  auto machine = Machine::fromData(*segment);
+  auto machine = Machine::fromData(*segment); // TODO : run program from command line
   init(machine.cpu);
 
   // Dump information
   cout << "Trehinos/Juse " << VERSION << "\n(c) 2022 Trehinos\n" << endl;
-  dumpOperations(machine.cpu);
-  dumpProgram(machine, 256);
+  if (debug) {
+    dumpOperations(machine.cpu);
+    dumpProgram(machine, 256);
+  }
 
   // Run program
-  cout << endl << "Debug" << endl;
-  machine.run(true);
+  if (debug) {
+    cout << endl << "Debug program " << program << endl;
+  }
+  machine.run(debug);
 }
