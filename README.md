@@ -69,9 +69,9 @@ Juse.exe [-d]
     OP   : Mnemu code                                       | Ecal code                        | Operation name
     ===============================================================================================================
     0000 : NOP                                              |                                  | Nothing
-    0100 : SHJUMP          A(U16)                           | goto A                           | Short Jump
-    0101 : JUMP            A(U32) B(U16)                    | goto A:B                         | Jump
-    0102 : LJUMP           A(U64)                           | goto! A                          | Long Jump
+    0100 : SHJUMP          A(U16)                           | goto DP:DS:A                     | Short Jump
+    0101 : JUMP            A(U32) B(U16)                    | goto DP:A:B                      | Jump
+    0102 : LJUMP           A(U64)                           | goto A                           | Long Jump
     0103 : CALL            A(U16)                           | call A                           | Call
     0104 : RET                                              | return                           | Return
     0105 : LCALL           A(U64)                           | call! A                          | Long Call
@@ -95,6 +95,7 @@ Juse.exe [-d]
     1001 : WINT16          A(U8)                            | out Words[A]                     | Write Word
     1002 : WINT32          A(U8)                            | out Quads[A]                     | Write Quad
     1003 : WINT64          A(U8)                            | out Longs[A]                     | Write Long
+    1004 : WINT            A(U16)                           | out [DP:DS:A]                    | Write Direct
     1010 : RINT8           A(U8)                            | in Bytes[A]                      | Read Byte
     1011 : RINT16          A(U8)                            | in Words[A]                      | Read Word
     1012 : RINT32          A(U8)                            | in Quads[A]                      | Read Quad

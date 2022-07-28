@@ -1,15 +1,21 @@
 #pragma once
 
 #include <array>
+#include <concepts>
 #include <cstdint>
+#include <cuchar>
 #include <functional>
 #include <map>
 #include <memory>
+#include <sstream>
 #include <stack>
 #include <string>
 #include <vector>
 
 namespace Juse {
+
+template <typename T, typename... U>
+concept IsAnyOf = (std::same_as<T, U> || ...);
 
 const size_t SEGMENT_SIZE = 1 << 16; // 64 KiB
 
@@ -33,6 +39,13 @@ using U8 = std::uint8_t;
 using U16 = std::uint16_t;
 using U32 = std::uint32_t;
 using U64 = std::uint64_t;
+
+using CH8 = char;
+using CH16 = char16_t;
+using CH32 = char32_t;
+
+template <typename T>
+concept IsChar = IsAnyOf<T, CH8, CH16, CH32>;
 
 using I8 = std::int8_t;
 using I16 = std::int16_t;

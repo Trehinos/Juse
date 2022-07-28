@@ -1,10 +1,22 @@
-
-#include <sstream>
-#include <string>
+#include <codecvt>
 
 #include "operations.h"
 
 namespace Juse {
+
+template <IsChar From, IsChar To> struct Converter {
+
+  static To convert(From from) {
+    std::wstring_convert<std::codecvt<From, To, std::mbstate_t>, To> c;
+    switch (From) {
+    case CH8:
+      using StringType = std::u16string;
+      break;
+    }
+
+    return StringType(c.from_bytes(from, from + sizeof(from))).c_str();
+  }
+};
 
 void out(std::ostream &os, std::stringstream &ss, bool debug) {
   if (debug) {
@@ -15,6 +27,7 @@ void out(std::ostream &os, std::stringstream &ss, bool debug) {
     os << std::endl;
   }
 }
+
 std::string in(std::ostream &os, std::istream &is, bool debug) {
   std::string str{};
   if (debug) {
@@ -63,6 +76,16 @@ void createIoOperations(Cpu &cpu) {
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
+  cpu.operations[0x1004] = S<Operation>(new Operation(
+      "Write Direct", "WINT", "out [DP:DS:A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        U8 register_index = U8(operation.argument(instruction, 0));
+        std::stringstream buffer{};
+        buffer << std::dec
+               << U16(set2word(machine.readData(register_index, SIZE16)));
+        out(machine.out, buffer, machine.cpu.flag_debug);
+      },
+      {{SIZE16}}));
   cpu.operations[0x1010] = S<Operation>(new Operation(
       "Read Byte", "RINT8", "in Bytes[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {

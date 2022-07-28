@@ -67,12 +67,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.ecal" />
+    <None Include="example.asm" />
     <None Include="LICENSE" />
     <None Include="README.md" />
-    <None Include="example.asm">
-      <Filter>Fichiers sources</Filter>
-    </None>
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
