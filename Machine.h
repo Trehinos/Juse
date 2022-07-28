@@ -10,6 +10,7 @@
 namespace Juse {
 
 U64 set2word(ByteSet bytes);
+template <typename T> ByteSet word2set(T);
 
 class Machine {
 
@@ -45,10 +46,11 @@ public:
   void multiPush(ByteSet);
   ByteSet multiPop(size_t);
 
-  ByteSet read(size_t);
+  ByteSet read(size_t = 1);
 
-  ByteSet readAt(U64, size_t);
-  ByteSet readData(U16, size_t);
+  ByteSet readAt(U64, size_t = 1);
+  ByteSet readData(U16, size_t = 1);
+
   void writeAt(U64, ByteSet);
   void writeData(U16, ByteSet);
 

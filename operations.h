@@ -9,10 +9,15 @@ void dumpState(Cpu &);
 void dumpOperations(Cpu &);
 void dumpProgram(Machine &, size_t);
 
-void createControlOperations(Cpu &);
-void createRegistersOperations(Cpu &);
-void createIoOperations(Cpu &);
-void createMemoryOperations(Cpu &);
+/* 01xx */ void createControlOperations(Cpu &);
+/* 02xx */ void createRegistersOperations(Cpu &);
+
+/* 10xx */ void createIoOperations(Cpu &);
+
+/* 20xx */ void createPointersOperations(Cpu &);
+
+/* F0xx */ void createStackOperations(Cpu &);
+/* F1xx */ void createMemoryOperations(Cpu &);
 
 /*
  * Create operations

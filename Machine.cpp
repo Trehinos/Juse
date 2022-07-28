@@ -13,6 +13,24 @@ U64 Juse::set2word(ByteSet bytes) {
   return word;
 }
 
+template <typename T> ByteSet Juse::word2set(T byte) {
+  ByteSet set{};
+  size_t size = sizeof(byte);
+  size_t offset = 0;
+  U64 mask = 0xFF;
+  for (size_t i = 0; i < size; i++) {
+    set.push_back(U8((mask & byte) >> offset));
+    mask <<= 8;
+    offset += 8;
+  }
+  return set;
+}
+
+template ByteSet Juse::word2set<U8>(U8);
+template ByteSet Juse::word2set<U16>(U16);
+template ByteSet Juse::word2set<U32>(U32);
+template ByteSet Juse::word2set<U64>(U64);
+
 Machine::Machine(std::istream &ins, std::ostream &outs)
     : memory{}, stack(), cpu(), in{ins}, out{outs},
 
@@ -110,12 +128,13 @@ void Juse::Machine::writeData(U16 address, ByteSet set) {
 
 S<Operation> Machine::getOperation(U16 &id) {
   ByteSet identifier = read(2);
+  id = U16(set2word(identifier));
 
-  try {
-    return cpu.operations.at(id = U16(set2word(identifier)));
-  } catch (std::out_of_range) {
+  if (!cpu.operations.contains(id)) {
     return Cpu::NoOp;
   }
+
+  return cpu.operations[id];
 }
 
 void Machine::run(bool debug) {

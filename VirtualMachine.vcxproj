@@ -117,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -131,6 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,8 +151,10 @@
     <ClCompile Include="operations_control.cpp" />
     <ClCompile Include="operations_io.cpp" />
     <ClCompile Include="operations_memory.cpp" />
+    <ClCompile Include="operations_pointers.cpp" />
     <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="Juse.cpp" />
+    <ClCompile Include="operations_stack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cpu.h" />
@@ -161,7 +165,8 @@
     <ClInclude Include="types.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.ecal" />
+    <None Include=".gitignore" />
+    <None Include="example.asm" />
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>
