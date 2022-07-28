@@ -47,6 +47,18 @@ using CH32 = char32_t;
 template <typename T>
 concept IsChar = IsAnyOf<T, CH8, CH16, CH32>;
 
+template <IsChar T> using StringStream = std::basic_stringstream<T>;
+
+template <IsChar T = CH8> using String = std::basic_stringstream<T>;
+
+using SS8 = StringStream<CH8>;
+using SS16 = StringStream<CH16>;
+using SS32 = StringStream<CH32>;
+
+using S8 = String<CH8>;
+using S16 = String<CH16>;
+using S32 = String<CH32>;
+
 using I8 = std::int8_t;
 using I16 = std::int16_t;
 using I32 = std::int32_t;

@@ -13,7 +13,7 @@ It could be compared to the JVM or the CLR machines.
 
 **Juse is still in early development.**
 
-- For now, there are only 35 operations implemented.  
+- For now, there are only 40 operations implemented.  
     Nothing to play with... But if you are curious ;)
 - An assembler language is planned.
 - Focus is on the C++ code structure for now.
@@ -101,9 +101,13 @@ Juse.exe [-d]
     1012 : RINT32          A(U8)                            | in Quads[A]                      | Read Quad
     1013 : RINT64          A(U8)                            | in Longs[A]                      | Read Long
     10f0 : WASCII          A(U16)                           | out S8 [A]                       | Write Ascii
+    10f1 : WUTF16          A(U16)                           | out S16 [A]                      | Write Utf-16
+    10f2 : WUTF32          A(U16)                           | out S32 [A]                      | Write Utf-32
     2000 :                 A(U16)                           |                                  | Not implemented
     f000 : ALLOCPOOL       A(U16)                           | alloc A                          | Allocate Pool
     f001 : ALLOCSEG        A(U32) B(U16)                    | alloc A on B                     | Allocate Segment
+    f1f0 : PUSHDS                                           | push DS                          | Push Data Segment
+    f1f1 : POPDS                                            | pop DS                           | Pop Data Segment
     ===============================================================================================================
     ```
 

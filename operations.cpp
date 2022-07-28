@@ -80,4 +80,5 @@ void Juse::init(Cpu &cpu) {
   createIoOperations(cpu);
   createPointersOperations(cpu);
   createMemoryOperations(cpu);
+  createStackOperations(cpu);
 }

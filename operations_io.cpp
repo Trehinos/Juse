@@ -6,19 +6,10 @@ namespace Juse {
 
 template <IsChar From, IsChar To> struct Converter {
 
-  static To convert(From from) {
-    std::wstring_convert<std::codecvt<From, To, std::mbstate_t>, To> c;
-    switch (From) {
-    case CH8:
-      using StringType = std::u16string;
-      break;
-    }
-
-    return StringType(c.from_bytes(from, from + sizeof(from))).c_str();
-  }
+  static To convert(From from) { return To(from); }
 };
 
-void out(std::ostream &os, std::stringstream &ss, bool debug) {
+void out(std::ostream &os, SS8 &ss, bool debug) {
   if (debug) {
     os << "  << ";
   }
@@ -139,12 +130,54 @@ void createIoOperations(Cpu &cpu) {
         std::stringstream buffer{};
         U8 character{};
         do {
-          character = U8(set2word(machine.readData(address + offset, 1)));
+          character = CH8(U8(set2word(machine.readData(address + offset, SIZE8))));
           if (character != '\0') {
             buffer << character;
           }
           offset++;
         } while (character != '\0');
+        out(machine.out, buffer, machine.cpu.flag_debug);
+      },
+      {{SIZE16}}));
+
+  cpu.operations[0x10F1] = S<Operation>(new Operation(
+      "Write Utf-16", "WUTF16", "out S16 [A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        // TODO convert encoding
+        U16 address = U16(operation.argument(instruction, 0));
+        U16 offset = 0;
+        SS8 buffer{};
+        U16 character{};
+        Converter<CH16, CH8> CH16_CH8;
+        do {
+          character =
+              CH16(U16(set2word(machine.readData(address + offset, SIZE16))));
+          if (character != u'\0') {
+            buffer << CH16_CH8.convert(character);
+          }
+          offset++;
+        } while (character != u'\0');
+        out(machine.out, buffer, machine.cpu.flag_debug);
+      },
+      {{SIZE16}}));
+
+  cpu.operations[0x10F2] = S<Operation>(new Operation(
+      "Write Utf-32", "WUTF32", "out S32 [A]",
+      [](Machine &machine, Instruction &instruction, Operation &operation) {
+        // TODO convert encoding
+        U16 address = U16(operation.argument(instruction, 0));
+        U16 offset = 0;
+        SS8 buffer{};
+        U32 character{};
+        Converter<CH32, CH8> CH32_CH8;
+        do {
+          character =
+              CH32(U32(set2word(machine.readData(address + offset, SIZE32))));
+          if (character != U'\0') {
+            buffer << CH32_CH8.convert(character);
+          }
+          offset++;
+        } while (character != U'\0');
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE16}}));

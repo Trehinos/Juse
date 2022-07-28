@@ -154,6 +154,7 @@
     <ClCompile Include="operations_pointers.cpp" />
     <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="Juse.cpp" />
+    <ClCompile Include="operations_stack.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cpu.h" />
