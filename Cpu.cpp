@@ -8,8 +8,18 @@
 using namespace Juse;
 
 Cpu::Cpu()
-    : pool_pointer(0), segment_pointer(0), instruction_pointer(0),
-      flag_exit(false), flag_debug(false) {}
+    : compareFlags(), pool_pointer(0), segment_pointer(0),
+      instruction_pointer(0), flag_exit(false), flag_debug(false),
+      flag_skip(false) {
+  compareFlags[CompareFlag::EQ] = false;
+  compareFlags[CompareFlag::GT] = false;
+  compareFlags[CompareFlag::LW] = false;
+  compareFlags[CompareFlag::GE] = false;
+  compareFlags[CompareFlag::LE] = false;
+  compareFlags[CompareFlag::NE] = false;
+  compareFlags[CompareFlag::Z0] = false;
+  compareFlags[CompareFlag::CR] = false;
+}
 
 void Cpu::forward() {
   if (instruction_pointer == UINT16_MAX) {

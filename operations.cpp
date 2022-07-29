@@ -78,7 +78,7 @@ void Juse::init(Cpu &cpu) {
   createControlOperations(cpu);
   createRegistersOperations(cpu);
   createIoOperations(cpu);
-  createPointersOperations(cpu);
+  //createPointersOperations(cpu);
   createMemoryOperations(cpu);
   createStackOperations(cpu);
 }
