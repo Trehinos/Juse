@@ -1,11 +1,8 @@
-#include <codecvt>
-
 #include "operations.h"
 
 namespace Juse {
 
 template <IsChar From, IsChar To> struct Converter {
-
   static To convert(From from) { return To(from); }
 };
 
@@ -122,15 +119,16 @@ void createIoOperations(Cpu &cpu) {
       },
       {{SIZE8}}));
 
-  cpu.operations[0x10F0] = S<Operation>(new Operation(
+  cpu.operations[0x1080] = S<Operation>(new Operation(
       "Write Ascii", "WASCII", "out S8 [A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U16 offset = 0;
         std::stringstream buffer{};
-        U8 character{};
+        CH8 character{};
         do {
-          character = CH8(U8(set2word(machine.readData(address + offset, SIZE8))));
+          character =
+              CH8(U8(set2word(machine.readData(address + offset, SIZE8))));
           if (character != '\0') {
             buffer << character;
           }
@@ -140,7 +138,7 @@ void createIoOperations(Cpu &cpu) {
       },
       {{SIZE16}}));
 
-  cpu.operations[0x10F1] = S<Operation>(new Operation(
+  cpu.operations[0x1081] = S<Operation>(new Operation(
       "Write Utf-16", "WUTF16", "out S16 [A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         // TODO convert encoding
@@ -161,7 +159,7 @@ void createIoOperations(Cpu &cpu) {
       },
       {{SIZE16}}));
 
-  cpu.operations[0x10F2] = S<Operation>(new Operation(
+  cpu.operations[0x1082] = S<Operation>(new Operation(
       "Write Utf-32", "WUTF32", "out S32 [A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         // TODO convert encoding

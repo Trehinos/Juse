@@ -14,6 +14,21 @@
 
 namespace Juse {
 
+enum class CompareFlag {
+  EQ = 0,
+  GT = 1,
+  LW = 2,
+  GE = 3,
+  LE = 4,
+  NE = 5,
+  Z0 = 6,
+  CR = 7,
+  OF = 8,
+  ERR = 255
+};
+
+using CompareFlags = std::map<CompareFlag, bool>;
+
 template <typename T, typename... U>
 concept IsAnyOf = (std::same_as<T, U> || ...);
 
@@ -39,6 +54,9 @@ using U8 = std::uint8_t;
 using U16 = std::uint16_t;
 using U32 = std::uint32_t;
 using U64 = std::uint64_t;
+
+template <typename T>
+concept IsWord = IsAnyOf<T, U8, U16, U32, U64>;
 
 using CH8 = char;
 using CH16 = char16_t;
@@ -71,14 +89,15 @@ const U32 MASK_32TOP16 = 0xFFFF0000;
 const U32 MASK_BOTTOM32 = 0xFFFFFFFF;
 const U64 MASK_64TOP32 = 0xFFFFFFFF00000000;
 
-using Segment = std::array<U8, SEGMENT_SIZE>;
-using Pool = std::map<U32, S<Segment>>;
-using Memory = std::map<U16, S<Pool>>;
-
+template <int size> using ByteArray = std::array<U8, size>;
 using ByteSet = std::vector<U8>;
 using Stack = std::stack<U8>;
 
-template <class Type> using GeneralRegisters = std::array<Type, 256>;
+using Segment = ByteArray<SEGMENT_SIZE>;
+using Pool = std::map<U32, S<Segment>>;
+using Memory = std::map<U16, S<Pool>>;
+
+template <IsWord Type> using GeneralRegisters = std::array<Type, 256>;
 
 class Operation;
 

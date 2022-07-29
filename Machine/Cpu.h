@@ -1,21 +1,8 @@
 #pragma once
 
-#include "types.h"
+#include "../Models/types.h"
 
 namespace Juse {
-
-enum class CompareFlag {
-  EQ = 0,
-  GT = 1,
-  LW = 2,
-  GE = 3,
-  LE = 4,
-  NE = 5,
-  Z0 = 6,
-  CR = 7,
-  OF = 8,
-  ERR = 255
-};
 
 class Cpu {
 
@@ -27,7 +14,7 @@ class Cpu {
   U16 instruction_pointer;
 
 public:
-  std::map<CompareFlag, bool> compareFlags;
+  CompareFlags compareFlags;
   bool flag_exit;
   bool flag_debug;
   bool flag_skip;

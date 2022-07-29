@@ -6,12 +6,17 @@
 
 using namespace Juse;
 
-void Juse::dumpState(Cpu &cpu) {
+std::ostream &Juse::operator<<(std::ostream &os, const U8 c) {
+  os << (int)(unsigned char)c;
+  return os;
+}
+
+void Debug::dumpState(Cpu &cpu) {
   using namespace std;
   cout << "IP=" << cpu.instruction() << endl;
 }
 
-void Juse::dumpOperations(Cpu &cpu) {
+void Debug::dumpOperations(Cpu &cpu) {
   using namespace std;
   cout << cpu.operations.size() << " operations loaded." << endl;
   cout << "===================================================================="
@@ -20,8 +25,7 @@ void Juse::dumpOperations(Cpu &cpu) {
   cout << setfill(' ') << right << setw(4) << "OP  "
        << " : " << setw(48) << left << "Jumne code"
        << " | " << setw(32) << "JuseLang code"
-       << " | Operation name"
-       << endl;
+       << " | Operation name" << endl;
   cout << "===================================================================="
           "==========================================="
        << endl;
@@ -45,26 +49,29 @@ void Juse::dumpOperations(Cpu &cpu) {
        << endl;
 }
 
-void Juse::dumpProgram(Machine &m, size_t max) {
+void Debug::dumpProgram(Machine &m, const U8 from, const U8 size, U32 segmentId,
+                        U16 poolID) {
   const size_t align = 32;
 
   using namespace std;
-  S<Segment> segment = m.getSegment(0, 0);
+  S<Segment> segment = m.getSegment(poolID, segmentId);
   cout << "Program\n       ";
-  for (size_t addr = 0; addr < align; addr++) {
+  for (U8 addr = 0; addr < align; addr++) {
     cout << setfill('0') << right << hex << setw(2) << addr << " ";
   }
   cout << endl;
 
-  size_t addr = 0;
+  U8 addr = 0;
   for (U8 data : *segment) {
+    if (addr < from) {
+      continue;
+    }
     if (addr % align == 0) {
       cout << endl << setfill('0') << right << hex << setw(4) << addr << " | ";
     }
-    cout << setfill('0') << right << hex << setw(2) << (int)(unsigned char)data
-         << " ";
+    cout << setfill('0') << right << hex << setw(2) << data << " ";
     addr++;
-    if (addr >= max) {
+    if (addr >= from + size) {
       cout << endl;
       return;
     }
@@ -78,7 +85,7 @@ void Juse::init(Cpu &cpu) {
   createControlOperations(cpu);
   createRegistersOperations(cpu);
   createIoOperations(cpu);
-  //createPointersOperations(cpu);
+  // createPointersOperations(cpu);
   createMemoryOperations(cpu);
   createStackOperations(cpu);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "../Models/types.h"
 
 namespace Juse {
 struct Argument {

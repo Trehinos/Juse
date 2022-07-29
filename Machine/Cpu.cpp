@@ -19,6 +19,8 @@ Cpu::Cpu()
   compareFlags[CompareFlag::NE] = false;
   compareFlags[CompareFlag::Z0] = false;
   compareFlags[CompareFlag::CR] = false;
+  compareFlags[CompareFlag::OF] = false;
+  compareFlags[CompareFlag::ERR] = false;
 }
 
 void Cpu::forward() {

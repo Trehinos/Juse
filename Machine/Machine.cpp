@@ -13,7 +13,7 @@ U64 Juse::set2word(ByteSet bytes) {
   return word;
 }
 
-template <typename T> ByteSet Juse::word2set(T byte) {
+template <IsWord T> ByteSet Juse::word2set(T byte) {
   ByteSet set{};
   size_t size = sizeof(byte);
   size_t offset = 0;

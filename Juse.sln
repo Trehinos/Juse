@@ -18,36 +18,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EXAMPLES", "EXAMPLES", "{CD
 		example.ecal = example.ecal
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CODE", "CODE", "{57B43AE3-222E-40D4-8929-458D11DEEDDB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MAIN", "MAIN", "{6E3FBA32-94D9-448A-B482-E7859CCE3563}"
-	ProjectSection(SolutionItems) = preProject
-		Juse.cpp = Juse.cpp
-		Juse.h = Juse.h
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HEADERS", "HEADERS", "{2C6C5C89-37E1-4383-B630-DA6759488080}"
-	ProjectSection(SolutionItems) = preProject
-		Cpu.h = Cpu.h
-		Machine.h = Machine.h
-		Operation.h = Operation.h
-		operations.h = operations.h
-		types.h = types.h
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LIBS", "LIBS", "{453810FB-4301-4957-9AE3-EE96C29E6FEA}"
-	ProjectSection(SolutionItems) = preProject
-		Cpu.cpp = Cpu.cpp
-		Machine.cpp = Machine.cpp
-		Operation.cpp = Operation.cpp
-		operations.cpp = operations.cpp
-		operations_control.cpp = operations_control.cpp
-		operations_io.cpp = operations_io.cpp
-		operations_memory.cpp = operations_memory.cpp
-		operations_pointers.cpp = operations_pointers.cpp
-		operations_registers.cpp = operations_registers.cpp
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -67,11 +37,6 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{6E3FBA32-94D9-448A-B482-E7859CCE3563} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
-		{2C6C5C89-37E1-4383-B630-DA6759488080} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
-		{453810FB-4301-4957-9AE3-EE96C29E6FEA} = {57B43AE3-222E-40D4-8929-458D11DEEDDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4096B340-490B-4976-BD67-C980DDE55AF2}

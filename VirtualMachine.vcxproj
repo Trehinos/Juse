@@ -142,36 +142,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Cpu.cpp" />
-    <ClCompile Include="Machine.cpp">
-      <LanguageStandard Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdcpp20</LanguageStandard>
-    </ClCompile>
-    <ClCompile Include="Operation.cpp" />
-    <ClCompile Include="operations.cpp" />
-    <ClCompile Include="operations_control.cpp" />
-    <ClCompile Include="operations_io.cpp" />
-    <ClCompile Include="operations_memory.cpp" />
-    <ClCompile Include="operations_pointers.cpp" />
-    <ClCompile Include="operations_registers.cpp" />
     <ClCompile Include="Juse.cpp" />
-    <ClCompile Include="operations_stack.cpp" />
+    <ClCompile Include="Machine\Cpu.cpp" />
+    <ClCompile Include="Machine\Machine.cpp" />
+    <ClCompile Include="Machine\Operation.cpp" />
+    <ClCompile Include="Operations\operations.cpp" />
+    <ClCompile Include="Operations\operations_control.cpp" />
+    <ClCompile Include="Operations\operations_io.cpp" />
+    <ClCompile Include="Operations\operations_memory.cpp" />
+    <ClCompile Include="Operations\operations_pointers.cpp" />
+    <ClCompile Include="Operations\operations_registers.cpp" />
+    <ClCompile Include="Operations\operations_stack.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Cpu.h" />
     <ClInclude Include="Juse.h" />
-    <ClInclude Include="Machine.h" />
-    <ClInclude Include="Operation.h" />
-    <ClInclude Include="operations.h" />
-    <ClInclude Include="types.h" />
+    <ClInclude Include="Machine\Cpu.h" />
+    <ClInclude Include="Machine\Machine.h" />
+    <ClInclude Include="Machine\Operation.h" />
+    <ClInclude Include="Models\Executable.h" />
+    <ClInclude Include="Models\types.h" />
+    <ClInclude Include="Operations\operations.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="example.asm" />
+    <None Include="example.juse" />
     <None Include="LICENSE" />
     <None Include="README.md" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="ecalv3.xml" />
+    <Xml Include="juse-lang.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

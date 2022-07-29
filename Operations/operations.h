@@ -1,13 +1,17 @@
 #pragma once
 
-#include "Machine.h"
-#include "Operation.h"
+#include "../Machine/Machine.h"
+#include "../Machine/Operation.h"
 
 namespace Juse {
 
+std::ostream& operator<<(std::ostream&, const U8);
+
+namespace Debug {
 void dumpState(Cpu &);
 void dumpOperations(Cpu &);
-void dumpProgram(Machine &, size_t);
+void dumpProgram(Machine &, U8 = 0, U8 = 255, U32 = 0, U16 = 0);
+} // namespace Debug
 
 /* 01xx */ void createControlOperations(Cpu &);
 /* 02xx */ void createRegistersOperations(Cpu &);

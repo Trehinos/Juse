@@ -4,13 +4,22 @@
 #include <stdexcept>
 #include <utility>
 
+#include "../Models/types.h"
 #include "Cpu.h"
-#include "types.h"
+
 
 namespace Juse {
 
-U64 set2word(ByteSet bytes);
-template <typename T> ByteSet word2set(T);
+/*
+ * set2word: returns a U64 from a ByteSet. The ByteSet MUST not be bigger
+ * than 8.
+ */
+U64 set2word(ByteSet);
+
+/*
+ *
+ */
+template <IsWord T> ByteSet word2set(T);
 
 class Machine {
 
