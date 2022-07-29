@@ -18,8 +18,8 @@ void Juse::dumpOperations(Cpu &cpu) {
           "==========================================="
        << endl;
   cout << setfill(' ') << right << setw(4) << "OP  "
-       << " : " << setw(48) << left << "Mnemu code"
-       << " | " << setw(32) << "Ecal code"
+       << " : " << setw(48) << left << "Jumne code"
+       << " | " << setw(32) << "JuseLang code"
        << " | Operation name"
        << endl;
   cout << "===================================================================="

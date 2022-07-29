@@ -51,9 +51,10 @@ This language defines **mnemonics** which each of them will correspond to **a un
 Something like :
 
 ```
+; Adds 40 and 20
 SET8 0 40
 SET8 1 20
-ADD8 2 0 1      ;
+ADD8 2 0 1      
 WINT8 2         ; prints 60
 ```
 
@@ -62,12 +63,13 @@ WINT8 2         ; prints 60
 A second one which simplify reading the code for the developper :
 
 ```
-Bytes[0] = 40; Bytes[1] = 40;
+/* Adds 40 and 20 */
+Bytes[0] = 40; Bytes[1] = 20;
 Bytes[2] = Bytes[0] + Bytes[1];
-out Bytes[2];
+out Bytes[2];   // prints 60
 ```
 
-The JuseLang language will include `#PREPROCESSING` (define, include, segment, offset), '@labels' and `$references`.
+The JuseLang language will include `#PREPROCESSING` (define, include, segment, offset), `@labels` and `$references`.
 
 
 #### Write a program
