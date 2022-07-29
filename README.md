@@ -39,6 +39,37 @@ IN PROGRESS (will be moved in the wiki)
 
 ### Usage
 
+#### (Future) : assembler
+
+Juse will come with 2 assembler languages.
+
+##### Jumne code (simple ASM)
+
+Jumne stands for "JUse MNEmonics".
+
+This language defines **mnemonics** which each of them will correspond to **a unique OpCode**.  
+Something like :
+
+```
+SET8 0 40
+SET8 1 20
+ADD8 2 0 1      ;
+WINT8 2         ; prints 60
+```
+
+##### JuseLang code (advanced ASM)
+
+A second one which simplify reading the code for the developper :
+
+```
+Bytes[0] = 40; Bytes[1] = 40;
+Bytes[2] = Bytes[0] + Bytes[1];
+out Bytes[2];
+```
+
+The JuseLang language will include `#PREPROCESSING` (define, include, segment, offset), '@labels' and `$references`.
+
+
 #### Write a program
 
 - For now, the program run by the VM is defined in the function `array<U8, 256> testProgram()` in `Juse.cpp`.
@@ -85,7 +116,7 @@ Juse.exe [-d]
 - Implemented OpCodes :
 ```
 ===============================================================================================================
-OP   : Mnemu code                                       | Ecal code                        | Operation name
+OP   : Jumne code                                       | JuseLang code                    | Operation name
 ===============================================================================================================
 0000 : NOP                                              |                                  | Nothing
 0100 : SHJUMP          A(U16)                           | goto DP:DS:A                     | Short Jump
