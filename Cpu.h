@@ -13,7 +13,7 @@ enum class CompareFlag {
   NE = 5,
   Z0 = 6,
   CR = 7,
-
+  OF = 8,
   ERR = 255
 };
 

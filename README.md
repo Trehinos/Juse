@@ -61,7 +61,18 @@ Juse.exe [-d]
     - `CP` code pool, `CS` code segment, `IP` instruction pointer,
     - `DP` data pool, `DS` data segment,
     - `flag_exit` (triggered by the `END` OpCode),
-    - `flag_debug` (always `true` for now).
+    - `flag_debug` (sets by the command invoking Juse).
+    - Arithmetic flags :
+        - `EQ` : true if `A ? B => A == B`
+        - `GT` : true if `A ? B => A > B`
+        - `LW` : true if `A ? B => A < B`
+        - `GE` : true if `A ? B => A >= B`
+        - `LE` : true if `A ? B => A <= B`
+        - `NE` : true if `A ? B => A != B`
+        - `Z0` : true if `A ? B => A == B == 0`
+        - `CR` : carry flag
+        - `OF` : overflow flag
+        - `ERR` : error flag
 - Addresses are 64 bits long (`U64`), the memory is chunked as : `Pool[U16]:Segment[U32]:U8[U16]`
 - **One `Segment` is 64KiB**. It is the smallest amount of memory a program takes.
 - **256 general purpose registers** of each type : `Byte (U8)`, `Word (U16)`, `Quad (U32)`, `Long (U64)`
