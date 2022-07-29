@@ -62,7 +62,7 @@ Juse.exe [-d]
     - `DP` data pool, `DS` data segment,
     - `flag_exit` (triggered by the `END` OpCode),
     - `flag_debug` (always `true` for now).
-- Addresses are 64 bits long (`U64`), the memory is chunked as : `PooLongs[U16]:Segment[U32]:U8[U16]`
+- Addresses are 64 bits long (`U64`), the memory is chunked as : `Pool[U16]:Segment[U32]:U8[U16]`
 - **One `Segment` is 64KiB**. It is the smallest amount of memory a program takes.
 - **256 general purpose registers** of each type : `Byte (U8)`, `Word (U16)`, `Quad (U32)`, `Long (U64)`
 
@@ -110,7 +110,6 @@ OP   : Mnemu code                                       | Ecal code             
 10f0 : WASCII          A(U16)                           | out S8 [A]                       | Write Ascii
 10f1 : WUTF16          A(U16)                           | out S16 [A]                      | Write Utf-16
 10f2 : WUTF32          A(U16)                           | out S32 [A]                      | Write Utf-32
-2000 :                 A(U16)                           |                                  | Not implemented
 f000 : ALLOCPOOL       A(U16)                           | alloc A                          | Allocate Pool
 f001 : ALLOCSEG        A(U32) B(U16)                    | alloc A on B                     | Allocate Segment
 f1f0 : PUSHDS                                           | push DS                          | Push Data Segment
