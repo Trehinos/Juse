@@ -62,6 +62,7 @@ Juse.exe [-d]
     - `DP` data pool, `DS` data segment,
     - `flag_exit` (triggered by the `END` OpCode),
     - `flag_debug` (sets by the command invoking Juse).
+    - `flag_skip` : used for conditionnal branching. If true : skip the next operation then set flag_skip to false.
     - Arithmetic flags :
         - `EQ` : true if `A ? B => A == B`
         - `GT` : true if `A ? B => A > B`
