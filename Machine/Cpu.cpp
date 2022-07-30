@@ -19,7 +19,6 @@ void Juse::debugInstruction(Machine& machine, Operation& operation, Instruction&
         for (Argument argument : operation.getArgumentDefs()) {
             machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation.argument(instruction, index++);
         }
-        machine.out << std::endl;
     }
 }
 
@@ -114,6 +113,15 @@ void Cpu::cycle(Machine& machine, bool debug)
     }
 
     Instruction instruction = getInstructionFromId(machine, *current, identifier);
+
+    if (debug) {
+        if (flag_skip) {
+            machine.out << " <- SKIP" << std::endl;
+            flag_skip = false;
+            return;
+        }
+        machine.out << std::endl;
+    }
     (*current)(machine, instruction);
 }
 

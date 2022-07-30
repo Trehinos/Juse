@@ -60,13 +60,16 @@ void Juse::Operations::Standard::branching(Cpu& cpu)
     cpu.operations[0x0008] = S<Operation>(new Operation(
         "If", "IF", "if A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            machine.out << "Not implemented"; // TODO
+            U8 compareOperator = U8(operation.argument(instruction, 0));
+            if (machine.cpu.registers.compareFlags.at(CompareFlag(compareOperator))) {
+                machine.cpu.flag_skip = true;
+            } 
         },
         { { SIZE8 } }));
     cpu.operations[0x0009] = S<Operation>(new Operation(
         "Skip", "SKIP", "skip",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            machine.out << "Not implemented"; // TODO
+            machine.cpu.flag_skip = true;
         },
         {}));
 

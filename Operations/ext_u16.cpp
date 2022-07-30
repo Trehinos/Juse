@@ -5,9 +5,13 @@
 template <Juse::IsWord T>
 void Juse::setWord<Juse::U16>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
 
+template <Juse::IsWord T>
+T Juse::random<Juse::U16>(T, T);
+
 /* 14xx-17xx */
 void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
 {
+    // 14xx - U16 Moves & Casts
     cpu.operations[0x1400] = S<Operation>(new Operation(
         "Set Word", "SET16", "Words[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
@@ -30,9 +34,78 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U16 address = U16(operation.argument(instruction, 0));
             U8 register_index = U8(operation.argument(instruction, 1));
-            machine.writeData(address, word2set<U16>(machine.cpu.registers.bytes[register_index]));
+            machine.writeData(address, word2set<U16>(machine.cpu.registers.words[register_index]));
         },
         { { SIZE16 }, { SIZE8 } }));
+
+    // 15xx - U16 Operations
+    cpu.operations[0x1500] = S<Operation>(new Operation(
+        "Add", "ADD16", "Words[A] = Words[B] + Words[C], Words[D]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            U32 result = rB + rC;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1501] = S<Operation>(new Operation(
+        "Substract", "SUB16", "Words[A] = Words[B] - Words[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            U16 result = rB - rC;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1502] = S<Operation>(new Operation(
+        "Multiply", "MUL16", "Words[A] = Words[B] * Words[C], Words[D]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            U32 result = rB * rC;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1503] = S<Operation>(new Operation(
+        "Divide", "DIV16", "Words[A] = Words[B] / Words[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            // TODO DIV a, b, 0, d
+
+            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            U16 result = rB / rC;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1504] = S<Operation>(new Operation(
+        "Modulo", "MOD16", "Words[A] = Words[B] % Words[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            U16 result = rB % rC;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    // TODO : 1505 - ABD16
+
+    cpu.operations[0x1506] = S<Operation>(new Operation(
+        "Random", "RND16", "Words[A] = {RND(B, C)}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 index = U8(operation.argument(instruction, 0));
+            U16 min = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
+            U16 max = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
+            machine.cpu.registers.words[index] = random<U16>(min, max);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    // 17xx - U16 I/O
     cpu.operations[0x1700] = S<Operation>(new Operation(
         "Write Word", "WINT16", "out Words[A]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {

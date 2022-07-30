@@ -30,7 +30,7 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U16 address = U16(operation.argument(instruction, 0));
             U8 register_index = U8(operation.argument(instruction, 1));
-            machine.writeData(address, word2set<U32>(machine.cpu.registers.bytes[register_index]));
+            machine.writeData(address, word2set<U32>(machine.cpu.registers.quads[register_index]));
         },
         { { SIZE16 }, { SIZE8 } }));
     cpu.operations[0x1B00] = S<Operation>(new Operation(

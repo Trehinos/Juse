@@ -1,5 +1,7 @@
 #pragma once
 
+#include <random>
+
 #include "../Machine/Machine.h"
 #include "../Machine/Operation.h"
 
@@ -21,6 +23,23 @@ struct Converter {
 void out(std::ostream&, SS8&, bool);
 std::string in(std::ostream&, std::istream&, bool);
 
+template <Juse::IsWord T>
+void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
+{
+    U8 register_index = U8(operation.argument(instruction, 0));
+    T value = T(operation.argument(instruction, 1));
+    registers[register_index] = value;
+}
+
+template <Juse::IsWord T>
+T random(T min, T max)
+{
+    static std::random_device r;
+    static std::uniform_int_distribution<T> uniform(min, max);
+    static std::default_random_engine e(r());
+    return uniform(e);
+}
+
 namespace Operations {
     namespace Standard {
         void branching(Cpu&);
@@ -38,14 +57,6 @@ namespace Operations {
         void ext_float(Cpu&);
     }
 
-}
-
-template <Juse::IsWord T>
-void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
-{
-    Juse::U8 register_index = Juse::U8(operation.argument(instruction, 0));
-    T value = T(operation.argument(instruction, 1));
-    registers[register_index] = value;
 }
 
 /*

@@ -32,7 +32,7 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- **42 operations**, general registers manipulation (read/write), byte IO and strings output
+- **48 operations**, general registers manipulation (read/write), byte IO and strings output
 
 ## Dependencies
 
@@ -156,6 +156,12 @@ OP   : Jumne code                                       | JuseLang code         
 1400 : SET16           A(U8) B(U16)                     | Words[A] = B                     | Set Word
 1401 : COPYFROM16      A(U8) B(U16)                     | Words[A] = [B]                   | Copy Word From
 1402 : COPYTO16        A(U16) B(U8)                     | [A] = Words[B]                   | Copy Word To
+1500 : ADD16           A(U8) B(U8) C(U8)                | Words[A] = Words[B] + Words[C], Words[D] | Add
+1501 : SUB16           A(U8) B(U8) C(U8)                | Words[A] = Words[B] - Words[C]   | Substract
+1502 : MUL16           A(U8) B(U8) C(U8)                | Words[A] = Words[B] * Words[C], Words[D] | Multiply
+1503 : DIV16           A(U8) B(U8) C(U8)                | Words[A] = Words[B] / Words[C]   | Divide
+1504 : MOD16           A(U8) B(U8) C(U8)                | Words[A] = Words[B] % Words[C]   | Modulo
+1506 : RND16           A(U8) B(U8) C(U8)                | Words[A] = {RND(B, C)}           | Random
 1700 : WINT16          A(U8)                            | out Words[A]                     | Write Word
 1701 : RINT16          A(U8)                            | in Words[A]                      | Read Word
 1710 : WUTF16          A(U16)                           | out S16 [A]                      | Write Utf-16
