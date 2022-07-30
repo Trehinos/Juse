@@ -144,15 +144,20 @@
   <ItemGroup>
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Machine\Cpu.cpp" />
+    <ClCompile Include="Operations\allocation.cpp" />
+    <ClCompile Include="Operations\Debug.cpp" />
     <ClCompile Include="Machine\Machine.cpp" />
     <ClCompile Include="Machine\Operation.cpp" />
+    <ClCompile Include="Operations\branching.cpp" />
+    <ClCompile Include="Operations\ext_u16.cpp" />
+    <ClCompile Include="Operations\ext_u32.cpp" />
+    <ClCompile Include="Operations\ext_u64.cpp" />
+    <ClCompile Include="Operations\ext_u8.cpp" />
+    <ClCompile Include="Operations\logic.cpp" />
+    <ClCompile Include="Operations\move.cpp" />
     <ClCompile Include="Operations\operations.cpp" />
-    <ClCompile Include="Operations\operations_control.cpp" />
     <ClCompile Include="Operations\operations_io.cpp" />
-    <ClCompile Include="Operations\operations_memory.cpp" />
-    <ClCompile Include="Operations\operations_pointers.cpp" />
-    <ClCompile Include="Operations\operations_registers.cpp" />
-    <ClCompile Include="Operations\operations_stack.cpp" />
+    <ClCompile Include="Operations\thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Juse.h" />

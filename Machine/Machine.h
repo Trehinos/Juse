@@ -31,10 +31,6 @@ public:
     P<Memory> memory;
     Stack stack;
 
-    /* Move operations location */
-    U16 dataPool;
-    U32 dataSegment;
-
     Machine(std::istream&, std::ostream&);
     static Machine loadFile(std::string);
     static Machine fromData(Segment&);

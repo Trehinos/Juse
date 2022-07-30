@@ -30,22 +30,37 @@
     <ClCompile Include="Operations\operations.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_control.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Operations\operations_io.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_memory.cpp">
+    <ClCompile Include="Operations\Debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_pointers.cpp">
+    <ClCompile Include="Operations\branching.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_registers.cpp">
+    <ClCompile Include="Operations\move.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_stack.cpp">
+    <ClCompile Include="Operations\logic.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\allocation.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\thread.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\ext_u8.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\ext_u16.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\ext_u32.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Operations\ext_u64.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>

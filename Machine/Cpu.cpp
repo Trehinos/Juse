@@ -41,6 +41,10 @@ Cpu::Cpu()
     , pool_pointer(0)
     , segment_pointer(0)
     , instruction_pointer(0)
+    , data_pool { 0 }
+    , data_segment { 0 }
+    , address_pointer { 0 }
+    , address_offset { 0 }
     , flag_exit(false)
     , flag_debug(false)
     , flag_skip(false)

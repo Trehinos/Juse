@@ -2,41 +2,9 @@
 
 namespace Juse {
 
-template <IsChar From, IsChar To> struct Converter {
-  static To convert(From from) { return To(from); }
-};
-
-void out(std::ostream &os, SS8 &ss, bool debug) {
-  if (debug) {
-    os << "  << ";
-  }
-  os << ss.str() << std::flush;
-  if (debug) {
-    os << std::endl;
-  }
-}
-
-std::string in(std::ostream &os, std::istream &is, bool debug) {
-  std::string str{};
-  if (debug) {
-    os << "  >> ";
-  }
-  std::getline(is >> std::ws, str);
-  is.clear();
-  return str;
-}
 
 /* 10xx */
 void createIoOperations(Cpu &cpu) {
-  cpu.operations[0x1000] = S<Operation>(new Operation(
-      "Write Byte", "WINT8", "out Bytes[A]",
-      [](Machine &machine, Instruction &instruction, Operation &operation) {
-        U8 register_index = U8(operation.argument(instruction, 0));
-        std::stringstream buffer{};
-        buffer << std::dec << +machine.cpu.registers.bytes[register_index];
-        out(machine.out, buffer, machine.cpu.flag_debug);
-      },
-      {{SIZE8}}));
   cpu.operations[0x1001] = S<Operation>(new Operation(
       "Write Word", "WINT16", "out Words[A]",
       [](Machine &machine, Instruction &instruction, Operation &operation) {
@@ -62,27 +30,6 @@ void createIoOperations(Cpu &cpu) {
         std::stringstream buffer{};
         buffer << std::dec << machine.cpu.registers.longs[register_index];
         out(machine.out, buffer, machine.cpu.flag_debug);
-      },
-      {{SIZE8}}));
-  cpu.operations[0x1004] = S<Operation>(new Operation(
-      "Write Direct", "WINT", "out [DP:DS:A]",
-      [](Machine &machine, Instruction &instruction, Operation &operation) {
-        U8 register_index = U8(operation.argument(instruction, 0));
-        std::stringstream buffer{};
-        buffer << std::dec
-               << U16(set2word(machine.readData(register_index, SIZE16)));
-        out(machine.out, buffer, machine.cpu.flag_debug);
-      },
-      {{SIZE16}}));
-  cpu.operations[0x1010] = S<Operation>(new Operation(
-      "Read Byte", "RINT8", "in Bytes[A]",
-      [](Machine &machine, Instruction &instruction, Operation &operation) {
-        U16 value;
-        std::stringstream buffer;
-        U8 register_index = U8(operation.argument(instruction, 0));
-        buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
-        buffer >> std::dec >> value;
-        machine.cpu.registers.bytes[register_index] = U8(value);
       },
       {{SIZE8}}));
   cpu.operations[0x1011] = S<Operation>(new Operation(
@@ -118,25 +65,6 @@ void createIoOperations(Cpu &cpu) {
         machine.cpu.registers.longs[register_index] = value;
       },
       {{SIZE8}}));
-
-  cpu.operations[0x1080] = S<Operation>(new Operation(
-      "Write Ascii", "WASCII", "out S8 [A]",
-      [](Machine &machine, Instruction &instruction, Operation &operation) {
-        U16 address = U16(operation.argument(instruction, 0));
-        U16 offset = 0;
-        std::stringstream buffer{};
-        CH8 character{};
-        do {
-          character =
-              CH8(U8(set2word(machine.readData(address + offset, SIZE8))));
-          if (character != '\0') {
-            buffer << character;
-          }
-          offset++;
-        } while (character != '\0');
-        out(machine.out, buffer, machine.cpu.flag_debug);
-      },
-      {{SIZE16}}));
 
   cpu.operations[0x1081] = S<Operation>(new Operation(
       "Write Utf-16", "WUTF16", "out S16 [A]",

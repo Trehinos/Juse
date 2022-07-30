@@ -25,6 +25,12 @@ class Cpu {
     U16 instruction_pointer;
 
 public:
+    /* Move operations location */
+    U16 data_pool;
+    U32 data_segment;
+    U16 address_pointer;
+    U16 address_offset;
+
     bool flag_exit;
     bool flag_debug;
     bool flag_skip;

@@ -40,8 +40,6 @@ Machine::Machine(std::istream& ins, std::ostream& outs)
     , cpu()
     , in { ins }
     , out { outs }
-    , dataPool { 0 }
-    , dataSegment { 0 }
 {
     memory = makeP<Memory>();
     createSegment(0, 0);
@@ -131,7 +129,7 @@ ByteSet Machine::readAt(U64 address, size_t nb_bytes)
 
 ByteSet Machine::readData(U16 address, size_t nb_bytes)
 {
-    return readAt(Address::with(dataPool, dataSegment, address), nb_bytes);
+    return readAt(Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
 }
 
 void Juse::Machine::writeAt(U64 address, ByteSet set)
@@ -144,7 +142,7 @@ void Juse::Machine::writeAt(U64 address, ByteSet set)
 void Juse::Machine::writeData(U16 address, ByteSet set)
 {
     for (U8 byte : set) {
-        cpu.set(*memory, Address::with(dataPool, dataSegment, address), byte);
+        cpu.set(*memory, Address::with(cpu.data_pool, cpu.data_segment, address), byte);
     }
 }
 

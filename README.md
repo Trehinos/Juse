@@ -13,10 +13,13 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 
 **Juse is still in early development.**
 
-- For now, there are only 40 operations implemented.  
-    Nothing to play with... But if you are curious ;)
-- An assembler language is planned.
-- Focus is on the C++ code structure for now.
+- For now, there are only 34 operations implemented.  
+    You can play with if you are curious ;)
+- But there are a lot of feature todo :
+    - OpKeys are not fixed.
+    - 2 assemblers languages are planned.
+    - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**.
+    - No base frequency is defined for now. It will.
 
 &copy; 2022 Sébastien GELDREICH
 
@@ -121,44 +124,39 @@ Juse.exe [-d]
 OP   : Jumne code                                       | JuseLang code                    | Operation name
 ===============================================================================================================
 0000 : NOP                                              |                                  | Nothing
-0100 : SHJUMP          A(U16)                           | goto DP:DS:A                     | Short Jump
-0101 : JUMP            A(U32) B(U16)                    | goto DP:A:B                      | Jump
-0102 : LJUMP           A(U64)                           | goto A                           | Long Jump
-0103 : CALL            A(U16)                           | call A                           | Call
-0104 : RET                                              | return                           | Return
-0105 : LCALL           A(U64)                           | call! A                          | Long Call
-0106 : LRET                                             | return!                          | Long Return
-0110 : DATAPOOL        A(U16)                           | datapool A                       | Set Data Pool
-0111 : DATASEG         A(U32)                           | dataset A                        | Set Data Segment
-01ff : END                                              | end                              | End Program
-0200 : SET8            A(U8) B(U8)                      | Bytes[A] = B                     | Set Byte
-0201 : SET16           A(U8) B(U16)                     | Words[A] = B                     | Set Word
-0202 : SET32           A(U8) B(U32)                     | Quads[A] = B                     | Set Quad
-0203 : SET64           A(U8) B(U64)                     | Longs[A] = B                     | Set Long
-0210 : COPYFROM8       A(U8) B(U16)                     | Bytes[A] = [B]                   | Copy Byte From
-0211 : COPYFROM16      A(U8) B(U16)                     | Words[A] = [B]                   | Copy Word From
-0212 : COPYFROM32      A(U8) B(U16)                     | Quads[A] = [B]                   | Copy Quad From
-0213 : COPYFROM64      A(U8) B(U16)                     | Longs[A] = [B]                   | Copy Long From
-0220 : COPYTO8         A(U16) B(U8)                     | [A] = Bytes[B]                   | Copy Byte To
-0221 : COPYTO16        A(U16) B(U8)                     | [A] = Words[B]                   | Copy Word To
-0222 : COPYTO32        A(U16) B(U8)                     | [A] = Quads[B]                   | Copy Quad To
-0223 : COPYTO64        A(U16) B(U8)                     | [A] = Longs[B]                   | Copy Long To
-1000 : WINT8           A(U8)                            | out Bytes[A]                     | Write Byte
-1001 : WINT16          A(U8)                            | out Words[A]                     | Write Word
-1002 : WINT32          A(U8)                            | out Quads[A]                     | Write Quad
-1003 : WINT64          A(U8)                            | out Longs[A]                     | Write Long
-1004 : WINT            A(U16)                           | out [DP:DS:A]                    | Write Direct
-1010 : RINT8           A(U8)                            | in Bytes[A]                      | Read Byte
-1011 : RINT16          A(U8)                            | in Words[A]                      | Read Word
-1012 : RINT32          A(U8)                            | in Quads[A]                      | Read Quad
-1013 : RINT64          A(U8)                            | in Longs[A]                      | Read Long
-10f0 : WASCII          A(U16)                           | out S8 [A]                       | Write Ascii
-10f1 : WUTF16          A(U16)                           | out S16 [A]                      | Write Utf-16
-10f2 : WUTF32          A(U16)                           | out S32 [A]                      | Write Utf-32
-f000 : ALLOCPOOL       A(U16)                           | alloc A                          | Allocate Pool
-f001 : ALLOCSEG        A(U32) B(U16)                    | alloc A on B                     | Allocate Segment
-f1f0 : PUSHDS                                           | push DS                          | Push Data Segment
-f1f1 : POPDS                                            | pop DS                           | Pop Data Segment
+0001 : SHJUMP          A(U16)                           | goto DP:DS:A                     | Short Jump
+0002 : JUMP            A(U32) B(U16)                    | goto DP:A:B                      | Jump
+0003 : LJUMP           A(U64)                           | goto A                           | Long Jump
+0004 : CALL            A(U16)                           | call A                           | Call
+0005 : RET                                              | return                           | Return
+0006 : LCALL           A(U64)                           | call! A                          | Long Call
+0007 : LRET                                             | return!                          | Long Return
+0008 : IF              A(U8)                            | if A                             | If
+0009 : SKIP                                             | skip                             | Skip
+000f : END                                              | end                              | End Program
+0100 : DATAPOOL        A(U16)                           | datapool A                       | Set Data Pool
+0101 : DATASEG         A(U32)                           | dataset A                        | Set Data Segment
+0102 : DATAPTR         A(U16)                           | dataptr A                        | Set Address Pointer
+0103 : DATAOFF         A(U16)                           | dataoffset A                     | Set Address Offset
+01f0 : PUSHDS                                           | push DS                          | Push Data Segment
+01f1 : POPDS                                            | pop DS                           | Pop Data Segment
+0400 : ALLOCPOOL       A(U16)                           | alloc A                          | Allocate Pool
+0401 : ALLOCSEG        A(U32) B(U16)                    | alloc A on B                     | Allocate Segment
+1000 : SET8            A(U8) B(U8)                      | Bytes[A] = B                     | Set Byte
+1001 : COPYFROM8       A(U8) B(U16)                     | Bytes[A] = [B]                   | Copy Byte From
+1002 : COPYTO8         A(U16) B(U8)                     | [A] = Bytes[B]                   | Copy Byte To
+1300 : WINT8           A(U8)                            | out Bytes[A]                     | Write Byte
+1301 : RINT8           A(U8)                            | in Bytes[A]                      | Read Byte
+1310 : WASCII          A(U16)                           | out S8 [A]                       | Write Ascii
+1400 : SET16           A(U8) B(U16)                     | Words[A] = B                     | Set Word
+1401 : COPYFROM16      A(U8) B(U16)                     | Words[A] = [B]                   | Copy Word From
+1402 : COPYTO16        A(U16) B(U8)                     | [A] = Words[B]                   | Copy Word To
+1800 : SET32           A(U8) B(U32)                     | Quads[A] = B                     | Set Quad
+1801 : COPYFROM32      A(U8) B(U16)                     | Quads[A] = [B]                   | Copy Quad From
+1802 : COPYTO32        A(U16) B(U8)                     | [A] = Quads[B]                   | Copy Quad To
+1c00 : SET64           A(U8) B(U64)                     | Longs[A] = B                     | Set Long
+1c01 : COPYFROM64      A(U8) B(U16)                     | Longs[A] = [B]                   | Copy Long From
+1c02 : COPYTO64        A(U16) B(U8)                     | [A] = Longs[B]                   | Copy Long To
 ===============================================================================================================
 ```
 
