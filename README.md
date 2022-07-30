@@ -13,7 +13,7 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 
 **Juse is still in early development.**
 
-- For now, there are only 34 operations implemented.  
+- For now, only few operations are implemented.  
     You can play with if you are curious ;)
 - But there are a lot of features todo :
     - OpKeys are not fixed.
@@ -32,7 +32,7 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- 34 operations, general registers manipulation (read/write), byte IO and strings output
+- **42 operations**, general registers manipulation (read/write), byte IO and strings output
 
 ## Dependencies
 
@@ -156,12 +156,20 @@ OP   : Jumne code                                       | JuseLang code         
 1400 : SET16           A(U8) B(U16)                     | Words[A] = B                     | Set Word
 1401 : COPYFROM16      A(U8) B(U16)                     | Words[A] = [B]                   | Copy Word From
 1402 : COPYTO16        A(U16) B(U8)                     | [A] = Words[B]                   | Copy Word To
+1700 : WINT16          A(U8)                            | out Words[A]                     | Write Word
+1701 : RINT16          A(U8)                            | in Words[A]                      | Read Word
+1710 : WUTF16          A(U16)                           | out S16 [A]                      | Write Utf-16
 1800 : SET32           A(U8) B(U32)                     | Quads[A] = B                     | Set Quad
 1801 : COPYFROM32      A(U8) B(U16)                     | Quads[A] = [B]                   | Copy Quad From
 1802 : COPYTO32        A(U16) B(U8)                     | [A] = Quads[B]                   | Copy Quad To
+1b00 : WINT32          A(U8)                            | out Quads[A]                     | Write Quad
+1b01 : RINT32          A(U8)                            | in Quads[A]                      | Read Quad
+1b10 : WUTF32          A(U16)                           | out S32 [A]                      | Write Utf-32
 1c00 : SET64           A(U8) B(U64)                     | Longs[A] = B                     | Set Long
 1c01 : COPYFROM64      A(U8) B(U16)                     | Longs[A] = [B]                   | Copy Long From
 1c02 : COPYTO64        A(U16) B(U8)                     | [A] = Longs[B]                   | Copy Long To
+1f00 : WINT64          A(U8)                            | out Longs[A]                     | Write Long
+1f01 : RINT64          A(U8)                            | in Longs[A]                      | Read Long
 ===============================================================================================================
 ```
 

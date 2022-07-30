@@ -30,9 +30,6 @@
     <ClCompile Include="Operations\operations.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\operations_io.cpp">
-      <Filter>Fichiers sources</Filter>
-    </ClCompile>
     <ClCompile Include="Operations\Debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>

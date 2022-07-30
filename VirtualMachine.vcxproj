@@ -156,7 +156,6 @@
     <ClCompile Include="Operations\logic.cpp" />
     <ClCompile Include="Operations\move.cpp" />
     <ClCompile Include="Operations\operations.cpp" />
-    <ClCompile Include="Operations\operations_io.cpp" />
     <ClCompile Include="Operations\thread.cpp" />
   </ItemGroup>
   <ItemGroup>

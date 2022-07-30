@@ -33,4 +33,24 @@ void Juse::Operations::StandardExtensions::ext_u64(Cpu& cpu)
             machine.writeData(address, word2set<U64>(machine.cpu.registers.bytes[register_index]));
         },
         { { SIZE16 }, { SIZE8 } }));
+    cpu.operations[0x1F00] = S<Operation>(new Operation(
+        "Write Long", "WINT64", "out Longs[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 register_index = U8(operation.argument(instruction, 0));
+            std::stringstream buffer {};
+            buffer << std::dec << machine.cpu.registers.longs[register_index];
+            out(machine.out, buffer, machine.cpu.flag_debug);
+        },
+        { { SIZE8 } }));
+    cpu.operations[0x1F01] = S<Operation>(new Operation(
+        "Read Long", "RINT64", "in Longs[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U64 value;
+            std::stringstream buffer;
+            U8 register_index = U8(operation.argument(instruction, 0));
+            buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
+            buffer >> std::dec >> value;
+            machine.cpu.registers.longs[register_index] = value;
+        },
+        { { SIZE8 } }));
 }
