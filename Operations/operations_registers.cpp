@@ -1,4 +1,3 @@
-
 #include "operations.h"
 
 namespace Juse {
@@ -10,7 +9,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U8 value = U8(operation.argument(instruction, 1));
-        machine.bytes[register_index] = value;
+        machine.cpu.registers.bytes[register_index] = value;
       },
       {{SIZE8}, {SIZE8}}));
   cpu.operations[0x0201] = S<Operation>(new Operation(
@@ -18,7 +17,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U16 value = U16(operation.argument(instruction, 1));
-        machine.words[register_index] = value;
+        machine.cpu.registers.words[register_index] = value;
       },
       {{SIZE8}, {SIZE16}}));
   cpu.operations[0x0202] = S<Operation>(new Operation(
@@ -26,7 +25,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U32 value = U32(operation.argument(instruction, 1));
-        machine.quads[register_index] = value;
+        machine.cpu.registers.quads[register_index] = value;
       },
       {{SIZE8}, {SIZE32}}));
   cpu.operations[0x0203] = S<Operation>(new Operation(
@@ -34,7 +33,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U64 value = operation.argument(instruction, 1);
-        machine.longs[register_index] = value;
+        machine.cpu.registers.longs[register_index] = value;
       },
       {{SIZE8}, {SIZE64}}));
 
@@ -44,7 +43,7 @@ void createRegistersOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U16 address = U16(operation.argument(instruction, 1));
         U8 value = U8(set2word(machine.readData(address, SIZE8)));
-        machine.bytes[register_index] = value;
+        machine.cpu.registers.bytes[register_index] = value;
       },
       {{SIZE8}, {SIZE16}}));
 
@@ -54,7 +53,7 @@ void createRegistersOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U16 address = U16(operation.argument(instruction, 1));
         U16 value = U16(set2word(machine.readData(address, SIZE16)));
-        machine.words[register_index] = value;
+        machine.cpu.registers.words[register_index] = value;
       },
       {{SIZE8}, {SIZE16}}));
 
@@ -64,7 +63,7 @@ void createRegistersOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U16 address = U16(operation.argument(instruction, 1));
         U32 value = U32(set2word(machine.readData(address, SIZE32)));
-        machine.quads[register_index] = value;
+        machine.cpu.registers.quads[register_index] = value;
       },
       {{SIZE8}, {SIZE16}}));
 
@@ -74,7 +73,7 @@ void createRegistersOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         U16 address = U16(operation.argument(instruction, 1));
         U64 value = set2word(machine.readData(address, SIZE64));
-        machine.longs[register_index] = value;
+        machine.cpu.registers.longs[register_index] = value;
       },
       {{SIZE8}, {SIZE16}}));
 
@@ -83,7 +82,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U8 register_index = U8(operation.argument(instruction, 1));
-        machine.writeData(address, word2set<U8>(machine.bytes[register_index]));
+        machine.writeData(address, word2set<U8>(machine.cpu.registers.bytes[register_index]));
       },
       {{SIZE16}, {SIZE8}}));
 
@@ -92,7 +91,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U8 register_index = U8(operation.argument(instruction, 1));
-        machine.writeData(address, word2set<U16>(machine.bytes[register_index]));
+        machine.writeData(address, word2set<U16>(machine.cpu.registers.bytes[register_index]));
       },
       {{SIZE16}, {SIZE8}}));
 
@@ -101,7 +100,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U8 register_index = U8(operation.argument(instruction, 1));
-        machine.writeData(address, word2set<U32>(machine.bytes[register_index]));
+        machine.writeData(address, word2set<U32>(machine.cpu.registers.bytes[register_index]));
       },
       {{SIZE16}, {SIZE8}}));
 
@@ -110,7 +109,7 @@ void createRegistersOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U16 address = U16(operation.argument(instruction, 0));
         U8 register_index = U8(operation.argument(instruction, 1));
-        machine.writeData(address, word2set<U64>(machine.bytes[register_index]));
+        machine.writeData(address, word2set<U64>(machine.cpu.registers.bytes[register_index]));
       },
       {{SIZE16}, {SIZE8}}));
 }

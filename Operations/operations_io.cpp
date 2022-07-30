@@ -33,7 +33,7 @@ void createIoOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         std::stringstream buffer{};
-        buffer << std::dec << +machine.bytes[register_index];
+        buffer << std::dec << +machine.cpu.registers.bytes[register_index];
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
@@ -42,7 +42,7 @@ void createIoOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         std::stringstream buffer{};
-        buffer << std::dec << machine.words[register_index];
+        buffer << std::dec << machine.cpu.registers.words[register_index];
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
@@ -51,7 +51,7 @@ void createIoOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         std::stringstream buffer{};
-        buffer << std::dec << machine.quads[register_index];
+        buffer << std::dec << machine.cpu.registers.quads[register_index];
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
@@ -60,7 +60,7 @@ void createIoOperations(Cpu &cpu) {
       [](Machine &machine, Instruction &instruction, Operation &operation) {
         U8 register_index = U8(operation.argument(instruction, 0));
         std::stringstream buffer{};
-        buffer << std::dec << machine.longs[register_index];
+        buffer << std::dec << machine.cpu.registers.longs[register_index];
         out(machine.out, buffer, machine.cpu.flag_debug);
       },
       {{SIZE8}}));
@@ -82,7 +82,7 @@ void createIoOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
         buffer >> std::dec >> value;
-        machine.bytes[register_index] = U8(value);
+        machine.cpu.registers.bytes[register_index] = U8(value);
       },
       {{SIZE8}}));
   cpu.operations[0x1011] = S<Operation>(new Operation(
@@ -93,7 +93,7 @@ void createIoOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
         buffer >> std::dec >> value;
-        machine.words[register_index] = value;
+        machine.cpu.registers.words[register_index] = value;
       },
       {{SIZE8}}));
   cpu.operations[0x1012] = S<Operation>(new Operation(
@@ -104,7 +104,7 @@ void createIoOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
         buffer >> std::dec >> value;
-        machine.quads[register_index] = value;
+        machine.cpu.registers.quads[register_index] = value;
       },
       {{SIZE8}}));
   cpu.operations[0x1013] = S<Operation>(new Operation(
@@ -115,7 +115,7 @@ void createIoOperations(Cpu &cpu) {
         U8 register_index = U8(operation.argument(instruction, 0));
         buffer << in(machine.out, machine.in, machine.cpu.flag_debug);
         buffer >> std::dec >> value;
-        machine.longs[register_index] = value;
+        machine.cpu.registers.longs[register_index] = value;
       },
       {{SIZE8}}));
 

@@ -4,41 +4,54 @@
 
 namespace Juse {
 
+Instruction getInstructionFromId(Machine& machine, Operation& operation, U16 identifier);
+void debugInstruction(Machine& machine, Operation& operation, Instruction& instruction);
+
+struct Registers {
+    GeneralRegisters<U8> bytes;
+    GeneralRegisters<U16> words;
+    GeneralRegisters<U32> quads;
+    GeneralRegisters<U64> longs;
+    CompareFlags compareFlags;
+};
+
 class Cpu {
 
-  /*
+    /*
    * Registers
    */
-  U16 pool_pointer;
-  U32 segment_pointer;
-  U16 instruction_pointer;
+    U16 pool_pointer;
+    U32 segment_pointer;
+    U16 instruction_pointer;
 
 public:
-  CompareFlags compareFlags;
-  bool flag_exit;
-  bool flag_debug;
-  bool flag_skip;
+    bool flag_exit;
+    bool flag_debug;
+    bool flag_skip;
 
-  static S<Operation> NoOp;
-  OperationMap operations;
+    Registers registers;
 
-  Cpu();
-  void initOperations();
-  void forward();
-  U64 addressPointer();
-  void jump(U16, U32, U16);
-  void longjump(U64);
-  bool shouldExit();
+    static S<Operation> NoOp;
+    OperationMap operations;
 
-  void cycle(Machine &, bool = false);
+    Cpu();
+    void initOperations();
+    void forward();
+    U64 addressPointer();
+    void jump(U16, U32, U16);
+    void longjump(U64);
+    bool shouldExit();
 
-  U8 dataAt(Memory &, U64);
-  U8 data(Memory &);
+    void cycle(Machine&, bool = false);
 
-  void set(Memory &, U64, U8);
+    U8 dataAt(Memory&, U64);
+    U8 data(Memory&);
 
-  U16 pool();
-  U16 segment();
-  U16 instruction();
+    void set(Memory&, U64, U8);
+
+    U16 pool();
+    U16 segment();
+    U16 instruction();
 };
+
 } // namespace Juse

@@ -42,6 +42,8 @@ template <class T> const auto makeP = std::make_unique<T>;
 
 template <class T> const auto makeS = std::make_shared<T>;
 
+template <class T> S<T> share(T &t) { return makeS<T>(std::move(t)); }
+
 const size_t SIZE8 = 1;
 const size_t SIZE16 = 2;
 const size_t SIZE32 = 4;
