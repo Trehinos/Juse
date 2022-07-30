@@ -15,7 +15,7 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 
 - For now, there are only 34 operations implemented.  
     You can play with if you are curious ;)
-- But there are a lot of feature todo :
+- But there are a lot of features todo :
     - OpKeys are not fixed.
     - 2 assemblers languages are planned.
     - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**.
@@ -26,8 +26,13 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 ## Key features
 
 - The goal : A **multipurpose virtual machine** written in modern C++
+    - The machine has to be easy to understand (16 bits opkey with variable length opcodes)
+    - The project can be used as a framework to create a custom virtual machine with custom opcodes.
+
+Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
+- 34 operations, general registers manipulation (read/write), byte IO and strings output
 
 ## Dependencies
 
