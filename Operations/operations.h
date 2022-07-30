@@ -20,9 +20,6 @@ struct Converter {
     static To convert(From from) { return To(from); }
 };
 
-void out(std::ostream&, SS8&, bool);
-std::string in(std::ostream&, std::istream&, bool);
-
 template <Juse::IsWord T>
 void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
 {
@@ -39,6 +36,30 @@ T random(T min, T max)
     static std::default_random_engine e(r());
     return uniform(e);
 }
+
+template <Juse::IsWord T>
+CompareFlags compare(T a, T b)
+{
+    CompareFlags flags = Registers::createFlags();
+    if (a == b) {
+        flags[CompareFlag::EQ] = true;
+        flags[CompareFlag::GE] = true;
+        flags[CompareFlag::LE] = true;
+        if (a == 0) {
+            flags[CompareFlag::Z0] = true;
+        }
+    }
+    if (a > b) {
+        flags[CompareFlag::GT] = true;
+    }
+    if (a < b) {
+        flags[CompareFlag::LW] = true;
+    }
+    return flags;
+}
+
+void out(std::ostream&, SS8&, bool);
+std::string in(std::ostream&, std::istream&, bool);
 
 namespace Operations {
     namespace Standard {

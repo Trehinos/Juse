@@ -15,16 +15,16 @@
 namespace Juse {
 
 enum class CompareFlag {
-  EQ = 0,
-  GT = 1,
-  LW = 2,
-  GE = 3,
-  LE = 4,
-  NE = 5,
-  Z0 = 6,
-  CR = 7,
-  OF = 8,
-  ERR = 255
+    EQ = 0,
+    GT = 1,
+    LW = 2,
+    GE = 3,
+    LE = 4,
+    NE = 5,
+    Z0 = 6,
+    CR = 7,
+    OF = 8,
+    ERR = 255
 };
 
 using CompareFlags = std::map<CompareFlag, bool>;
@@ -34,15 +34,20 @@ concept IsAnyOf = (std::same_as<T, U> || ...);
 
 const size_t SEGMENT_SIZE = 1 << 16; // 64 KiB
 
-template <class T> using P = std::unique_ptr<T>;
+template <class T>
+using P = std::unique_ptr<T>;
 
-template <class T> using S = std::shared_ptr<T>;
+template <class T>
+using S = std::shared_ptr<T>;
 
-template <class T> const auto makeP = std::make_unique<T>;
+template <class T>
+const auto makeP = std::make_unique<T>;
 
-template <class T> const auto makeS = std::make_shared<T>;
+template <class T>
+const auto makeS = std::make_shared<T>;
 
-template <class T> S<T> share(T &t) { return makeS<T>(std::move(t)); }
+template <class T>
+S<T> share(T& t) { return makeS<T>(std::move(t)); }
 
 const size_t SIZE8 = 1;
 const size_t SIZE16 = 2;
@@ -50,7 +55,8 @@ const size_t SIZE32 = 4;
 const size_t SIZE64 = 8;
 
 const std::map<size_t, size_t> sizes = {
-    {SIZE8, 8}, {SIZE16, 16}, {SIZE32, 32}, {SIZE64, 64}};
+    { SIZE8, 8 }, { SIZE16, 16 }, { SIZE32, 32 }, { SIZE64, 64 }
+};
 
 using U8 = std::uint8_t;
 using U16 = std::uint16_t;
@@ -67,9 +73,11 @@ using CH32 = char32_t;
 template <typename T>
 concept IsChar = IsAnyOf<T, CH8, CH16, CH32>;
 
-template <IsChar T> using StringStream = std::basic_stringstream<T>;
+template <IsChar T>
+using StringStream = std::basic_stringstream<T>;
 
-template <IsChar T = CH8> using String = std::basic_stringstream<T>;
+template <IsChar T = CH8>
+using String = std::basic_stringstream<T>;
 
 using SS8 = StringStream<CH8>;
 using SS16 = StringStream<CH16>;
@@ -91,7 +99,8 @@ const U32 MASK_32TOP16 = 0xFFFF0000;
 const U32 MASK_BOTTOM32 = 0xFFFFFFFF;
 const U64 MASK_64TOP32 = 0xFFFFFFFF00000000;
 
-template <int size> using ByteArray = std::array<U8, size>;
+template <int size>
+using ByteArray = std::array<U8, size>;
 using ByteSet = std::vector<U8>;
 using Stack = std::stack<U8>;
 
@@ -99,49 +108,52 @@ using Segment = ByteArray<SEGMENT_SIZE>;
 using Pool = std::map<U32, S<Segment>>;
 using Memory = std::map<U16, S<Pool>>;
 
-template <IsWord Type> using GeneralRegisters = std::array<Type, 256>;
+template <IsWord Type>
+using GeneralRegisters = std::array<Type, 256>;
 
 class Operation;
 
 using OperationMap = std::map<U16, S<Operation>>;
 
 struct Address {
-  U16 pool;
-  U32 segment;
-  U16 datum;
+    U16 pool;
+    U32 segment;
+    U16 datum;
 
-  U64 compose() { return (U64(pool) << 48) + (U64(segment) << 16) + datum; }
+    U64 compose() { return (U64(pool) << 48) + (U64(segment) << 16) + datum; }
 
-  static U64 with(U16 p, U32 s, U16 d) { return Address{p, s, d}.compose(); }
+    static U64 with(U16 p, U32 s, U16 d) { return Address { p, s, d }.compose(); }
 
-  static Address from(U64 address) {
-    U16 pool = U16(address & 0xFFFF000000000000);
-    U32 segment = U32(address & 0x0000FFFFFFFF0000);
-    U16 datum = U16(address & 0x000000000000FFFF);
+    static Address from(U64 address)
+    {
+        U16 pool = U16(address & 0xFFFF000000000000);
+        U32 segment = U32(address & 0x0000FFFFFFFF0000);
+        U16 datum = U16(address & 0x000000000000FFFF);
 
-    return Address{pool, segment, datum};
-  }
+        return Address { pool, segment, datum };
+    }
 };
 
 struct Instruction {
-  ByteSet data;
+    ByteSet data;
 
-  U16 identifier() { return U16(data[0] << 8) + (data[1]); }
+    U16 identifier() { return U16(data[0] << 8) + (data[1]); }
 
-  U64 argument(size_t offset, size_t size) {
-    U64 buffer = 0;
-    for (size_t i = SIZE16 + offset; i < SIZE16 + offset + size; i++) {
-      buffer <<= 8;
-      buffer += data[i];
+    U64 argument(size_t offset, size_t size)
+    {
+        U64 buffer = 0;
+        for (size_t i = SIZE16 + offset; i < SIZE16 + offset + size; i++) {
+            buffer <<= 8;
+            buffer += data[i];
+        }
+        return buffer;
     }
-    return buffer;
-  }
 };
 
 class Cpu;
 class Machine;
 
-using FunctionType = void(Machine &, Instruction &, Operation &);
+using FunctionType = void(Machine&, Instruction&, Operation&);
 using OperationFunction = std::function<FunctionType>;
 
 } // namespace Juse

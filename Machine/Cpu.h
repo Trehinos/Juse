@@ -13,6 +13,22 @@ struct Registers {
     GeneralRegisters<U32> quads;
     GeneralRegisters<U64> longs;
     CompareFlags compareFlags;
+
+    static CompareFlags createFlags()
+    {
+        CompareFlags flags {};
+        flags[CompareFlag::EQ] = false;
+        flags[CompareFlag::GT] = false;
+        flags[CompareFlag::LW] = false;
+        flags[CompareFlag::GE] = false;
+        flags[CompareFlag::LE] = false;
+        flags[CompareFlag::NE] = false;
+        flags[CompareFlag::Z0] = false;
+        flags[CompareFlag::CR] = false;
+        flags[CompareFlag::OF] = false;
+        flags[CompareFlag::ERR] = false;
+        return flags;
+    }
 };
 
 class Cpu {

@@ -8,6 +8,9 @@ void Juse::setWord<Juse::U16>(Juse::Operation&, Juse::Instruction&, Juse::Genera
 template <Juse::IsWord T>
 T Juse::random<Juse::U16>(T, T);
 
+template <Juse::IsWord T>
+Juse::CompareFlags Juse::compare<Juse::U16>(T a, T b);
+
 /* 14xx-17xx */
 void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
 {
@@ -48,7 +51,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
             machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
         },
-        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+        { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1501] = S<Operation>(new Operation(
         "Substract", "SUB16", "Words[A] = Words[B] - Words[C]",
@@ -69,7 +72,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
             machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
         },
-        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+        { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1503] = S<Operation>(new Operation(
         "Divide", "DIV16", "Words[A] = Words[B] / Words[C]",
@@ -104,6 +107,17 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             machine.cpu.registers.words[index] = random<U16>(min, max);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x15F0] = S<Operation>(new Operation(
+        "Compare", "CMP16", "Words[A] ? Words[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 iA = U8(operation.argument(instruction, 0));
+            U8 iB = U8(operation.argument(instruction, 1));
+            U16 rA = machine.cpu.registers.words[iA];
+            U16 rB = machine.cpu.registers.words[iB];
+            machine.cpu.registers.compareFlags = compare<U16>(rA, rB);
+        },
+        { { SIZE8 }, { SIZE8 } }));
 
     // 17xx - U16 I/O
     cpu.operations[0x1700] = S<Operation>(new Operation(
