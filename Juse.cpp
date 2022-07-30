@@ -6,10 +6,15 @@ using namespace Juse;
 
 array<U8, 256> testProgram()
 {
-    return {/*000*/ 0x01, 0x03, 0x00, 0x10, 'H',  'e',  'l',  'l',
-        /*008*/ 'o',  ' ',  'w',  'o',  'r',  'l',  'd',  0x00,
+    return { /*000*/ 0x01, 0x03, 0x00, 0x10, 'H', 'e', 'l', 'l',
+        /*008*/ 'o', ' ', 'w', 'o', 'r', 'l', 'd', 0x00,
         /*010*/ 0x00, 0x09, 0x13, 0x10, 0x00, 0x04, 0x00, 0x00,
         /*018*/ 0x13, 0x01, 0x00, 0x13, 0x00, 0x00, 0x00, 0x0F };
+}
+
+array<U8, 256> testRandom()
+{
+    return { 0x14, 0x00, 0, 0, 0, 0x14, 0x00, 1, 0, 100, 0x15, 0x06, 2, 0, 1, 0x17, 0, 2, 0x15, 0x06, 2, 0, 1, 0x17, 0, 2, 0x15, 0x06, 2, 0, 1, 0x17, 0, 2, 0x15, 0x06, 2, 0, 1, 0x17, 0, 2, 0, 0x0F };
 }
 
 int main(int argc, char* argv[])
@@ -24,7 +29,7 @@ int main(int argc, char* argv[])
 
     // Load program
     auto segment = makeS<Segment>();
-    auto source = testProgram();
+    auto source = testRandom();
     copy(source.begin(), source.end(), segment->begin());
 
     // Init machine
@@ -32,7 +37,8 @@ int main(int argc, char* argv[])
     init(machine.cpu);
 
     // Dump information
-    cout << "Trehinos/Juse " << VERSION << "\n(c) 2022 Trehinos\n" << endl;
+    cout << "Trehinos/Juse " << VERSION << "\n(c) 2022 Trehinos\n"
+         << endl;
     if (debug) {
         Debug::dumpOperations(machine.cpu);
         Debug::dumpProgram(machine);
@@ -40,7 +46,8 @@ int main(int argc, char* argv[])
 
     // Run program
     if (debug) {
-        cout << endl << "Debug program " << program << endl;
+        cout << endl
+             << "Debug program " << program << endl;
     }
     machine.run(debug);
 }

@@ -17,7 +17,7 @@ void Juse::debugInstruction(Machine& machine, Operation& operation, Instruction&
 
         size_t index = 0;
         for (Argument argument : operation.getArgumentDefs()) {
-            machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation.argument(instruction, index++);
+            machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation.argument(instruction, index++) << " ";
         }
     }
 }
