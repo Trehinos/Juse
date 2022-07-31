@@ -30,8 +30,7 @@ void Juse::Operations::Standard::branching(Cpu& cpu)
         "Call", "CALL", "call A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U16 target = MASK_BOTTOM8 & operation.argument(instruction, 0);
-            machine.push(0xFF00 & machine.cpu.instruction());
-            machine.push(0x00FF & machine.cpu.instruction());
+            machine.multiPush(word2set(machine.cpu.instruction()));
             machine.cpu.jump(machine.cpu.pool(), machine.cpu.segment(), target);
         },
         { { SIZE16 } }));
@@ -61,7 +60,7 @@ void Juse::Operations::Standard::branching(Cpu& cpu)
         "If", "IF", "if A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U8 compareOperator = U8(operation.argument(instruction, 0));
-            if (machine.cpu.registers.compareFlags.at(CompareFlag(compareOperator))) {
+            if (!machine.cpu.registers.compareFlags.at(CompareFlag(compareOperator))) {
                 machine.cpu.flag_skip = true;
             } 
         },

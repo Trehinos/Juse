@@ -1,4 +1,4 @@
-; std :
+;àstd :
 #DEFINE print(MESSAGE$) push DS & dataset std-data & alloc $printBuffer~8 & [$printBuffer] = MESSAGE$ & out S8 $printBuffer & pop DS
 #SEGMENT std-data
 $printBuffer #DL
@@ -61,21 +61,37 @@ return                                                  ; }
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Jeu du plus et du moins
 ;; TODO RND(A, B)
-$start goto $main
-$static-data
-$argv #DW~256
-$messagePrompt #DW~"Devinez le nombre auquel je pense :"
-$number #DW
-#DEFINE MAX 9999
+@start goto $main
+@static-data
+@messagePrompt #DW~36 "Devinez le nombre auquel je pense :"
+@more #DW~11 "C'est plus"
+@less #DW~12 "C'est moins"
+@victoryMsg #DW~26 "Bravo, vous avez trouvé !"
+@number #DW
 
-$main                                                       ; L main(    
-in Longs[0]                                                 ;   W argc
-in Words[0]                                                 ;   CH8* argv
-[$argv] = Words[0]                                          ; ) {
-RND(0, MAX)
+@main 91
+Words[0] = 0
+Words[1] = 9999
+Words[2] = RND(0, 1)
+$number = Words[2]
 
-Words[0] = $message
+@loop
+call @prompt
+Words[1] = [$number]
+Words[0] ? [Words[1]
+if =
+goto @victory
+if <
+out S8 @more
+if >
+out S8 @less
+goto @loop
 
+@prompt
+out S8 @messagePrompt
+in Words[0]
+return
 
-out Longs[0]                                                
+@victory
+out S8 @victoryMsg
 end                                                         ; }

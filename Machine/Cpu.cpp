@@ -109,17 +109,19 @@ void Cpu::cycle(Machine& machine, bool debug)
 
     if (debug) {
         machine.out << "@" << std::hex << std::right << std::setfill('0') << std::setw(4);
-        machine.out << (int)instruction_pointer << " : ";
+        machine.out << (int)(instruction_pointer - 2) << " : ";
     }
 
     Instruction instruction = getInstructionFromId(machine, *current, identifier);
 
-    if (debug) {
-        if (flag_skip) {
+    if (flag_skip) {
+        if (debug) {
             machine.out << " <- SKIP" << std::endl;
-            flag_skip = false;
-            return;
         }
+        flag_skip = false;
+        return;
+    }
+    if (debug) { 
         machine.out << std::endl;
     }
     (*current)(machine, instruction);

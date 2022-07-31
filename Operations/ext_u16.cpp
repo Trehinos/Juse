@@ -48,8 +48,10 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
             U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
             U32 result = rB + rC;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
+            U16 overflow = U16((result & MASK_32TOP16) >> 16);
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = U16(result & MASK_BOTTOM16);
+            machine.cpu.registers.compareFlags[CompareFlag::OF] = overflow != 0;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = overflow;
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
@@ -69,8 +71,10 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
             U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
             U32 result = rB * rC;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result & MASK_BOTTOM16;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = (result & MASK_32TOP16) >> 16;
+            U16 overflow = U16((result & MASK_32TOP16) >> 16);
+            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = U16(result & MASK_BOTTOM16);
+            machine.cpu.registers.compareFlags[CompareFlag::OF] = overflow != 0;
+            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = overflow;
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
@@ -96,7 +100,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    // TODO : 1505 - ABD16
+    // TODO : 1505 - ABS16
 
     cpu.operations[0x1506] = S<Operation>(new Operation(
         "Random", "RND16", "Words[A] = {RND(B, C)}",
