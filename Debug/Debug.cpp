@@ -2,7 +2,7 @@
 #include <iomanip>
 #include <sstream>
 
-#include "operations.h"
+#include "Debug.h"
 
 using namespace Juse;
 

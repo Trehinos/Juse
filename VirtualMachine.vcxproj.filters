@@ -30,7 +30,7 @@
     <ClCompile Include="Operations\operations.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\Debug.cpp">
+    <ClCompile Include="Debug\Debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Operations\branching.cpp">
@@ -92,14 +92,13 @@
     <ClInclude Include="Tests\Tests.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Debug\Debug.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="example.juse" />
     <None Include="LICENSE" />
     <None Include="README.md" />
     <None Include=".gitignore" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="juse-lang.xml" />
   </ItemGroup>
 </Project>

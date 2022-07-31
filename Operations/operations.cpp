@@ -1,12 +1,6 @@
 
 #include "operations.h"
 
-std::ostream& Juse::operator<<(std::ostream& os, const Juse::U8 c)
-{
-    os << (int)(unsigned char)c;
-    return os;
-}
-
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
     if (debug) {

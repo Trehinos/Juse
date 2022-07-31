@@ -7,14 +7,6 @@
 
 namespace Juse {
 
-std::ostream& operator<<(std::ostream&, const U8);
-
-namespace Debug {
-    void dumpState(Cpu&);
-    void dumpOperations(Cpu&);
-    void dumpProgram(Machine&, U16 = 0, U16 = 256, U32 = 0, U16 = 0);
-} // namespace Debug
-
 template <IsChar From, IsChar To>
 struct Converter {
     static To convert(From from) { return To(from); }

@@ -3,6 +3,9 @@
 #include "../Models/types.h"
 
 namespace Juse {
+
+std::ostream& operator<<(std::ostream&, const U8);
+
 struct Argument {
   size_t size = 0;
 };

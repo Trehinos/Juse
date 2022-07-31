@@ -103,7 +103,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
     // TODO : 1505 - ABS16
 
     cpu.operations[0x1506] = S<Operation>(new Operation(
-        "Random", "RND16", "Words[A] = {RND(B, C)}",
+        "Random", "RND16", "Words[A] = {RND Words[B] Words[C]}",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U8 index = U8(operation.argument(instruction, 0));
             U16 min = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];

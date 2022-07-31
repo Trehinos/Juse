@@ -4,6 +4,12 @@
 
 using namespace Juse;
 
+std::ostream& Juse::operator<<(std::ostream& os, const U8 c)
+{
+    os << (int)(unsigned char)c;
+    return os;
+}
+
 Operation::Operation(std::string name, std::string mnemu, std::string ecal, OperationFunction code, std::vector<Argument> arguments)
     : name(name)
     , mnemu(mnemu)

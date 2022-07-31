@@ -145,7 +145,7 @@
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Machine\Cpu.cpp" />
     <ClCompile Include="Operations\allocation.cpp" />
-    <ClCompile Include="Operations\Debug.cpp" />
+    <ClCompile Include="Debug\Debug.cpp" />
     <ClCompile Include="Machine\Machine.cpp" />
     <ClCompile Include="Machine\Operation.cpp" />
     <ClCompile Include="Operations\branching.cpp" />
@@ -161,6 +161,7 @@
     <ClCompile Include="Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Debug\Debug.h" />
     <ClInclude Include="Juse.h" />
     <ClInclude Include="Machine\Cpu.h" />
     <ClInclude Include="Machine\Machine.h" />
@@ -172,12 +173,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="example.juse" />
     <None Include="LICENSE" />
     <None Include="README.md" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="juse-lang.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

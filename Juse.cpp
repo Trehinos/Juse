@@ -1,5 +1,6 @@
 ﻿
 #include "Juse.h"
+#include "Debug/Debug.h"
 #include "Tests/Tests.h"
 
 using namespace std;
@@ -17,7 +18,7 @@ int main(int argc, char* argv[])
 
     // Load program
     auto segment = makeS<Segment>();
-    auto source = Tests::helloWorld();
+    auto source = Tests::higherLowerGame();
     copy(source.begin(), source.end(), segment->begin());
 
     // Init machine
@@ -25,8 +26,8 @@ int main(int argc, char* argv[])
     init(machine.cpu);
 
     // Dump information
-    cout << "Trehinos/Juse " << VERSION << "\n(c) 2022 Trehinos\n"
-         << endl;
+    cout << "Trehinos/Juse " << VERSION << "\n"
+         << "(c)2022 Trehinos\n " << endl;
     if (debug) {
         Debug::dumpOperations(machine.cpu);
         Debug::dumpProgram(machine);
