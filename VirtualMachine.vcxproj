@@ -157,6 +157,8 @@
     <ClCompile Include="Operations\move.cpp" />
     <ClCompile Include="Operations\operations.cpp" />
     <ClCompile Include="Operations\thread.cpp" />
+    <ClCompile Include="Tests\game.cpp" />
+    <ClCompile Include="Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Juse.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="Models\Executable.h" />
     <ClInclude Include="Models\types.h" />
     <ClInclude Include="Operations\operations.h" />
+    <ClInclude Include="Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
