@@ -2,8 +2,11 @@
 
 #include "operations.h"
 
-template <Juse::IsWord T>
-void Juse::setWord<Juse::U64>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+using Juse::IsWord;
+using Juse::U64;
+
+template <IsWord T>
+void Juse::setWord<U64>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
 
 /* 1Cxx-1Fxx */
 void Juse::Operations::StandardExtensions::ext_u64(Cpu& cpu)

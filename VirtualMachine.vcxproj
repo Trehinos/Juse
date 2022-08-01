@@ -169,6 +169,7 @@
     <ClInclude Include="Models\Executable.h" />
     <ClInclude Include="Models\types.h" />
     <ClInclude Include="Operations\operations.h" />
+    <ClInclude Include="Operations\u_operations.h" />
     <ClInclude Include="Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>

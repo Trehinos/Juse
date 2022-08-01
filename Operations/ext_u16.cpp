@@ -1,15 +1,38 @@
 
-
 #include "operations.h"
 
-template <Juse::IsWord T>
-void Juse::setWord<Juse::U16>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+#include "u_operations.h"
 
-template <Juse::IsWord T>
-T Juse::random<Juse::U16>(T, T);
+using Juse::IsWord;
+using Juse::U16;
+using Juse::U32;
 
-template <Juse::IsWord T>
-Juse::CompareFlags Juse::compare<Juse::U16>(T a, T b);
+template <IsWord T>
+void Juse::setWord<U16>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+
+template <IsWord T>
+Juse::CompareFlags Juse::compare<U16>(T a, T b);
+
+template <IsWord T>
+T Juse::random<U16>(T, T);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::calculate<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::add<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::substract<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::multiply<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::divide<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::modulo<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
 
 /* 14xx-17xx */
 void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
@@ -43,67 +66,44 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
 
     // 15xx - U16 Operations
     cpu.operations[0x1500] = S<Operation>(new Operation(
-        "Add", "ADD16", "Words[A] = Words[B] + Words[C], Words[D]",
+        "Add", "ADD16", "Words[A] = Words[B] + Words[C] CR Words[D]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
-            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            U32 result = rB + rC;
-            U16 overflow = U16((result & MASK_32TOP16) >> 16);
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = U16(result & MASK_BOTTOM16);
-            machine.cpu.registers.compareFlags[CompareFlag::OF] = overflow != 0;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = overflow;
+            Operations::Unsigned::add<U16, U32>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1501] = S<Operation>(new Operation(
         "Substract", "SUB16", "Words[A] = Words[B] - Words[C]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
-            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            U16 result = rB - rC;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+            Operations::Unsigned::substract<U16, U32>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1502] = S<Operation>(new Operation(
-        "Multiply", "MUL16", "Words[A] = Words[B] * Words[C], Words[D]",
+        "Multiply", "MUL16", "Words[A] = Words[B] * Words[C] CR Words[D]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
-            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            U32 result = rB * rC;
-            U16 overflow = U16((result & MASK_32TOP16) >> 16);
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = U16(result & MASK_BOTTOM16);
-            machine.cpu.registers.compareFlags[CompareFlag::OF] = overflow != 0;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 4))] = overflow;
+            Operations::Unsigned::multiply<U16, U32>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1503] = S<Operation>(new Operation(
         "Divide", "DIV16", "Words[A] = Words[B] / Words[C]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            // TODO DIV a, b, 0, d
-
-            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
-            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            U16 result = rB / rC;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+            Operations::Unsigned::divide<U16, U32>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x1504] = S<Operation>(new Operation(
         "Modulo", "MOD16", "Words[A] = Words[B] % Words[C]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U16 rB = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
-            U16 rC = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            U16 result = rB % rC;
-            machine.cpu.registers.words[U8(operation.argument(instruction, 0))] = result;
+            Operations::Unsigned::modulo<U16, U32>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     // TODO : 1505 - ABS16
 
     cpu.operations[0x1506] = S<Operation>(new Operation(
-        "Random", "RND16", "Words[A] = {RND Words[B] Words[C]}",
+        "Random", "RND16", "Words[A] = {rnd Words[B] Words[C]}",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U8 index = U8(operation.argument(instruction, 0));
             U16 min = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
