@@ -40,6 +40,8 @@ CompareFlags compare(T a, T b)
         if (a == 0) {
             flags[CompareFlag::Z0] = true;
         }
+    } else {
+        flags[CompareFlag::NE] = true;
     }
     if (a > b) {
         flags[CompareFlag::GT] = true;
