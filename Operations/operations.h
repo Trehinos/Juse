@@ -37,7 +37,6 @@ namespace Operations {
         void ext_string(Cpu&);
         void ext_float(Cpu&);
     }
-
 }
 
 /*

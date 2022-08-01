@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Machine\Cpu.cpp" />
+    <ClCompile Include="Models\U128.cpp" />
     <ClCompile Include="Operations\allocation.cpp" />
     <ClCompile Include="Debug\Debug.cpp" />
     <ClCompile Include="Machine\Machine.cpp" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Operations\move.cpp" />
     <ClCompile Include="Operations\operations.cpp" />
     <ClCompile Include="Operations\thread.cpp" />
+    <ClCompile Include="Tests\arithmetic.cpp" />
     <ClCompile Include="Tests\game.cpp" />
     <ClCompile Include="Tests\hello_world.cpp" />
   </ItemGroup>

@@ -2,11 +2,41 @@
 
 #include "operations.h"
 
+#include "u_operations.h"
+
 using Juse::IsWord;
 using Juse::U32;
+using Juse::U64;
 
 template <IsWord T>
 void Juse::setWord<U32>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+
+template <IsWord T>
+Juse::CompareFlags Juse::compare<U32>(T a, T b);
+
+template <IsWord T>
+T Juse::random<U32>(T, T);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::calculate<U32, U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::add<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::substract<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::multiply<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::divide<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::modulo<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T>
+void Juse::Operations::Unsigned::compare<U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 /* 18xx-1Bxx */
 void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
@@ -36,6 +66,62 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
             machine.writeData(address, word2set<U32>(machine.cpu.registers.quads[register_index]));
         },
         { { SIZE16 }, { SIZE8 } }));
+
+    cpu.operations[0x1900] = S<Operation>(new Operation(
+        "Add", "ADD32", "Quads[A] = Quads[B] + Quads[C] CR Quads[D]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::add<U32, U64>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1901] = S<Operation>(new Operation(
+        "Substract", "SUB32", "Quads[A] = Quads[B] - Quads[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::substract<U32, U64>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1902] = S<Operation>(new Operation(
+        "Multiply", "MUL32", "Quads[A] = Quads[B] * Quads[C] CR Quads[D]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::multiply<U32, U64>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1903] = S<Operation>(new Operation(
+        "Divide", "DIV32", "Quads[A] = Quads[B] / Quads[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::divide<U32, U64>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1904] = S<Operation>(new Operation(
+        "Modulo", "MOD32", "Quads[A] = Quads[B] % Quads[C]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::modulo<U32, U64>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    // TODO : 1505 - ABS16
+
+    cpu.operations[0x1906] = S<Operation>(new Operation(
+        "Random", "RND32", "Quads[A] = {rnd Quads[B] Quads[C]}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 index = U8(operation.argument(instruction, 0));
+            U32 min = machine.cpu.registers.quads[U8(operation.argument(instruction, 1))];
+            U32 max = machine.cpu.registers.quads[U8(operation.argument(instruction, 2))];
+            machine.cpu.registers.quads[index] = random<U32>(min, max);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x19F0] = S<Operation>(new Operation(
+        "Compare", "CMP32", "Quads[A] ? Quads[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::compare<U32>(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 } }));
+
+
     cpu.operations[0x1B00] = S<Operation>(new Operation(
         "Write Quad", "WINT32", "out Quads[A]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
@@ -58,7 +144,7 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
         { { SIZE8 } }));
 
     cpu.operations[0x1B10] = S<Operation>(new Operation(
-        "Write Utf-32", "WUTF32", "out S32 [A]",
+        "Write Utf-32", "WUTF32", "out S32 A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             // TODO convert encoding
             U16 address = U16(operation.argument(instruction, 0));

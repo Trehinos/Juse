@@ -7,7 +7,7 @@ using Juse::U8;
 using Juse::U16;
 
 template <IsWord T>
-void Juse::setWord<U16>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+void Juse::setWord<U16>(Operation&, Instruction&, GeneralRegisters<T>&);
 
 template <IsWord T>
 Juse::CompareFlags Juse::compare<U8>(T a, T b);
@@ -19,19 +19,22 @@ template <IsWord T, IsWord U>
 void Juse::Operations::Unsigned::calculate<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::add<U8, U16>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+void Juse::Operations::Unsigned::add<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::substract<U8, U16>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+void Juse::Operations::Unsigned::substract<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::multiply<U8, U16>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+void Juse::Operations::Unsigned::multiply<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::divide<U8, U16>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+void Juse::Operations::Unsigned::divide<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::modulo<U8, U16>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+void Juse::Operations::Unsigned::modulo<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T>
+void Juse::Operations::Unsigned::compare<U8>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 /* 10xx-13xx */
 void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
@@ -108,11 +111,7 @@ void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
     cpu.operations[0x11F0] = S<Operation>(new Operation(
         "Compare", "CMP8", "Bytes[A] ? Bytes[B]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U8 iA = U8(operation.argument(instruction, 0));
-            U8 iB = U8(operation.argument(instruction, 1));
-            U8 rA = machine.cpu.registers.bytes[iA];
-            U8 rB = machine.cpu.registers.bytes[iB];
-            machine.cpu.registers.compareFlags = compare<U8>(rA, rB);
+            Operations::Unsigned::compare<U8>(machine.cpu.registers.bytes, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
 
@@ -139,7 +138,7 @@ void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
         { { SIZE8 } }));
 
     cpu.operations[0x1310] = S<Operation>(new Operation(
-        "Write Ascii", "WASCII", "out S8 [A]",
+        "Write Ascii", "WASCII", "out S8 A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U16 address = U16(operation.argument(instruction, 0));
             U16 offset = 0;

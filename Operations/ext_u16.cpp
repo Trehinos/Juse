@@ -34,6 +34,9 @@ void Juse::Operations::Unsigned::divide<U16, U32>(Juse::GeneralRegisters<T>&, Ju
 template <IsWord T, IsWord U>
 void Juse::Operations::Unsigned::modulo<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
 
+template <IsWord T>
+void Juse::Operations::Unsigned::compare<U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
 /* 14xx-17xx */
 void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
 {
@@ -115,11 +118,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
     cpu.operations[0x15F0] = S<Operation>(new Operation(
         "Compare", "CMP16", "Words[A] ? Words[B]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            U8 iA = U8(operation.argument(instruction, 0));
-            U8 iB = U8(operation.argument(instruction, 1));
-            U16 rA = machine.cpu.registers.words[iA];
-            U16 rB = machine.cpu.registers.words[iB];
-            machine.cpu.registers.compareFlags = compare<U16>(rA, rB);
+            Operations::Unsigned::compare<U16>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
 
@@ -146,7 +145,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
         { { SIZE8 } }));
 
     cpu.operations[0x1710] = S<Operation>(new Operation(
-        "Write Utf-16", "WUTF16", "out S16 [A]",
+        "Write Utf-16", "WUTF16", "out S16 A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             // TODO convert encoding
             U16 address = U16(operation.argument(instruction, 0));

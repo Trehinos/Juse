@@ -53,18 +53,20 @@ const size_t SIZE8 = 1;
 const size_t SIZE16 = 2;
 const size_t SIZE32 = 4;
 const size_t SIZE64 = 8;
+const size_t SIZE128 = 16;
 
 const std::map<size_t, size_t> sizes = {
-    { SIZE8, 8 }, { SIZE16, 16 }, { SIZE32, 32 }, { SIZE64, 64 }
+    { SIZE8, 8 }, { SIZE16, 16 }, { SIZE32, 32 }, { SIZE64, 64 }, { SIZE128, 128 }
 };
 
 using U8 = std::uint8_t;
 using U16 = std::uint16_t;
 using U32 = std::uint32_t;
 using U64 = std::uint64_t;
+class U128;
 
 template <typename T>
-concept IsWord = IsAnyOf<T, U8, U16, U32, U64>;
+concept IsWord = IsAnyOf<T, U8, U16, U32, U64, U128>;
 
 using CH8 = char;
 using CH16 = char16_t;

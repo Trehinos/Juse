@@ -11,13 +11,13 @@ template <IsWord T>
 CompareFlags compare(T a, T b)
 {
     CompareFlags flags = Registers::createFlags();
+    if (a == 0 || b == 0) {
+        flags[CompareFlag::Z0] = true;
+    }
     if (a == b) {
         flags[CompareFlag::EQ] = true;
         flags[CompareFlag::GE] = true;
         flags[CompareFlag::LE] = true;
-        if (a == 0) {
-            flags[CompareFlag::Z0] = true;
-        }
     } else {
         flags[CompareFlag::NE] = true;
     }
@@ -109,6 +109,16 @@ namespace Operations {
             T rB = registers[U8(operation.argument(instruction, 1))];
             T rC = registers[U8(operation.argument(instruction, 2))];
             calculate<T, U>(registers, flags, instruction, operation, U(rB % rC));
+        }
+
+        template <IsWord T>
+        void compare(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        {
+            U8 iA = U8(operation.argument(instruction, 0));
+            U8 iB = U8(operation.argument(instruction, 1));
+            T rA = registers[iA];
+            T rB = registers[iB];
+            flags = Juse::compare<T>(rA, rB);
         }
     }
 }
