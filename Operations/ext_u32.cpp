@@ -9,7 +9,7 @@ using Juse::U32;
 using Juse::U64;
 
 template <IsWord T>
-void Juse::setWord<U32>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+void Juse::Operations::Unsigned::setWord<U32>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
 
 template <IsWord T>
 Juse::CompareFlags Juse::compare<U32>(T a, T b);
@@ -18,7 +18,7 @@ template <IsWord T>
 T Juse::random<U32>(T, T);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::calculate<U32, U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+void Juse::calculate<U32, U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
 
 template <IsWord T, IsWord U>
 void Juse::Operations::Unsigned::add<U32, U64>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
@@ -44,7 +44,7 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
     cpu.operations[0x1800] = S<Operation>(new Operation(
         "Set Quad", "SET32", "Quads[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            setWord<U32>(operation, instruction, machine.cpu.registers.quads);
+            Juse::Operations::Unsigned::setWord<U32>(operation, instruction, machine.cpu.registers.quads);
         },
         { { SIZE8 }, { SIZE32 } }));
 

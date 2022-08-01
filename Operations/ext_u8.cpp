@@ -7,7 +7,7 @@ using Juse::U8;
 using Juse::U16;
 
 template <IsWord T>
-void Juse::setWord<U16>(Operation&, Instruction&, GeneralRegisters<T>&);
+void Juse::Operations::Unsigned::setWord<U8>(Operation&, Instruction&, GeneralRegisters<T>&);
 
 template <IsWord T>
 Juse::CompareFlags Juse::compare<U8>(T a, T b);
@@ -16,7 +16,7 @@ template <IsWord T>
 T Juse::random<U16>(T, T);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::calculate<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+void Juse::calculate<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
 
 template <IsWord T, IsWord U>
 void Juse::Operations::Unsigned::add<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
@@ -42,7 +42,7 @@ void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
     cpu.operations[0x1000] = S<Operation>(new Operation(
         "Set Byte", "SET8", "Bytes[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            setWord<U8>(operation, instruction, machine.cpu.registers.bytes);
+            Juse::Operations::Unsigned::setWord<U8>(operation, instruction, machine.cpu.registers.bytes);
         },
         { { SIZE8 }, { SIZE8 } }));
 

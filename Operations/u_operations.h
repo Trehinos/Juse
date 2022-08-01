@@ -39,36 +39,44 @@ T random(T min, T max)
     return uniform(e);
 }
 
+template <IsWord T>
+struct CalculationResult {
+    T result;
+    T overflow;
+
+    CalculationResult(T r, T o)
+        : result { r }
+        , overflow { o }
+    {
+    }
+};
+
+template <IsWord T, IsWord U>
+void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation, U result, bool manageOverflow = false)
+{
+    T overflow = T(result >> (sizeof(T) * 8));
+    T mask = 0;
+    for (size_t s = 0; s < sizeof(T); s++) {
+        mask <<= 8;
+        mask |= 0xFF;
+    }
+    CalculationResult<T> r { T(result & mask), overflow };
+    flags = Registers::createFlags();
+    registers[U8(operation.argument(instruction, 0))] = r.result;
+    if (manageOverflow) {
+        flags[CompareFlag::OF] = r.overflow != 0;
+        registers[U8(operation.argument(instruction, 3))] = r.overflow;
+    }
+}
+
 namespace Operations {
     namespace Unsigned {
         template <IsWord T>
-        struct CalculationResult {
-            T result;
-            T overflow;
-
-            CalculationResult(T r, T o)
-                : result { r }
-                , overflow { o }
-            {
-            }
-        };
-
-        template <IsWord T, IsWord U>
-        void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation, U result, bool manageOverflow = false)
+        void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
         {
-            T overflow = T(result >> (sizeof(T) * 8));
-            T mask = 0;
-            for (size_t s = 0; s < sizeof(T); s++) {
-                mask <<= 8;
-                mask |= 0xFF;
-            }
-            CalculationResult<T> r { T(result & mask), overflow };
-            flags = Registers::createFlags();
-            registers[U8(operation.argument(instruction, 0))] = r.result;
-            if (manageOverflow) {
-                flags[CompareFlag::OF] = r.overflow != 0;
-                registers[U8(operation.argument(instruction, 3))] = r.overflow;
-            }
+            U8 register_index = U8(operation.argument(instruction, 0));
+            T value = T(operation.argument(instruction, 1));
+            registers[register_index] = value;
         }
 
         template <IsWord T, IsWord U>

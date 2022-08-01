@@ -33,7 +33,7 @@ It could be compared to the [JVM](https://en.wikipedia.org/wiki/Java_virtual_mac
 Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- **63 operations**, general registers manipulation (read/write), byte IO and strings output
+- **70 operations**, general registers manipulation (read/write), byte IO and strings output
 
 ## Dependencies
 
