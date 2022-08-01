@@ -12,6 +12,8 @@
 #include <string>
 #include <vector>
 
+#include "U128.h"
+
 namespace Juse {
 
 enum class CompareFlag {
@@ -63,7 +65,7 @@ using U8 = std::uint8_t;
 using U16 = std::uint16_t;
 using U32 = std::uint32_t;
 using U64 = std::uint64_t;
-class U128;
+using U128 = std::uint128_t;
 
 template <typename T>
 concept IsWord = IsAnyOf<T, U8, U16, U32, U64, U128>;

@@ -1,12 +1,41 @@
 
-
 #include "operations.h"
+
+#include "u_operations.h"
 
 using Juse::IsWord;
 using Juse::U64;
+using Juse::U128;
 
 template <IsWord T>
 void Juse::setWord<U64>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
+
+template <IsWord T>
+Juse::CompareFlags Juse::compare<U64>(T a, T b);
+
+template <IsWord T>
+T Juse::random<U64>(T, T);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::calculate<U64, U128>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::add<U64, U128>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::substract<U64, U128>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::multiply<U64, U128>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::divide<U64, U128>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T, IsWord U>
+void Juse::Operations::Unsigned::modulo<U64, U128>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+
+template <IsWord T>
+void Juse::Operations::Unsigned::compare<U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
 /* 1Cxx-1Fxx */
 void Juse::Operations::StandardExtensions::ext_u64(Cpu& cpu)
