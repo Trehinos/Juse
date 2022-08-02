@@ -4,8 +4,8 @@
 #include "u_operations.h"
 
 using Juse::IsWord;
-using Juse::U64;
 using Juse::U128;
+using Juse::U64;
 
 template <IsWord T>
 Juse::CompareFlags Juse::compare<U64>(T a, T b);
@@ -19,7 +19,7 @@ void Juse::calculate<U64, U128>(GeneralRegisters<T>&, CompareFlags&, Instruction
 namespace Juse::Operations {
 
 template <IsWord T>
-void Unsigned::set<U64>(GeneralRegisters<T>&, Operation&, Instruction&);
+void Unsigned::set<U64>(GeneralRegisters<T>&, Instruction&, Operation&);
 
 template <IsWord T>
 void Unsigned::copy<U64>(GeneralRegisters<T>&, Instruction&, Operation&);
@@ -50,7 +50,7 @@ void Juse::Operations::StandardExtensions::ext_u64(Cpu& cpu)
     cpu.operations[0x1C00] = S<Operation>(new Operation(
         "Set Long", "SET64", "Longs[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            Juse::Operations::Unsigned::set(machine.cpu.registers.longs, operation, instruction);
+            Juse::Operations::Unsigned::set(machine.cpu.registers.longs, instruction, operation);
         },
         { { SIZE8 }, { SIZE64 } }));
 

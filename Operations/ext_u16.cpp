@@ -19,7 +19,7 @@ void Juse::calculate<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&
 namespace Juse::Operations {
 
 template <IsWord T>
-void Unsigned::set<U16>(GeneralRegisters<T>&, Operation&, Instruction&);
+void Unsigned::set<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
 
 template <IsWord T>
 void Unsigned::copy<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
@@ -51,7 +51,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
     cpu.operations[0x1400] = S<Operation>(new Operation(
         "Set Word", "SET16", "Words[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            Juse::Operations::Unsigned::set(machine.cpu.registers.words, operation, instruction);
+            Juse::Operations::Unsigned::set(machine.cpu.registers.words, instruction, operation);
         },
         { { SIZE8 }, { SIZE16 } }));
 

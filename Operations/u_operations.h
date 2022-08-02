@@ -51,6 +51,7 @@ struct CalculationResult {
     }
 };
 
+// Common code of add/substract/multîply/divide/modulo operations
 template <IsWord T, IsWord U>
 void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation, U result, bool manageOverflow = false)
 {
@@ -72,7 +73,7 @@ void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction&
 namespace Operations {
     namespace Unsigned {
         template <IsWord T>
-        void set(Juse::GeneralRegisters<T>& registers, Juse::Operation& operation, Juse::Instruction& instruction)
+        void set(GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
         {
             U8 register_index = U8(operation.argument(instruction, 0));
             T value = T(operation.argument(instruction, 1));

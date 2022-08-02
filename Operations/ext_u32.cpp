@@ -20,7 +20,7 @@ void Juse::calculate<U32, U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&
 namespace Juse::Operations {
 
 template <IsWord T>
-void Unsigned::set<U32>(GeneralRegisters<T>&, Operation&, Instruction&);
+void Unsigned::set<U32>(GeneralRegisters<T>&, Instruction&, Operation&);
 
 template <IsWord T>
 void Unsigned::copy<U32>(GeneralRegisters<T>&, Instruction&, Operation&);
@@ -51,7 +51,7 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
     cpu.operations[0x1800] = S<Operation>(new Operation(
         "Set Quad", "SET32", "Quads[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            Juse::Operations::Unsigned::set(machine.cpu.registers.quads, operation, instruction);
+            Juse::Operations::Unsigned::set(machine.cpu.registers.quads, instruction, operation);
         },
         { { SIZE8 }, { SIZE32 } }));
 
@@ -134,7 +134,6 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
             Operations::Unsigned::compare(machine.cpu.registers.quads, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
-
 
     cpu.operations[0x1B00] = S<Operation>(new Operation(
         "Write Quad", "WINT32", "out Quads[A]",
