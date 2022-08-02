@@ -10,14 +10,6 @@ struct Converter {
     static To convert(From from) { return To(from); }
 };
 
-template <IsWord T>
-void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
-{
-    U8 register_index = U8(operation.argument(instruction, 0));
-    T value = T(operation.argument(instruction, 1));
-    registers[register_index] = value;
-}
-
 void out(std::ostream&, SS8&, bool);
 std::string in(std::ostream&, std::istream&, bool);
 

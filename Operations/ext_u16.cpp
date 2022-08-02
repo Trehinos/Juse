@@ -8,34 +8,47 @@ using Juse::U16;
 using Juse::U32;
 
 template <IsWord T>
-void Juse::setWord<U16>(Juse::Operation&, Juse::Instruction&, Juse::GeneralRegisters<T>&);
-
-template <IsWord T>
 Juse::CompareFlags Juse::compare<U16>(T a, T b);
 
 template <IsWord T>
 T Juse::random<U16>(T, T);
 
 template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::calculate<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
+void Juse::calculate<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&, U, bool);
 
-template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::add<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
-
-template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::substract<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
-
-template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::multiply<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
-
-template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::divide<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
-
-template <IsWord T, IsWord U>
-void Juse::Operations::Unsigned::modulo<U16, U32>(Juse::GeneralRegisters<T>&, Juse::CompareFlags&, Juse::Instruction&, Juse::Operation&);
+namespace Juse::Operations {
 
 template <IsWord T>
-void Juse::Operations::Unsigned::compare<U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+void Unsigned::set<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::copy<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::push<U16>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::pop<U16>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T, IsWord U>
+void Unsigned::add<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T, IsWord U>
+void Unsigned::substract<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T, IsWord U>
+void Unsigned::multiply<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T, IsWord U>
+void Unsigned::divide<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T, IsWord U>
+void Unsigned::modulo<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::compare<U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
+
+}
 
 /* 14xx-17xx */
 void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
@@ -44,7 +57,7 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
     cpu.operations[0x1400] = S<Operation>(new Operation(
         "Set Word", "SET16", "Words[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            setWord<U16>(operation, instruction, machine.cpu.registers.words);
+            Juse::Operations::Unsigned::set(machine.cpu.registers.words, instruction, operation);
         },
         { { SIZE8 }, { SIZE16 } }));
 
@@ -63,9 +76,30 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U16 address = U16(operation.argument(instruction, 0));
             U8 register_index = U8(operation.argument(instruction, 1));
-            machine.writeData(address, word2set<U16>(machine.cpu.registers.words[register_index]));
+            machine.writeData(address, word2set(machine.cpu.registers.words[register_index]));
         },
         { { SIZE16 }, { SIZE8 } }));
+
+    cpu.operations[0x1403] = S<Operation>(new Operation(
+        "Copy Word", "COPY16", "Words[A] = Words[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::copy(machine.cpu.registers.words, instruction, operation);
+        },
+        { { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1404] = S<Operation>(new Operation(
+        "Push Word", "PUSH16", "push Words[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::push(machine, machine.cpu.registers.words, instruction, operation);
+        },
+        { { SIZE8 } }));
+
+    cpu.operations[0x1405] = S<Operation>(new Operation(
+        "Pop Word", "POP16", "Words[A] = {pop}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::pop(machine, machine.cpu.registers.words, instruction, operation);
+        },
+        { { SIZE8 } }));
 
     // 15xx - U16 Operations
     cpu.operations[0x1500] = S<Operation>(new Operation(
@@ -111,14 +145,14 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             U8 index = U8(operation.argument(instruction, 0));
             U16 min = machine.cpu.registers.words[U8(operation.argument(instruction, 1))];
             U16 max = machine.cpu.registers.words[U8(operation.argument(instruction, 2))];
-            machine.cpu.registers.words[index] = random<U16>(min, max);
+            machine.cpu.registers.words[index] = random(min, max);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
     cpu.operations[0x15F0] = S<Operation>(new Operation(
         "Compare", "CMP16", "Words[A] ? Words[B]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
-            Operations::Unsigned::compare<U16>(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
+            Operations::Unsigned::compare(machine.cpu.registers.words, machine.cpu.registers.compareFlags, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
 
