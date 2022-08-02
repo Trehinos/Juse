@@ -72,11 +72,19 @@ void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction&
 namespace Operations {
     namespace Unsigned {
         template <IsWord T>
-        void setWord(Juse::Operation& operation, Juse::Instruction& instruction, Juse::GeneralRegisters<T>& registers)
+        void set(Juse::GeneralRegisters<T>& registers, Juse::Operation& operation, Juse::Instruction& instruction)
         {
             U8 register_index = U8(operation.argument(instruction, 0));
             T value = T(operation.argument(instruction, 1));
             registers[register_index] = value;
+        }
+
+        template <IsWord T>
+        void copy(GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        {
+            U8 rA = U8(operation.argument(instruction, 0));
+            U8 rB = U8(operation.argument(instruction, 1));
+            registers[rA] = registers[rB];
         }
 
         template <IsWord T, IsWord U>
