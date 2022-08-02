@@ -25,6 +25,12 @@ void Unsigned::set<U32>(GeneralRegisters<T>&, Instruction&, Operation&);
 template <IsWord T>
 void Unsigned::copy<U32>(GeneralRegisters<T>&, Instruction&, Operation&);
 
+template <IsWord T>
+void Unsigned::push<U32>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::pop<U32>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
 template <IsWord T, IsWord U>
 void Unsigned::add<U32, U64>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
@@ -80,6 +86,20 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
             Operations::Unsigned::copy(machine.cpu.registers.quads, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1804] = S<Operation>(new Operation(
+        "Push Quad", "PUSH32", "push Quads[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::push(machine, machine.cpu.registers.quads, instruction, operation);
+        },
+        { { SIZE8 } }));
+
+    cpu.operations[0x1805] = S<Operation>(new Operation(
+        "Pop Quad", "POP32", "Quads[A] = {pop}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::pop(machine, machine.cpu.registers.quads, instruction, operation);
+        },
+        { { SIZE8 } }));
 
     cpu.operations[0x1900] = S<Operation>(new Operation(
         "Add", "ADD32", "Quads[A] = Quads[B] + Quads[C] CR Quads[D]",

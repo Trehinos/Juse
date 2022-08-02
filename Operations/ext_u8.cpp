@@ -23,6 +23,12 @@ void Unsigned::set<U8>(GeneralRegisters<T>&, Instruction&, Operation&);
 template <IsWord T>
 void Unsigned::copy<U8>(GeneralRegisters<T>&, Instruction&, Operation&);
 
+template <IsWord T>
+void Unsigned::push<U8>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::pop<U8>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
 template <IsWord T, IsWord U>
 void Unsigned::add<U8, U16>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
@@ -78,6 +84,20 @@ void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
             Operations::Unsigned::copy(machine.cpu.registers.bytes, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1004] = S<Operation>(new Operation(
+        "Push Byte", "PUSH8", "push Bytes[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::push(machine, machine.cpu.registers.bytes, instruction, operation);
+        },
+        { { SIZE8 } }));
+
+    cpu.operations[0x1005] = S<Operation>(new Operation(
+        "Pop Byte", "POP8", "Bytes[A] = {pop}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::pop(machine, machine.cpu.registers.bytes, instruction, operation);
+        },
+        { { SIZE8 } }));
 
     // 11xx - U8 Operations
     cpu.operations[0x1100] = S<Operation>(new Operation(

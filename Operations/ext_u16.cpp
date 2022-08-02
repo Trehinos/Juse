@@ -24,6 +24,12 @@ void Unsigned::set<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
 template <IsWord T>
 void Unsigned::copy<U16>(GeneralRegisters<T>&, Instruction&, Operation&);
 
+template <IsWord T>
+void Unsigned::push<U16>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
+template <IsWord T>
+void Unsigned::pop<U16>(Machine&, GeneralRegisters<T>&, Instruction&, Operation&);
+
 template <IsWord T, IsWord U>
 void Unsigned::add<U16, U32>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Operation&);
 
@@ -80,6 +86,20 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
             Operations::Unsigned::copy(machine.cpu.registers.words, instruction, operation);
         },
         { { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1404] = S<Operation>(new Operation(
+        "Push Word", "PUSH16", "push Words[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::push(machine, machine.cpu.registers.words, instruction, operation);
+        },
+        { { SIZE8 } }));
+
+    cpu.operations[0x1405] = S<Operation>(new Operation(
+        "Pop Word", "POP16", "Words[A] = {pop}",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            Operations::Unsigned::pop(machine, machine.cpu.registers.words, instruction, operation);
+        },
+        { { SIZE8 } }));
 
     // 15xx - U16 Operations
     cpu.operations[0x1500] = S<Operation>(new Operation(

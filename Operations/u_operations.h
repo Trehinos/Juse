@@ -88,6 +88,20 @@ namespace Operations {
             registers[rA] = registers[rB];
         }
 
+        template <IsWord T>
+        void push(Machine& machine, GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        {
+            U8 register_index = U8(operation.argument(instruction, 0));
+            machine.multiPush(word2set<T>(registers[register_index]));
+        }
+
+        template <IsWord T>
+        void pop(Machine& machine, GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        {
+            U8 register_index = U8(operation.argument(instruction, 0));
+            registers[register_index]  = T(set2word(machine.multiPop(sizeof(T))));
+        }
+
         template <IsWord T, IsWord U>
         void add(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
         {
