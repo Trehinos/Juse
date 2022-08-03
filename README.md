@@ -29,7 +29,7 @@ But you can play with it if you are curious.
     - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**,
 - No base frequency is defined for now. It will :
     - One CPU will probably be limited to something like 100 KHz,
-    - **BUT** an operation will permit the machine to instantiate a new CPU with another instruction head (Juse **threading**).
+    - **BUT** an operation will permit the machine to instantiate a new CPU with its own registers (including `IP` : Juse **threading**).
     - Juse is not meant to be fast, but highly parallelized.
 
 ## Key features
