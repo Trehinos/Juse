@@ -62,6 +62,7 @@ public:
     void forward();
     U64 instructionPointer();
     U64 addressPointer();
+    U16 offseted();
     void jump(U16, U32, U16);
     void longjump(U64);
     bool shouldExit();

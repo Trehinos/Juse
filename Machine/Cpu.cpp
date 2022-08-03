@@ -84,7 +84,12 @@ U64 Cpu::instructionPointer()
 
 U64 Cpu::addressPointer()
 {
-    return Address::with(data_pool, data_segment, address_pointer + address_offset);
+    return Address::with(data_pool, data_segment, offseted());
+}
+
+U16 Cpu::offseted()
+{
+    return address_pointer + address_offset;
 }
 
 void Cpu::jump(U16 pool, U32 segment, U16 instruction)

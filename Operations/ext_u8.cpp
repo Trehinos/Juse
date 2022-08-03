@@ -52,6 +52,7 @@ void Unsigned::compare<U8>(GeneralRegisters<T>&, CompareFlags&, Instruction&, Op
 /* 10xx-13xx */
 void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
 {
+    // 10xx : U8 moves, stack operations, casts
     cpu.operations[0x1000] = S<Operation>(new Operation(
         "Set Byte", "SET8", "Bytes[A] = B",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
@@ -98,6 +99,19 @@ void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
             Operations::Unsigned::pop(machine, machine.cpu.registers.bytes, instruction, operation);
         },
         { { SIZE8 } }));
+
+    // 1006 - 1007 : casts operations, not applicable to u8
+
+    cpu.operations[0x1008] = S<Operation>(new Operation(
+        "Copy Byte If", "COPY8IF", "?A : Bytes[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            CompareFlag flag = CompareFlag(U8(operation.argument(instruction, 0)));
+            if (machine.cpu.registers.compareFlags[flag]) {
+                U8 register_index = U8(operation.argument(instruction, 1));
+                machine.writeData(machine.cpu.offseted(), word2set(machine.cpu.registers.bytes[register_index]));
+            }
+        },
+        { { SIZE8 }, { SIZE8 } }));
 
     // 11xx - U8 Operations
     cpu.operations[0x1100] = S<Operation>(new Operation(
