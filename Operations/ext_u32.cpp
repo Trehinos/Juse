@@ -101,6 +101,39 @@ void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
         },
         { { SIZE8 } }));
 
+    cpu.operations[0x1806] = S<Operation>(new Operation(
+        "Cast To Quad", "CAST16TO32", "Quads[A] = Words[A]:Words[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 rQ = U8(operation.argument(instruction, 0));
+            U8 rWA = U8(operation.argument(instruction, 1));
+            U8 rWB = U8(operation.argument(instruction, 2));
+            machine.cpu.registers.quads[rQ] = machine.cpu.registers.words[rWA] << sizes.at(SIZE16) | machine.cpu.registers.words[rWB];
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1807] = S<Operation>(new Operation(
+        "Cast From Quad", "CAST32TO16", "Words[A]:Words[B] = Quads[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 rWA = U8(operation.argument(instruction, 0));
+            U8 rWB = U8(operation.argument(instruction, 1));
+            U8 rQ = U8(operation.argument(instruction, 2));
+            U32 q = machine.cpu.registers.quads[rQ];
+            machine.cpu.registers.words[rWA] = U16((q & MASK_32TOP16) >> sizes.at(SIZE16));
+            machine.cpu.registers.words[rWB] = U16(q & MASK_BOTTOM16);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1808] = S<Operation>(new Operation(
+        "Copy Quad If", "COPY32IF", "?A : Quads[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            CompareFlag flag = CompareFlag(U8(operation.argument(instruction, 0)));
+            if (machine.cpu.registers.compareFlags[flag]) {
+                U8 register_index = U8(operation.argument(instruction, 1));
+                machine.writeData(machine.cpu.offseted(), word2set(machine.cpu.registers.quads[register_index]));
+            }
+        },
+        { { SIZE8 }, { SIZE8 } }));
+
     cpu.operations[0x1900] = S<Operation>(new Operation(
         "Add", "ADD32", "Quads[A] = Quads[B] + Quads[C] CR Quads[D]",
         [](Machine& machine, Instruction& instruction, Operation& operation) {

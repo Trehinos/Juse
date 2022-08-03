@@ -17,12 +17,12 @@ The instruction space distribution is inspired by the [RISC-V architecture](http
 
 ## The goal
 
-**Juse is still in early development.**
+**Juse is still in early development.**  
+But you can play with it if you are curious.
+
 - The goal : A **multipurpose virtual machine** written in modern C++
     - The machine has to be **easy to understand** (variable length opcodes with 16 bits opkey),
     - The project can be used as a framework to create a custom virtual machine with custom opcodes,
-- For now, only few operations are implemented.
-    You can play with if you are curious ;)
 - But there are a lot of features todo :
     - OpKeys specification is not fixed,
     - 2 assemblers languages are planned,
@@ -34,7 +34,7 @@ The instruction space distribution is inspired by the [RISC-V architecture](http
 Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- **107 operations**, general registers manipulation (read/write), byte IO and strings output
+- **113 operations** : branching, general registers manipulation (push/pop/read/write/unsigned arithmetic), integer and strings I/O 
 
 ## Dependencies
 
