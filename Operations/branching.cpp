@@ -1,5 +1,4 @@
 
-
 #include "operations.h"
 
 /* 00xx */
@@ -45,7 +44,7 @@ void Juse::Operations::Standard::branching(Cpu& cpu)
         "Long Call", "LCALL", "call! A",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             U64 target = operation.argument(instruction, 0);
-            machine.multiPush(word2set(machine.cpu.addressPointer()));
+            machine.multiPush(word2set(machine.cpu.instructionPointer()));
             machine.cpu.longjump(target);
         },
         { { SIZE64 } }));
@@ -65,12 +64,32 @@ void Juse::Operations::Standard::branching(Cpu& cpu)
             } 
         },
         { { SIZE8 } }));
+
     cpu.operations[0x0009] = S<Operation>(new Operation(
         "Skip", "SKIP", "skip",
         [](Machine& machine, Instruction& instruction, Operation& operation) {
             machine.cpu.flag_skip = true;
         },
         {}));
+
+    cpu.operations[0x000A] = S<Operation>(new Operation(
+        "Next", "NEXT", "next Words[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 register_index = U8(operation.argument(instruction, 0));
+            U16 target = machine.cpu.registers.words[register_index];
+            machine.cpu.address_offset += machine.cpu.address_increment;
+            machine.cpu.jump(machine.cpu.pool(), machine.cpu.segment(), target);
+        },
+        {{SIZE8}}));
+
+    cpu.operations[0x000B] = S<Operation>(new Operation(
+        "Next Direct", "NEXTD", "next A",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U16 target = U16(operation.argument(instruction, 0));
+            machine.cpu.address_offset += machine.cpu.address_increment;
+            machine.cpu.jump(machine.cpu.pool(), machine.cpu.segment(), target);
+        },
+        {{SIZE16}}));
 
     cpu.operations[0x000F] = S<Operation>(new Operation(
         "End Program", "END", "end",

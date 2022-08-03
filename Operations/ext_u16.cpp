@@ -101,6 +101,39 @@ void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
         },
         { { SIZE8 } }));
 
+    cpu.operations[0x1406] = S<Operation>(new Operation(
+        "Cast To Word", "CAST8TO16", "Words[A] = Bytes[A]:Bytes[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 rW = U8(operation.argument(instruction, 0));
+            U8 rBA = U8(operation.argument(instruction, 1));
+            U8 rBB = U8(operation.argument(instruction, 2));
+            machine.cpu.registers.words[rW] = machine.cpu.registers.bytes[rBA] << sizes.at(SIZE8) | machine.cpu.registers.bytes[rBB];
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1407] = S<Operation>(new Operation(
+        "Cast From Word", "CAST16TO8", "Bytes[A]:Bytes[B] = Words[A]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            U8 rBA = U8(operation.argument(instruction, 0));
+            U8 rBB = U8(operation.argument(instruction, 1));
+            U8 rW = U8(operation.argument(instruction, 2));
+            U16 w = machine.cpu.registers.words[rW];
+            machine.cpu.registers.bytes[rBA] = U8((w & MASK_16TOP8) >> sizes.at(SIZE8));
+            machine.cpu.registers.bytes[rBB] = U8(w & MASK_BOTTOM8);
+        },
+        { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
+
+    cpu.operations[0x1408] = S<Operation>(new Operation(
+        "Copy Word If", "COPY16IF", "?A : Words[B]",
+        [](Machine& machine, Instruction& instruction, Operation& operation) {
+            CompareFlag flag = CompareFlag(U8(operation.argument(instruction, 0)));
+            if (machine.cpu.registers.compareFlags[flag]) {
+                U8 register_index = U8(operation.argument(instruction, 1));
+                machine.writeData(machine.cpu.offseted(), word2set(machine.cpu.registers.words[register_index]));
+            }
+        },
+        { { SIZE8 }, { SIZE8 } }));
+
     // 15xx - U16 Operations
     cpu.operations[0x1500] = S<Operation>(new Operation(
         "Add", "ADD16", "Words[A] = Words[B] + Words[C] CR Words[D]",

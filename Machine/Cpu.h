@@ -46,6 +46,7 @@ public:
     U32 data_segment;
     U16 address_pointer;
     U16 address_offset;
+    U16 address_increment;
 
     bool flag_exit;
     bool flag_debug;
@@ -59,7 +60,9 @@ public:
     Cpu();
     void initOperations();
     void forward();
+    U64 instructionPointer();
     U64 addressPointer();
+    U16 offseted();
     void jump(U16, U32, U16);
     void longjump(U64);
     bool shouldExit();
