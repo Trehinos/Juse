@@ -43,6 +43,8 @@ class Cpu {
     U16 instruction_pointer;
 
 public:
+    const U32 BASE_FREQUENCY = 4;
+
     /* Move operations location */
     U16 data_pool;
     U32 data_segment;
@@ -62,7 +64,7 @@ public:
     static bool frequency(U16, TimePoint, TimePoint);
     OperationMap operations;
 
-    U16 config_frequency;
+    U32 config_frequency;
 
     Cpu();
     void initOperations();

@@ -15,7 +15,6 @@ int main(int argc, char* argv[])
 
     // Options interpretations
     bool debug = options["mode"] == "debug";
-    debug = false;
 
     // Load program
     auto segment = makeS<Segment>();

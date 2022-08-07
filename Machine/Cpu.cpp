@@ -50,7 +50,7 @@ Cpu::Cpu()
     , flag_exit(false)
     , flag_debug(false)
     , flag_skip(false)
-    , config_frequency(1)
+    , config_frequency(BASE_FREQUENCY)
 {
     registers.compareFlags[CompareFlag::EQ] = false;
     registers.compareFlags[CompareFlag::GT] = false;
@@ -113,8 +113,8 @@ bool Cpu::shouldExit() { return flag_exit; }
 
 bool Juse::Cpu::frequency(U16 frequency, TimePoint time, TimePoint last)
 {
-    U64 duration = 1000000 / U64(frequency);
-    TimePoint::duration d = last - time;
+    I64 duration = 1000000000 / frequency;
+    Duration d = time - last;
     return d.count() >= duration;
 }
 
@@ -151,7 +151,7 @@ void Cpu::cycle(Machine& machine, bool debug)
         }
         (*current)(machine, *this, instruction);
         TimePoint next = last;
-        next += TimePoint::duration { U64(1000000 / U64(config_frequency)) };
+        next += Duration { I64(1000000000 / config_frequency) };
         last = time;
         std::this_thread::sleep_until(next);
     }

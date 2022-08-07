@@ -131,8 +131,8 @@ struct Address {
 
     static Address from(U64 address)
     {
-        U16 pool = U16(address & 0xFFFF000000000000);
-        U32 segment = U32(address & 0x0000FFFFFFFF0000);
+        U16 pool = U16((address & 0xFFFF000000000000) >> 48);
+        U32 segment = U32((address & 0x0000FFFFFFFF0000) >> 16);
         U16 datum = U16(address & 0x000000000000FFFF);
 
         return Address { pool, segment, datum };
@@ -160,7 +160,7 @@ class Machine;
 
 using Clock = std::chrono::high_resolution_clock;
 using TimePoint = std::chrono::time_point<Clock>;
-using Duration = std::chrono::duration<double>;
+using Duration = TimePoint::duration;
 
 struct OperationArgument;
 using OperationArguments = std::vector<OperationArgument>;
