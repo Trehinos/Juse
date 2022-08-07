@@ -1,11 +1,13 @@
 #pragma once
 
+#include <thread>
+
 #include "../Models/types.h"
 
 namespace Juse {
 
-Instruction getInstructionFromId(Machine& machine, Operation& operation, U16 identifier);
-void debugInstruction(Machine& machine, Operation& operation, Instruction& instruction);
+Instruction getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier);
+void debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, Instruction& instruction);
 
 struct Registers {
     GeneralRegisters<U8> bytes;
@@ -53,9 +55,14 @@ public:
     bool flag_skip;
 
     Registers registers;
+    Stack stack;
 
     static S<Operation> NoOp;
+    static S<Operation> Thread;
+    static bool frequency(U16, TimePoint, TimePoint);
     OperationMap operations;
+
+    U16 config_frequency;
 
     Cpu();
     void initOperations();
@@ -67,7 +74,16 @@ public:
     void longjump(U64);
     bool shouldExit();
 
+    std::thread start(Machine&, bool);
+    void run(Machine&, bool = false);
     void cycle(Machine&, bool = false);
+
+    S<Operation> getOperation(Machine&, U16&);
+
+    void push(U8);
+    U8 pop();
+    void multiPush(ByteSet);
+    ByteSet multiPop(size_t);
 
     U8 dataAt(Memory&, U64);
     U8 data(Memory&);

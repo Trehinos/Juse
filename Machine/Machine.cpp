@@ -36,13 +36,13 @@ template ByteSet Juse::word2set<U64>(U64);
 
 Machine::Machine(std::istream& ins, std::ostream& outs)
     : memory {}
-    , stack()
-    , cpu()
+    , cpus {}
     , in { ins }
     , out { outs }
 {
-    memory = makeP<Memory>();
+    memory = makeS<Memory>();
     createSegment(0, 0);
+    cpus.push_back(Cpu {});
 }
 
 Machine Machine::loadFile(std::string filename)
@@ -83,32 +83,8 @@ S<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
     return (*getPool(pool_index))[segment_index];
 }
 
-void Machine::push(U8 byte) { stack.push(byte); }
 
-U8 Machine::pop()
-{
-    U8 byte = stack.top();
-    stack.pop();
-    return byte;
-}
-
-void Juse::Machine::multiPush(ByteSet set)
-{
-    for (U8 byte : set) {
-        push(byte);
-    }
-}
-
-ByteSet Juse::Machine::multiPop(size_t nb_bytes)
-{
-    ByteSet bytes {};
-    for (size_t i = 0; i < nb_bytes; i++) {
-        bytes.insert(bytes.begin(), pop());
-    }
-    return bytes;
-}
-
-ByteSet Machine::read(size_t nb_bytes)
+ByteSet Machine::read(Cpu& cpu, size_t nb_bytes)
 {
     ByteSet bytes {};
     for (size_t i = 0; i < nb_bytes; i++) {
@@ -118,7 +94,7 @@ ByteSet Machine::read(size_t nb_bytes)
     return bytes;
 }
 
-ByteSet Machine::readAt(U64 address, size_t nb_bytes)
+ByteSet Machine::readAt(Cpu& cpu, U64 address, size_t nb_bytes)
 {
     ByteSet bytes {};
     for (U64 i = address; i < address + nb_bytes; i++) {
@@ -127,40 +103,29 @@ ByteSet Machine::readAt(U64 address, size_t nb_bytes)
     return bytes;
 }
 
-ByteSet Machine::readData(U16 address, size_t nb_bytes)
+ByteSet Machine::readData(Cpu& cpu, U16 address, size_t nb_bytes)
 {
-    return readAt(Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
+    return readAt(cpu, Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
 }
 
-void Juse::Machine::writeAt(U64 address, ByteSet set)
+void Juse::Machine::writeAt(Cpu& cpu, U64 address, ByteSet set)
 {
     for (U8 byte : set) {
         cpu.set(*memory, address, byte);
     }
 }
 
-void Juse::Machine::writeData(U16 address, ByteSet set)
+void Juse::Machine::writeData(Cpu& cpu, U16 address, ByteSet set)
 {
     for (U8 byte : set) {
         cpu.set(*memory, Address::with(cpu.data_pool, cpu.data_segment, address), byte);
     }
 }
 
-S<Operation> Machine::getOperation(U16& id)
-{
-    ByteSet identifier = read(2);
-    id = U16(set2word(identifier));
-
-    if (!cpu.operations.contains(id)) {
-        return Cpu::NoOp;
-    }
-
-    return cpu.operations[id];
-}
-
 void Machine::run(bool debug)
 {
-    while (!cpu.shouldExit()) {
-        cpu.cycle(*this, debug);
+    for (Cpu& cpu : cpus) {
+        auto thread = cpu.start(*this, debug);
+        thread.join();
     }
 }

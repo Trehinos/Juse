@@ -27,9 +27,8 @@ public:
     std::ostream& out;
     std::istream& in;
 
-    Cpu cpu;
-    P<Memory> memory;
-    Stack stack;
+    std::vector<Cpu> cpus;
+    S<Memory> memory;
 
     Machine(std::istream&, std::ostream&);
     static Machine loadFile(std::string);
@@ -41,20 +40,12 @@ public:
     S<Pool> getPool(U16);
     S<Segment> getSegment(U16, U32);
 
-    void push(U8);
-    U8 pop();
-    void multiPush(ByteSet);
-    ByteSet multiPop(size_t);
+    ByteSet read(Cpu&, size_t = 1);
+    ByteSet readAt(Cpu&, U64, size_t = 1);
+    ByteSet readData(Cpu&, U16, size_t = 1);
 
-    ByteSet read(size_t = 1);
-
-    ByteSet readAt(U64, size_t = 1);
-    ByteSet readData(U16, size_t = 1);
-
-    void writeAt(U64, ByteSet);
-    void writeData(U16, ByteSet);
-
-    S<Operation> getOperation(U16&);
+    void writeAt(Cpu&, U64, ByteSet);
+    void writeData(Cpu&, U16, ByteSet);
 
     void run(bool = false);
 };

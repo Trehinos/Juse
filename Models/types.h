@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <chrono>
 #include <concepts>
 #include <cstdint>
 #include <cuchar>
@@ -157,7 +158,13 @@ struct Instruction {
 class Cpu;
 class Machine;
 
-using FunctionType = void(Machine&, Instruction&, Operation&);
+using Clock = std::chrono::high_resolution_clock;
+using TimePoint = std::chrono::time_point<Clock>;
+using Duration = std::chrono::duration<double>;
+
+struct OperationArgument;
+using OperationArguments = std::vector<OperationArgument>;
+using FunctionType = void(Machine&, Cpu&, OperationArguments);
 using OperationFunction = std::function<FunctionType>;
 
 } // namespace Juse

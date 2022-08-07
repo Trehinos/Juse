@@ -34,6 +34,6 @@ namespace Operations {
 /*
  * Create operations
  */
-void init(Cpu& cpu);
-
+void init(Cpu&, const std::string = "std/std_ext/str/float");
+void loadOperationSet(Juse::Cpu&, const std::string);
 } // namespace Juse

@@ -53,7 +53,7 @@ struct CalculationResult {
 
 // Common code of add/substract/multîply/divide/modulo operations
 template <IsWord T, IsWord U>
-void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation, U result, bool manageOverflow = false)
+void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments, U result, bool manageOverflow = false)
 {
     T overflow = T(result >> (sizeof(T) * 8));
     T mask = 0;
@@ -63,90 +63,90 @@ void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction&
     }
     CalculationResult<T> r { T(result & mask), overflow };
     flags = Registers::createFlags();
-    registers[U8(operation.argument(instruction, 0))] = r.result;
+    registers[U8(arguments[0].value)] = r.result;
     if (manageOverflow) {
         flags[CompareFlag::OF] = r.overflow != 0;
-        registers[U8(operation.argument(instruction, 3))] = r.overflow;
+        registers[U8(arguments[3].value)] = r.overflow;
     }
 }
 
 namespace Operations {
     namespace Unsigned {
         template <IsWord T>
-        void set(GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        void set(GeneralRegisters<T>& registers, OperationArguments& arguments)
         {
-            U8 register_index = U8(operation.argument(instruction, 0));
-            T value = T(operation.argument(instruction, 1));
+            U8 register_index = U8(arguments[0].value);
+            T value = T(arguments[1].value);
             registers[register_index] = value;
         }
 
         template <IsWord T>
-        void copy(GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        void copy(GeneralRegisters<T>& registers, OperationArguments& arguments)
         {
-            U8 rA = U8(operation.argument(instruction, 0));
-            U8 rB = U8(operation.argument(instruction, 1));
+            U8 rA = U8(arguments[0].value);
+            U8 rB = U8(arguments[1].value);
             registers[rA] = registers[rB];
         }
 
         template <IsWord T>
-        void push(Machine& machine, GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        void push(Cpu& cpu, GeneralRegisters<T>& registers, OperationArguments& arguments)
         {
-            U8 register_index = U8(operation.argument(instruction, 0));
-            machine.multiPush(word2set<T>(registers[register_index]));
+            U8 register_index = U8(arguments[0].value);
+            cpu.multiPush(word2set<T>(registers[register_index]));
         }
 
         template <IsWord T>
-        void pop(Machine& machine, GeneralRegisters<T>& registers, Instruction& instruction, Operation& operation)
+        void pop(Cpu& cpu, GeneralRegisters<T>& registers, OperationArguments& arguments)
         {
-            U8 register_index = U8(operation.argument(instruction, 0));
-            registers[register_index]  = T(set2word(machine.multiPop(sizeof(T))));
+            U8 register_index = U8(arguments[0].value);
+            registers[register_index] = T(set2word(cpu.multiPop(sizeof(T))));
         }
 
         template <IsWord T, IsWord U>
-        void add(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void add(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            T rB = registers[U8(operation.argument(instruction, 1))];
-            T rC = registers[U8(operation.argument(instruction, 2))];
-            calculate<T, U>(registers, flags, instruction, operation, U(rB) + U(rC), true);
+            T rB = registers[U8(arguments[1].value)];
+            T rC = registers[U8(arguments[2].value)];
+            calculate<T, U>(registers, flags, arguments, U(rB) + U(rC), true);
         }
 
         template <IsWord T, IsWord U>
-        void substract(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void substract(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            T rB = registers[U8(operation.argument(instruction, 1))];
-            T rC = registers[U8(operation.argument(instruction, 2))];
-            calculate<T, U>(registers, flags, instruction, operation, U(rB - rC));
+            T rB = registers[U8(arguments[1].value)];
+            T rC = registers[U8(arguments[2].value)];
+            calculate<T, U>(registers, flags, arguments, U(rB - rC));
         }
 
         template <IsWord T, IsWord U>
-        void multiply(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void multiply(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            T rB = registers[U8(operation.argument(instruction, 1))];
-            T rC = registers[U8(operation.argument(instruction, 2))];
-            calculate<T, U>(registers, flags, instruction, operation, U(rB) - U(rC), true);
+            T rB = registers[U8(arguments[1].value)];
+            T rC = registers[U8(arguments[2].value)];
+            calculate<T, U>(registers, flags, arguments, U(rB) - U(rC), true);
         }
 
         template <IsWord T, IsWord U>
-        void divide(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void divide(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            T rB = registers[U8(operation.argument(instruction, 1))];
-            T rC = registers[U8(operation.argument(instruction, 2))];
-            calculate<T, U>(registers, flags, instruction, operation, U(rB / rC));
+            T rB = registers[U8(arguments[1].value)];
+            T rC = registers[U8(arguments[2].value)];
+            calculate<T, U>(registers, flags, arguments, U(rB / rC));
         }
 
         template <IsWord T, IsWord U>
-        void modulo(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void modulo(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            T rB = registers[U8(operation.argument(instruction, 1))];
-            T rC = registers[U8(operation.argument(instruction, 2))];
-            calculate<T, U>(registers, flags, instruction, operation, U(rB % rC));
+            T rB = registers[U8(arguments[1].value)];
+            T rC = registers[U8(arguments[2].value)];
+            calculate<T, U>(registers, flags, arguments, U(rB % rC));
         }
 
         template <IsWord T>
-        void compare(GeneralRegisters<T>& registers, CompareFlags& flags, Instruction& instruction, Operation& operation)
+        void compare(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArguments& arguments)
         {
-            U8 iA = U8(operation.argument(instruction, 0));
-            U8 iB = U8(operation.argument(instruction, 1));
+            U8 iA = U8(arguments[0].value);
+            U8 iB = U8(arguments[1].value);
             T rA = registers[iA];
             T rB = registers[iB];
             flags = Juse::compare<T>(rA, rB);

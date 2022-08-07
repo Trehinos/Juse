@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Machine\Cpu.cpp" />
+    <ClCompile Include="Models\JTypes.cpp" />
     <ClCompile Include="Models\U128.cpp" />
     <ClCompile Include="Operations\allocation.cpp" />
     <ClCompile Include="Debug\Debug.cpp" />
@@ -169,9 +170,11 @@
     <ClInclude Include="Machine\Machine.h" />
     <ClInclude Include="Machine\Operation.h" />
     <ClInclude Include="Models\Executable.h" />
+    <ClInclude Include="Models\JTypes.h" />
     <ClInclude Include="Models\types.h" />
     <ClInclude Include="Models\U128.h" />
     <ClInclude Include="Operations\operations.h" />
+    <ClInclude Include="Operations\thread.h" />
     <ClInclude Include="Operations\u_operations.h" />
     <ClInclude Include="Tests\Tests.h" />
   </ItemGroup>

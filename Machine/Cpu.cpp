@@ -1,4 +1,5 @@
 
+#include <functional>
 #include <iomanip>
 
 #include "Cpu.h"
@@ -7,9 +8,9 @@
 
 using namespace Juse;
 
-void Juse::debugInstruction(Machine& machine, Operation& operation, Instruction& instruction)
+void Juse::debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, Instruction& instruction)
 {
-    if (machine.cpu.flag_debug) {
+    if (cpu.flag_debug) {
         for (U8 byte : instruction.data) {
             machine.out << std::setw(2) << std::hex << (int)(unsigned char)byte;
         }
@@ -22,15 +23,15 @@ void Juse::debugInstruction(Machine& machine, Operation& operation, Instruction&
     }
 }
 
-Instruction Juse::getInstructionFromId(Machine& machine, Operation& operation, U16 identifier)
+Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier)
 {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
-    ByteSet toAdd = machine.read(operation.length() - 2);
+    ByteSet toAdd = machine.read(cpu, operation.length() - 2);
     for (U8 add : toAdd) {
         instruction.data.push_back(add);
     }
 
-    debugInstruction(machine, operation, instruction);
+    debugInstruction(machine, cpu, operation, instruction);
 
     return instruction;
 }
@@ -40,6 +41,7 @@ Cpu::Cpu()
     , pool_pointer(0)
     , segment_pointer(0)
     , instruction_pointer(0)
+    , stack()
     , data_pool { 0 }
     , data_segment { 0 }
     , address_pointer { 0 }
@@ -48,6 +50,7 @@ Cpu::Cpu()
     , flag_exit(false)
     , flag_debug(false)
     , flag_skip(false)
+    , config_frequency(1)
 {
     registers.compareFlags[CompareFlag::EQ] = false;
     registers.compareFlags[CompareFlag::GT] = false;
@@ -108,34 +111,88 @@ void Cpu::longjump(U64 address)
 
 bool Cpu::shouldExit() { return flag_exit; }
 
+bool Juse::Cpu::frequency(U16 frequency, TimePoint time, TimePoint last)
+{
+    U64 duration = 1000000 / U64(frequency);
+    TimePoint::duration d = last - time;
+    return d.count() >= duration;
+}
+
 void Cpu::cycle(Machine& machine, bool debug)
 {
-    flag_debug = debug;
+    static TimePoint time = Clock::now(), last = Clock::now();
+    time = Clock::now();
 
-    U16 identifier = 0;
-    S<Operation> current = machine.getOperation(identifier);
-    if (current == NoOp) {
-        return;
-    }
+    if (frequency(config_frequency, time, last)) {
+        flag_debug = debug;
 
-    if (debug) {
-        machine.out << "@" << std::hex << std::right << std::setfill('0') << std::setw(4);
-        machine.out << (int)(instruction_pointer - 2) << " : ";
-    }
-
-    Instruction instruction = getInstructionFromId(machine, *current, identifier);
-
-    if (flag_skip) {
-        if (debug) {
-            machine.out << " <- SKIP" << std::endl;
+        U16 identifier = 0;
+        S<Operation> current = getOperation(machine, identifier);
+        if (current == NoOp) {
+            return;
         }
-        flag_skip = false;
-        return;
+
+        if (debug) {
+            machine.out << "@" << std::hex << std::right << std::setfill('0') << std::setw(4);
+            machine.out << (int)(instruction_pointer - 2) << " : ";
+        }
+
+        Instruction instruction = getInstructionFromId(machine, *this, *current, identifier);
+
+        if (flag_skip) {
+            if (debug) {
+                machine.out << " <- SKIP" << std::endl;
+            }
+            flag_skip = false;
+            return;
+        }
+        if (debug) {
+            machine.out << std::endl;
+        }
+        (*current)(machine, *this, instruction);
+        TimePoint next = last;
+        next += TimePoint::duration { U64(1000000 / U64(config_frequency)) };
+        last = time;
+        std::this_thread::sleep_until(next);
     }
-    if (debug) {
-        machine.out << std::endl;
+}
+
+void Cpu::run(Machine& machine, bool debug)
+{
+    while (!shouldExit()) {
+        cycle(machine, debug);
     }
-    (*current)(machine, instruction);
+}
+
+std::thread Cpu::start(Machine& machine, bool debug)
+{
+    std::thread thr(&Cpu::run, *this, std::ref(machine), debug);
+    return thr;
+}
+
+void Cpu::push(U8 byte) { stack.push(byte); }
+
+U8 Cpu::pop()
+{
+    U8 byte = stack.top();
+    stack.pop();
+    return byte;
+}
+
+void Cpu::multiPush(ByteSet set)
+{
+    for (U8 byte : set) {
+        push(byte);
+    }
+}
+
+ByteSet Cpu::multiPop(size_t nb_bytes)
+{
+    ByteSet bytes {};
+    for (size_t i = 0; i < nb_bytes; i++) {
+        bytes.insert(bytes.begin(), pop());
+    }
+    return bytes;
 }
 
 U8 Cpu::dataAt(Memory& memory, U64 address)
@@ -158,9 +215,21 @@ U16 Cpu::segment() { return segment_pointer; }
 
 U16 Cpu::instruction() { return instruction_pointer; }
 
+S<Operation> Cpu::getOperation(Machine& machine, U16& id)
+{
+    ByteSet identifier = machine.read(*this, 2);
+    id = U16(set2word(identifier));
+
+    if (!operations.contains(id)) {
+        return Cpu::NoOp;
+    }
+
+    return operations[id];
+}
+
 S<Operation> Cpu::NoOp = S<Operation>(new Operation(
     "Nothing", "NOP", "",
-    [](Machine& machine, Instruction& instruction, Operation& operation) {},
+    [](Machine&, Cpu&, OperationArguments) {},
     {}));
 
 void Cpu::initOperations() { operations[0x0000] = NoOp; }

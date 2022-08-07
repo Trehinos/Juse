@@ -3,7 +3,7 @@
 #include "Operations/operations.h"
 
 namespace Juse {
-const std::string VERSION = "0.3";
+const std::string VERSION = "0.3.4";
 
 std::tuple<std::string, std::map<std::string, std::string>>
 parseArgs(int argc, char* argv[])

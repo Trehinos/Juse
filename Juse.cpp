@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
 
     // Options interpretations
     bool debug = options["mode"] == "debug";
+    debug = false;
 
     // Load program
     auto segment = makeS<Segment>();
@@ -23,13 +24,13 @@ int main(int argc, char* argv[])
 
     // Init machine
     auto machine = Machine::fromData(*segment); // TODO : run program from command line
-    init(machine.cpu);
+    init(machine.cpus[0]);
 
     // Dump information
     cout << "Trehinos/Juse " << VERSION << "\n"
          << "(c)2022 Trehinos\n " << endl;
     if (debug) {
-        Debug::dumpOperations(machine.cpu);
+        Debug::dumpOperations(machine.cpus[0]);
         Debug::dumpProgram(machine);
     }
 
