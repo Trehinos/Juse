@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
 
     // Options interpretations
     bool debug = options["mode"] == "debug";
+    bool help = options["display"] == "help";
+    bool usage = options["display"] == "usage";
 
     // Load program
     auto segment = makeS<Segment>();
@@ -22,14 +24,21 @@ int main(int argc, char* argv[])
     copy(source.begin(), source.end(), segment->begin());
 
     // Init machine
-    auto machine = Machine::fromData(*segment); // TODO : run program from command line
+    //auto machine = Machine::fromData(*segment);
+    auto machine = Machine::loadFile(program);
     init(machine.cpus[0]);
 
     // Dump information
     cout << "Trehinos/Juse " << VERSION << "\n"
          << "(c)2022 Trehinos\n " << endl;
-    if (debug) {
+    if (help) {
         Debug::dumpOperations(machine.cpus[0]);
+        return 0;
+    }
+    if (usage) {
+        cout << "Usage : Juse [-h|u] | [-d] program.juse" << endl;
+    }
+    if (debug) {
         Debug::dumpProgram(machine);
     }
 

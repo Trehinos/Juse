@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <fstream>
 
 #include "Machine.h"
 
@@ -47,7 +48,28 @@ Machine::Machine(std::istream& ins, std::ostream& outs)
 
 Machine Machine::loadFile(std::string filename)
 {
-    return Machine(std::cin, std::cout);
+    std::ifstream file(filename, std::ios::binary);
+    Machine machine(std::cin, std::cout);
+    U16 pool = 0;
+    U32 segment = 0;
+    while (!file.eof()) {
+        S<Segment> current = machine.getSegment(pool, segment);
+        for (U8& byte : *current) {
+            if (file.eof())
+                break;
+            file >> byte;
+        }
+        segment++;
+        if (!file.eof()) { 
+            if (segment == UINT32_MAX) {
+                pool++;
+                segment = 0;
+            }
+            machine.createSegment(pool, segment);
+        }
+    }
+
+    return machine;
 }
 
 Machine Juse::Machine::fromData(Segment& segment)
@@ -82,7 +104,6 @@ S<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
 {
     return (*getPool(pool_index))[segment_index];
 }
-
 
 ByteSet Machine::read(Cpu& cpu, size_t nb_bytes)
 {

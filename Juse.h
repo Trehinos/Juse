@@ -15,6 +15,7 @@ parseArgs(int argc, char* argv[])
     std::string program {};
     std::map<std::string, std::string> options;
     options["mode"] = "normal";
+    options["display"] = "none";
 
     bool in_flag = false;
     char flag_buffer = 0;
@@ -30,6 +31,17 @@ parseArgs(int argc, char* argv[])
                     in_flag = false;
                     flag_buffer = 0;
                     break;
+                case 'u':
+                    options["display"] = "usage";
+                    in_flag = false;
+                    flag_buffer = 0;
+                    break;
+                case 'h':
+                    options["display"] = "help";
+                    in_flag = false;
+                    flag_buffer = 0;
+                    break;
+
                 }
             } else {
                 if (program.size() > 0) {
