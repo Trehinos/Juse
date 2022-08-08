@@ -15,25 +15,25 @@ std::string in(std::ostream&, std::istream&, bool);
 
 namespace Operations {
     namespace Standard {
-        void branching(Cpu&);
-        void move(Cpu&);
-        void logic(Cpu&);
-        void allocation(Cpu&);
-        void thread(Cpu&);
+        void addBranching(Cpu&);
+        void addMoves(Cpu&);
+        void addLogic(Cpu&);
+        void addAllocations(Cpu&);
+        void addThreads(Cpu&);
     }
     namespace StandardExtensions {
-        void ext_u8(Cpu&);
-        void ext_u16(Cpu&);
-        void ext_u32(Cpu&);
-        void ext_u64(Cpu&);
-        void ext_string(Cpu&);
-        void ext_float(Cpu&);
+        void addExtU8(Cpu&);
+        void addExtU16(Cpu&);
+        void addExtU32(Cpu&);
+        void addExtU64(Cpu&);
+        void addExtFloat(Cpu&);
+        void addExtTypes(Cpu&);
     }
 }
 
 /*
  * Create operations
  */
-void init(Cpu&, const std::string = "std/std_ext/str/float");
-void loadOperationSet(Juse::Cpu&, const std::string);
+void init(Cpu&, const std::string = "std/std_ext");
+void loadOperationsSets(Juse::Cpu&, const std::string);
 } // namespace Juse

@@ -52,7 +52,7 @@ void Unsigned::compare<U32>(GeneralRegisters<T>&, CompareFlags&, OperationArgume
 }
 
 /* 18xx-1Bxx */
-void Juse::Operations::StandardExtensions::ext_u32(Cpu& cpu)
+void Juse::Operations::StandardExtensions::addExtU32(Cpu& cpu)
 {
     cpu.operations[0x1800] = S<Operation>(new Operation(
         "Set Quad", "SET32", "Quads[A] = B",

@@ -2,7 +2,7 @@
 #include "operations.h"
 
 /* 00xx */
-void Juse::Operations::Standard::branching(Cpu& cpu)
+void Juse::Operations::Standard::addBranching(Cpu& cpu)
 {
     cpu.operations[0x0001] = S<Operation>(new Operation(
         "Short Jump", "SHJUMP", "goto DP:DS:A",

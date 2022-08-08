@@ -64,13 +64,14 @@ Cpu::Cpu()
     registers.compareFlags[CompareFlag::ERR] = false;
 }
 
-void Cpu::forward()
+void Cpu::forward(Memory& memory)
 {
     if (instruction_pointer == UINT16_MAX) {
         instruction_pointer = 0;
-        if (segment_pointer == UINT32_MAX) {
+        Pool p = *memory[pool()];
+        if (segment_pointer >= p.size()) {
             segment_pointer = 0;
-            if (pool_pointer == UINT16_MAX)
+            if (pool_pointer >= memory.size())
                 pool_pointer = 0;
             else
                 pool_pointer++;
@@ -111,19 +112,24 @@ void Cpu::longjump(U64 address)
 
 bool Cpu::shouldExit() { return flag_exit; }
 
-bool Juse::Cpu::frequency(U16 frequency, TimePoint time, TimePoint last)
+Duration Cpu::duration(U32 frequency)
 {
     I64 duration = 1000000000 / frequency;
+    return Duration {duration};
+}
+
+bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
+{
     Duration d = time - last;
-    return d.count() >= duration;
+    return d >= duration(frequency);
 }
 
 void Cpu::cycle(Machine& machine, bool debug)
 {
-    static TimePoint time = Clock::now(), last = Clock::now();
+    static TimePoint time, last = Clock::now();
     time = Clock::now();
 
-    if (frequency(config_frequency, time, last)) {
+    if (tick(config_frequency, time, last)) {
         flag_debug = debug;
 
         U16 identifier = 0;
@@ -151,7 +157,8 @@ void Cpu::cycle(Machine& machine, bool debug)
         }
         (*current)(machine, *this, instruction);
         TimePoint next = last;
-        next += Duration { I64(1000000000 / config_frequency) };
+        Duration ellapsed = last - Clock::now();
+        next += duration(config_frequency) - ellapsed;
         last = time;
         std::this_thread::sleep_until(next);
     }

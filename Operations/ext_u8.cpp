@@ -50,7 +50,7 @@ void Unsigned::compare<U8>(GeneralRegisters<T>&, CompareFlags&, OperationArgumen
 }
 
 /* 10xx-13xx */
-void Juse::Operations::StandardExtensions::ext_u8(Cpu& cpu)
+void Juse::Operations::StandardExtensions::addExtU8(Cpu& cpu)
 {
     // 10xx : U8 moves, stack operations, casts
     cpu.operations[0x1000] = S<Operation>(new Operation(

@@ -4,7 +4,7 @@
 #include "thread.h"
 
 /* 04xx */
-void Juse::Operations::Standard::Thread::thread(Machine& machine, Cpu& cpu, Address address, U32 freq)
+void Juse::Operations::Thread::thread(Machine& machine, Cpu& cpu, Address address, U32 freq)
 {
     Cpu thread = Cpu { cpu };
     if (freq != 0)
@@ -15,7 +15,7 @@ void Juse::Operations::Standard::Thread::thread(Machine& machine, Cpu& cpu, Addr
     machine.cpus.push_back(thread);
 }
 
-void Juse::Operations::Standard::thread(Cpu& cpu)
+void Juse::Operations::Standard::addThreads(Cpu& cpu)
 {
     cpu.operations[0x0400] = S<Operation>(new Operation(
         "Change Frequency", "FREQ", "conf_freq = A",
@@ -30,7 +30,6 @@ void Juse::Operations::Standard::thread(Cpu& cpu)
             Thread::thread(machine, cpu, Address::from(arguments[0].value), U32(arguments[1].value));
         },
         { { SIZE64 }, { SIZE32 } }));
-    ;
     cpu.operations[0x0402] = S<Operation>(new Operation(
         "Short Thread", "STHREAD", "thread CP:CS:A at B",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {

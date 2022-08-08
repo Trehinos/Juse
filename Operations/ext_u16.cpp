@@ -51,7 +51,7 @@ void Unsigned::compare<U16>(GeneralRegisters<T>&, CompareFlags&, OperationArgume
 }
 
 /* 14xx-17xx */
-void Juse::Operations::StandardExtensions::ext_u16(Cpu& cpu)
+void Juse::Operations::StandardExtensions::addExtU16(Cpu& cpu)
 {
     // 14xx - U16 Moves & Casts
     cpu.operations[0x1400] = S<Operation>(new Operation(

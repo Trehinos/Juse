@@ -30,7 +30,7 @@ std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
 void Juse::init(Juse::Cpu& cpu, const std::string type)
 {
     cpu.initOperations();
-    loadOperationSet(cpu, type);
+    loadOperationsSets(cpu, type);
 }
 
 std::vector<std::string> split(std::string s, std::string delimiter)
@@ -49,29 +49,28 @@ std::vector<std::string> split(std::string s, std::string delimiter)
     return res;
 }
 
-void Juse::loadOperationSet(Juse::Cpu& cpu, const std::string types)
+void Juse::loadOperationsSets(Juse::Cpu& cpu, const std::string types)
 {
-
     for (const auto& c : split(types, "/")) {
         if (c == "std") {
-            Operations::Standard::branching(cpu);
-            Operations::Standard::move(cpu);
-            Operations::Standard::logic(cpu);
-            Operations::Standard::allocation(cpu);
-            Operations::Standard::thread(cpu);
+            Operations::Standard::addBranching(cpu);
+            Operations::Standard::addMoves(cpu);
+            Operations::Standard::addLogic(cpu);
+            Operations::Standard::addAllocations(cpu);
+            Operations::Standard::addThreads(cpu);
             continue;
         }
         if (c == "u8" || c == "std_ext") {
-            Operations::StandardExtensions::ext_u8(cpu);
+            Operations::StandardExtensions::addExtU8(cpu);
         }
         if (c == "u16" || c == "std_ext") {
-            Operations::StandardExtensions::ext_u16(cpu);
+            Operations::StandardExtensions::addExtU16(cpu);
         }
         if (c == "u32" || c == "std_ext") {
-            Operations::StandardExtensions::ext_u32(cpu);
+            Operations::StandardExtensions::addExtU32(cpu);
         }
         if (c == "u64" || c == "std_ext") {
-            Operations::StandardExtensions::ext_u64(cpu);
+            Operations::StandardExtensions::addExtU64(cpu);
         }
         if (c == "str") {
             //Operations::StandardExtensions::ext_string(cpu);

@@ -89,7 +89,7 @@ ByteSet Machine::read(Cpu& cpu, size_t nb_bytes)
     ByteSet bytes {};
     for (size_t i = 0; i < nb_bytes; i++) {
         bytes.push_back(cpu.data(*memory));
-        cpu.forward();
+        cpu.forward(*memory);
     }
     return bytes;
 }

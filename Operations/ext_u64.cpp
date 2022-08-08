@@ -51,7 +51,7 @@ void Unsigned::compare<U64>(GeneralRegisters<T>&, CompareFlags&, OperationArgume
 }
 
 /* 1Cxx-1Fxx */
-void Juse::Operations::StandardExtensions::ext_u64(Cpu& cpu)
+void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
 {
     cpu.operations[0x1C00] = S<Operation>(new Operation(
         "Set Long", "SET64", "Longs[A] = B",

@@ -3,7 +3,7 @@
 #include "operations.h"
 
 /* 04xx */
-void Juse::Operations::Standard::allocation(Cpu& cpu)
+void Juse::Operations::Standard::addAllocations(Cpu& cpu)
 {
     cpu.operations[0x0400] = S<Operation>(new Operation(
         "Allocate Pool", "ALLOCPOOL", "alloc A",

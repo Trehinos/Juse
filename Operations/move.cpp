@@ -3,7 +3,7 @@
 #include "operations.h"
 
 /* 01xx */
-void Juse::Operations::Standard::move(Cpu& cpu)
+void Juse::Operations::Standard::addMoves(Cpu& cpu)
 {
     cpu.operations[0x0100] = S<Operation>(new Operation(
         "Set Data Pool", "DATAPOOL", "data pool A",
