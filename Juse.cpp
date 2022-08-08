@@ -18,13 +18,7 @@ int main(int argc, char* argv[])
     bool help = options["display"] == "help";
     bool usage = options["display"] == "usage";
 
-    // Load program
-    auto segment = makeS<Segment>();
-    auto source = Tests::higherLowerGame();
-    copy(source.begin(), source.end(), segment->begin());
-
     // Init machine
-    //auto machine = Machine::fromData(*segment);
     auto machine = Machine::loadFile(program);
     init(machine.cpus[0]);
 
@@ -37,6 +31,7 @@ int main(int argc, char* argv[])
     }
     if (usage) {
         cout << "Usage : Juse [-h|u] | [-d] program.juse" << endl;
+        return 0;
     }
     if (debug) {
         Debug::dumpProgram(machine);

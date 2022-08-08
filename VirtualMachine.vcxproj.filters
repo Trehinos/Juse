@@ -122,4 +122,7 @@
     <None Include="README.md" />
     <None Include=".gitignore" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="example.juse" />
+  </ItemGroup>
 </Project>

@@ -57,11 +57,10 @@ Machine Machine::loadFile(std::string filename)
         for (U8& byte : *current) {
             if (file.eof())
                 break;
-            file >> byte;
+            file.read(reinterpret_cast<char*>(&byte), sizeof(U8));
         }
-        segment++;
         if (!file.eof()) { 
-            if (segment == UINT32_MAX) {
+            if (++segment == UINT32_MAX) {
                 pool++;
                 segment = 0;
             }
