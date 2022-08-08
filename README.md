@@ -37,7 +37,7 @@ But you can play with it if you are curious.
 Implemented features :
 - The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
 - The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- **113 operations** : branching, general registers manipulation (push/pop/read/write/unsigned arithmetic), integer and strings I/O 
+- **117 operations** : branching, general registers manipulation (push/pop/read/write/unsigned arithmetic), integer and strings I/O 
 
 ## Dependencies
 
