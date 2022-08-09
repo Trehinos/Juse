@@ -1,7 +1,7 @@
 
 #include "utility.h"
 
-void Juse::Utility::Memory::forward(U16& pool, U32& segment, U16& addr, size_t steps)
+void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, size_t steps)
 {
     U32 tmpAddr = U32(addr);
     tmpAddr += U32(steps);
@@ -19,16 +19,16 @@ void Juse::Utility::Memory::forward(U16& pool, U32& segment, U16& addr, size_t s
         }
     }
 }
-Juse::S<Juse::Pool> Juse::Utility::Memory::pool(Juse::Memory& memory, U16 poolIndex)
+Juse::S<Juse::Pool> Juse::Utility::MachineMemory::pool(Memory& memory, U16 poolIndex)
 {
     return memory.at(poolIndex);
 }
-Juse::S<Juse::Segment> Juse::Utility::Memory::segment(Juse::Pool& pool, U32 segmentIndex)
+Juse::S<Juse::Segment> Juse::Utility::MachineMemory::segment(Pool& pool, U32 segmentIndex)
 {
     return pool.at(segmentIndex);
 }
 
-void Juse::Utility::Memory::write(Juse::Memory& memory, ByteSet set, Address addr)
+void Juse::Utility::MachineMemory::write(Memory& memory, ByteSet set, Address addr)
 {
     S<Pool> p = pool(memory, addr.pool);
     for (U8 byte : set) { 

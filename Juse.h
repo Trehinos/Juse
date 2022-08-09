@@ -2,7 +2,7 @@
 
 #include "Operations/operations.h"
 
-#include "Machine/utility.h"
+#include "Models/utility.h"
 
 namespace Juse {
 const std::string VERSION = "0.3.4";

@@ -20,15 +20,15 @@ namespace Jumne {
     };
 
     Jumne::Instruction parse(std::string line);
-    ByteSet linkOperation(Juse::U16, Juse::Operation&, std::vector<std::string>);
+    ByteSet linkOperation(U16, Operation&, std::vector<std::string>);
 
-    std::optional<Operation> findOperation(OperationMap, std::string, Juse::U16&);
+    std::optional<Operation> findOperation(OperationMap, std::string, U16&);
 
     class Compiler {
         OperationMap operations;
         std::vector<Label> labels;
 
-        ByteSet compileLine(std::string);
+        ByteSet compileLine(Address, std::string);
 
     public:
         Compiler(OperationMap&);

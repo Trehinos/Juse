@@ -1,0 +1,125 @@
+- `Juse::`
+    - `VERSION`
+    - `parseArgs()`
+    - *types.h* :
+        - Constants
+            - `SIZE8`
+            - `SIZE16`
+            - `SIZE32`
+            - `SIZE64`
+            - `SIZE128`
+            - `MASK_BOTTOM8`
+            - `MASK_16TOP8`
+            - `MASK_BOTTOM16`
+            - `MASK_32TOP16`
+            - `MASK_BOTTOM32`
+            - `MASK_64TOP32`
+            - `SEGMENT_SIZE`
+        - Types
+            - `CompareFlag`
+            - `CompareFlags`
+            - `IsAnyOf<T, U...>`
+            - `P<T>`
+            - `S<T>`
+            - `makeP<T>`
+            - `makeS<T>`
+            - `share<T>(T&)`
+            - `sizes`
+            - `U8`
+            - `U16`
+            - `U32`
+            - `U64`
+            - `U128`
+            - `<IsWord>`
+            - `CH8`
+            - `CH16`
+            - `CH32`
+            - `<IsChar>`
+            - `SS8`
+            - `SS16`
+            - `SS32`
+            - `S8`
+            - `S16`
+            - `S32`
+            - `I8`
+            - `I16`
+            - `I32`
+            - `I64`
+            - `ByteArray<size>`
+            - `ByteSet`
+            - `Stack`
+            - `Segment`
+            - `Pool`
+            - `Memory`
+            - `GeneralRegisters<IsWord>`
+            - `Address`
+            - `Instruction`
+            - `Cpu`
+            - `Machine`
+            - `Clock`
+            - `TimePoint`
+            - `Duration`
+            - `OperationArgument`
+            - `OperationArguments`
+            - `FunctionType`
+            - `OperationFunction`
+    - *Operation.h* :
+        - `ostream& operator<<(ostream&, U8)`
+        - `Argument`
+        - `OperationArgument`
+    - *Cpu.h* :
+        - `getInstructionFromId()`
+        - `debugInstruction()`
+        - `Registers`
+        - `Cpu`
+    - *Machine.h* :
+        - `set2word()`
+        - `word2set<IsWord>()`
+        - `Registers`
+        - `Cpu`
+    - *operations.h* :
+        - `Converter`
+        - `out()`
+        - `in()`
+        - `init()`
+        - `loadOperationsSets()`
+    - *operations_u.h* :
+        - `compare<IsWord>()`
+        - `random<IsWord>()`
+        - `CalculationResult<IsWord>`
+        - `calculate<IsWord, IsWord>()`
+    - `Operations::`
+        - `Standard::`
+            - `addBranching()`
+            - `addMoves()`
+            - `addLogic()`
+            - `addAllocations()`
+            - `addThreads()`
+        - `StandardExtensions::`
+            - `addExtU8()`
+            - `addExtU16()`
+            - `addExtU32()`
+            - `addExtU64()`
+        - `Unsigned::`
+            - `set<IsWord>()`
+            - `copy<IsWord>()`
+            - `push<IsWord>()`
+            - `pop<IsWord>()`
+            - `add<IsWord, IsWord>()`
+            - `substract<IsWord, IsWord>()`
+            - `multiply<IsWord, IsWord>()`
+            - `divide<IsWord, IsWord>()`
+            - `modulo<IsWord, IsWord>()`
+            - `compare<IsWord>()`
+        - `Thread::`
+            - `thread()`
+    - `Utility::`
+        - `Strings::`
+            - `rtrim()`
+            - `ltrim()`
+            - `trim()`
+        - `MachineMemory::`
+            - `forward()`
+            - `write()`
+            - `pool()`
+            - `segment()`
