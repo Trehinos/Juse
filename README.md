@@ -28,15 +28,17 @@ But you can play with it if you are curious.
     - 2 assemblers languages are planned,
     - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**,
 
-*Only using `std::` and custom code*
+*Only using `std::`*
 
 ## Key features
 
 Implemented features :
-- The machine is composed of its **Cpu**, the **Stack** and the **Memory**,
-- The **Cpu** can deal with 8, 16, 32 and 64 bits words,
-- Machine have **threadable Cpus** with **choosen frequency** (fixed from 1 Hz to 1 GHz ; 4 KHz by default),
-- **117 operations** : branching, moves, threads, allocations, general registers manipulation (push/pop/read/write/unsigned arithmetic), integers and strings I/O 
+- The machine is composed of its `Cpu`, the `Stack` and the `Memory`,
+- The `Cpu` can deal with 8, 16, 32 and 64 bits words,
+- The `Machine` has **threadable Cpus** (each Cpu has a fixed frequency from 1 Hz to 1 GHz ; **4 KHz by default**),
+- **117 operations** :
+    - `std` : branching, moves, threads, allocations, 
+    - `ext_u*` : general registers manipulation (push/pop/read/write/unsigned arithmetic), integers and strings I/O 
 
 ## Dependencies
 
