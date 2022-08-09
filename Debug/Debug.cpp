@@ -25,7 +25,7 @@ void Debug::dumpOperations(Cpu& cpu)
     for (pair<U16, S<Operation>> operation : cpu.operations) {
         std::stringstream arguments_str {};
 
-        arguments_str << left << setw(16) << operation.second->mnemuCode();
+        arguments_str << left << setw(16) << operation.second->jumne();
         char argIndex = 'A';
         for (Argument arg : operation.second->getArgumentDefs()) {
             arguments_str << argIndex++ << "(U" << sizes.at(arg.size) << ") ";

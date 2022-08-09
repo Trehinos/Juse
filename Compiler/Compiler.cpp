@@ -33,7 +33,7 @@ Juse::ByteSet Juse::Jumne::linkOperation(U16 opKey, Operation& operation, std::v
 std::optional<Juse::Operation> Juse::Jumne::findOperation(OperationMap operations, std::string jumne, U16& opKey)
 {
     for (const auto& [opkey, operation] : operations) {
-        if (operation->mnemuCode() == jumne) {
+        if (operation->jumne() == jumne) {
             opKey = opkey;
             return *operation;
         }

@@ -66,17 +66,82 @@
     - *Operation.h* :
         - `ostream& operator<<(ostream&, U8)`
         - `Argument`
+            - `size`
         - `OperationArgument`
+            - `index`
+            - `value`
+        - `Operation`
+            - `getName()`
+            - `jumne()`
+            - `juseLang()`
+            - `argument()`
+            - `operationArguments()`
+            - `getArgumentDefs()`
+            - `length()`
+            - `operator()()`
     - *Cpu.h* :
         - `getInstructionFromId()`
         - `debugInstruction()`
         - `Registers`
+            - `createFlags()`
         - `Cpu`
+            - `BASE_FREQUENCY`
+            - static `NoOp`
+            - static `duration()`
+            - static `tick()`
+            - `data_pool`
+            - `data_segment`
+            - `address_pointer`
+            - `address_offset`
+            - `address_increment`
+            - `flag_exit`
+            - `flag_debug`
+            - `flag_skip`
+            - `registers`
+            - `stack`
+            - `operations`
+            - `config_frequency`
+            - `initOperations()`
+            - `forward()`
+            - `instructionPointer()`
+            - `addressPointer()`
+            - `offseted()`
+            - `jump()`
+            - `longjump()`
+            - `shouldExit()`
+            - `start()`
+            - `run()`
+            - `cycle()`
+            - `getOperation()`
+            - `push()`
+            - `pop()`
+            - `multiPush()`
+            - `multiPop()`
+            - `dataAt()`
+            - `data()`
+            - `set()`
+            - `pool()`
+            - `segment()`
+            - `instruction()`
     - *Machine.h* :
         - `set2word()`
         - `word2set<IsWord>()`
         - `Registers`
-        - `Cpu`
+        - `Machine`
+            - static `loadFile`
+            - static `fromData`
+            - `out`
+            - `in`
+            - `cpus`
+            - `memory`
+            - `createPool()`
+            - `createSegment()`
+            - `read()`
+            - `readAt()`
+            - `readData()`
+            - `writeAt()`
+            - `writeData()`
+            - `run()`
     - *operations.h* :
         - `Converter`
         - `out()`

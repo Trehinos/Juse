@@ -27,7 +27,7 @@ public:
     Operation(std::string = {}, std::string = {}, std::string = {},
         OperationFunction = {}, std::vector<Argument> = {});
     std::string getName() { return name; }
-    std::string mnemuCode() { return mnemu; }
+    std::string jumne() { return mnemu; }
     std::string juseLang() { return juse_lang; }
     U64 argument(Instruction&, size_t = 0);
     OperationArguments operationArguments(Instruction&);
