@@ -33,9 +33,9 @@ But you can play with it if you are curious.
 ## Key features
 
 Implemented features :
-- The machine is composed of its `Cpu`, the `Stack` and the `Memory`,
-- The `Cpu` can deal with 8, 16, 32 and 64 bits words,
-- The `Machine` has **threadable Cpus** (each Cpu has a fixed frequency from 1 Hz to 1 GHz ; **4 KHz by default**),
+- The machine is composed of `Cpu`s (with `Stack` and `Register`s) and the `Memory`,
+- `Cpu`s can deal with 8, 16, 32 and 64 bits words,
+- The `Machine` has **threadable Cpus** (each `Cpu` has a fixed frequency from 1 Hz to 1 GHz ; **4 KHz by default**),
 - **117 operations** :
     - `std` : branching, moves, threads, allocations, 
     - `ext_u*` : general registers manipulation (push/pop/read/write/unsigned arithmetic), integers and strings I/O 
