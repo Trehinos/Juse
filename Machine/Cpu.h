@@ -28,6 +28,7 @@ struct Registers {
         flags[CompareFlag::Z0] = false;
         flags[CompareFlag::CR] = false;
         flags[CompareFlag::OF] = false;
+        flags[CompareFlag::SN] = false;
         flags[CompareFlag::ERR] = false;
         return flags;
     }

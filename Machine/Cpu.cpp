@@ -36,6 +36,18 @@ Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& op
     return instruction;
 }
 
+Duration Cpu::duration(U32 frequency)
+{
+    I64 duration = 1000000000 / frequency;
+    return Duration { duration };
+}
+
+bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
+{
+    Duration d = time - last;
+    return d >= duration(frequency);
+}
+
 Cpu::Cpu()
     : registers {}
     , pool_pointer(0)
@@ -111,18 +123,6 @@ void Cpu::longjump(U64 address)
 }
 
 bool Cpu::shouldExit() { return flag_exit; }
-
-Duration Cpu::duration(U32 frequency)
-{
-    I64 duration = 1000000000 / frequency;
-    return Duration {duration};
-}
-
-bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
-{
-    Duration d = time - last;
-    return d >= duration(frequency);
-}
 
 void Cpu::cycle(Machine& machine, bool debug)
 {

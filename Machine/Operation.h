@@ -19,7 +19,7 @@ class Operation {
 
     std::string name;
     std::string mnemu;
-    std::string ecal;
+    std::string juse_lang;
     std::vector<Argument> arguments;
     OperationFunction code;
 
@@ -28,7 +28,7 @@ public:
         OperationFunction = {}, std::vector<Argument> = {});
     std::string getName() { return name; }
     std::string mnemuCode() { return mnemu; }
-    std::string ecalCode() { return ecal; }
+    std::string juseLang() { return juse_lang; }
     U64 argument(Instruction&, size_t = 0);
     OperationArguments operationArguments(Instruction&);
     std::vector<Argument> getArgumentDefs();

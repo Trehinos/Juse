@@ -10,10 +10,10 @@ std::ostream& Juse::operator<<(std::ostream& os, const U8 c)
     return os;
 }
 
-Operation::Operation(std::string name, std::string mnemu, std::string ecal, OperationFunction code, std::vector<Argument> arguments)
+Operation::Operation(std::string name, std::string mnemu, std::string juse_lang, OperationFunction code, std::vector<Argument> arguments)
     : name(name)
     , mnemu(mnemu)
-    , ecal(ecal)
+    , juse_lang(juse_lang)
     , code(code)
     , arguments(arguments)
 {

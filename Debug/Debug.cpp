@@ -33,7 +33,7 @@ void Debug::dumpOperations(Cpu& cpu)
 
         cout << setfill('0') << right << hex << setw(4) << operation.first << " : "
              << setfill(' ') << setw(48) << left << arguments_str.str() << " | "
-             << setw(32) << operation.second->ecalCode()  << " | " << operation.second->getName() << endl;
+             << setw(32) << operation.second->juseLang()  << " | " << operation.second->getName() << endl;
     }
     cout << "===============================================================================================================" << endl;
 }

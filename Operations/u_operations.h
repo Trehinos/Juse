@@ -68,6 +68,8 @@ void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArg
         flags[CompareFlag::OF] = r.overflow != 0;
         registers[U8(arguments[3].value)] = r.overflow;
     }
+    T signMask = 0b1000000 << (sizeof(T) - 8);
+    flags[CompareFlag::SN] = (signMask & r.result) > 0;
 }
 
 namespace Operations {

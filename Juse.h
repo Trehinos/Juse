@@ -2,6 +2,8 @@
 
 #include "Operations/operations.h"
 
+#include "Machine/utility.h"
+
 namespace Juse {
 const std::string VERSION = "0.3.4";
 
@@ -15,6 +17,7 @@ parseArgs(int argc, char* argv[])
     std::string program {};
     std::map<std::string, std::string> options;
     options["mode"] = "normal";
+    options["compile"] = "none";
     options["display"] = "none";
 
     bool in_flag = false;
@@ -38,6 +41,11 @@ parseArgs(int argc, char* argv[])
                     break;
                 case 'h':
                     options["display"] = "help";
+                    in_flag = false;
+                    flag_buffer = 0;
+                    break;
+                case 'c':
+                    options["compile"] = "compile";
                     in_flag = false;
                     flag_buffer = 0;
                     break;

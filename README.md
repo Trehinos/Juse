@@ -27,17 +27,14 @@ But you can play with it if you are curious.
     - OpKeys specification is not fixed,
     - 2 assemblers languages are planned,
     - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**,
-- No base frequency is defined for now. It will :
-    - One CPU will probably be limited to something like 100 KHz,
-    - **BUT** an operation will permit the machine to instantiate a new CPU with its own registers (including `IP` : Juse **threading**).
-    - Juse is not meant to be fast, but highly parallelized.
 
 ## Key features
 
 Implemented features :
-- The machine is composed of its **Cpu**, the **Stack** and the **Memory**.
-- The **Cpu** can deal with 8, 16, 32 and 64 bits words
-- **117 operations** : branching, general registers manipulation (push/pop/read/write/unsigned arithmetic), integer and strings I/O 
+- The machine is composed of its **Cpu**, the **Stack** and the **Memory**,
+- The **Cpu** can deal with 8, 16, 32 and 64 bits words,
+- Machine have **threadable Cpus** with **choosen frequency** (fixed from 1 Hz to 1 GHz ; 4 KHz by default),
+- **117 operations** : branching, moves, threads, allocations, general registers manipulation (push/pop/read/write/unsigned arithmetic), integers and strings I/O 
 
 ## Dependencies
 
