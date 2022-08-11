@@ -1,8 +1,7 @@
 
-#include "../../operations.h"
-#include "u_operations.h"
+#include "ext_u16.h"
 
-namespace Juse::Operations::Ext16 {
+namespace Juse::Operations::ExtU16 {
 
 /* 14xx-17xx */
 void add(OperationMap& operations)
@@ -35,20 +34,20 @@ void add(OperationMap& operations)
     operations[0x1700] = Write16;
     operations[0x1701] = Read16;
 
-    operations[0x1710] = Write16;
+    operations[0x1710] = WriteUtf16;
 }
 
 void init()
 {
     // 14xx - U16 Moves & Casts
-    S<Operation> Set16 = S<Operation>(new Operation(
+    Set16 = S<Operation>(new Operation(
         "Set Word", "SET16", "Words[A] = B",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Juse::Operations::Unsigned::set(cpu.registers.words, arguments);
         },
         { { SIZE8 }, { SIZE16 } }));
 
-    S<Operation> CopyFrom16 = S<Operation>(new Operation(
+    CopyFrom16 = S<Operation>(new Operation(
         "Copy Word From", "COPYFROM16", "Words[A] = [B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -58,7 +57,7 @@ void init()
         },
         { { SIZE8 }, { SIZE16 } }));
 
-    S<Operation> CopyTo16 = S<Operation>(new Operation(
+    CopyTo16 = S<Operation>(new Operation(
         "Copy Word To", "COPYTO16", "[A] = Words[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 address = U16(arguments[0].value);
@@ -67,28 +66,28 @@ void init()
         },
         { { SIZE16 }, { SIZE8 } }));
 
-    S<Operation> Copy16 = S<Operation>(new Operation(
+    Copy16 = S<Operation>(new Operation(
         "Copy Word", "COPY16", "Words[A] = Words[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::copy(cpu.registers.words, arguments);
         },
         { { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Push16 = S<Operation>(new Operation(
+    Push16 = S<Operation>(new Operation(
         "Push Word", "PUSH16", "push Words[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::push(cpu, cpu.registers.words, arguments);
         },
         { { SIZE8 } }));
 
-    S<Operation> Pop16 = S<Operation>(new Operation(
+    Pop16 = S<Operation>(new Operation(
         "Pop Word", "POP16", "Words[A] = {pop}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::pop(cpu, cpu.registers.words, arguments);
         },
         { { SIZE8 } }));
 
-    S<Operation> CastTo16 = S<Operation>(new Operation(
+    CastTo16 = S<Operation>(new Operation(
         "Cast To Word", "CAST8TO16", "Words[A] = Bytes[A]:Bytes[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rW = U8(arguments[0].value);
@@ -98,7 +97,7 @@ void init()
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> CastFrom16 = S<Operation>(new Operation(
+    CastFrom16 = S<Operation>(new Operation(
         "Cast From Word", "CAST16TO8", "Bytes[A]:Bytes[B] = Words[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rBA = U8(arguments[0].value);
@@ -110,7 +109,7 @@ void init()
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Copy16If = S<Operation>(new Operation(
+    Copy16If = S<Operation>(new Operation(
         "Copy Word If", "COPY16IF", "?A : Words[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             CompareFlag flag = CompareFlag(U8(arguments[0].value));
@@ -122,35 +121,35 @@ void init()
         { { SIZE8 }, { SIZE8 } }));
 
     // 15xx - U16 Operations
-    S<Operation> Add16 = S<Operation>(new Operation(
+    Add16 = S<Operation>(new Operation(
         "Add", "ADD16", "Words[A] = Words[B] + Words[C] CR Words[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::add<U16, U32>(cpu.registers.words, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Substract16 = S<Operation>(new Operation(
+    Substract16 = S<Operation>(new Operation(
         "Substract", "SUB16", "Words[A] = Words[B] - Words[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::substract<U16, U32>(cpu.registers.words, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Multiply16 = S<Operation>(new Operation(
+    Multiply16 = S<Operation>(new Operation(
         "Multiply", "MUL16", "Words[A] = Words[B] * Words[C] CR Words[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::multiply<U16, U32>(cpu.registers.words, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Divide16 = S<Operation>(new Operation(
+    Divide16 = S<Operation>(new Operation(
         "Divide", "DIV16", "Words[A] = Words[B] / Words[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::divide<U16, U32>(cpu.registers.words, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Modulo16 = S<Operation>(new Operation(
+    Modulo16 = S<Operation>(new Operation(
         "Modulo", "MOD16", "Words[A] = Words[B] % Words[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::modulo<U16, U32>(cpu.registers.words, cpu.registers.compareFlags, arguments);
@@ -159,7 +158,7 @@ void init()
 
     // TODO : 1505 - ABS16
 
-    S<Operation> Random16 = S<Operation>(new Operation(
+    Random16 = S<Operation>(new Operation(
         "Random", "RND16", "Words[A] = {rnd Words[B] Words[C]}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 index = U8(arguments[0].value);
@@ -169,7 +168,7 @@ void init()
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Compare16 = S<Operation>(new Operation(
+    Compare16 = S<Operation>(new Operation(
         "Compare", "CMP16", "Words[A] ? Words[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::compare(cpu.registers.words, cpu.registers.compareFlags, arguments);
@@ -177,7 +176,7 @@ void init()
         { { SIZE8 }, { SIZE8 } }));
 
     // 17xx - U16 I/O
-    S<Operation> Write16 = S<Operation>(new Operation(
+    Write16 = S<Operation>(new Operation(
         "Write Word", "WINT16", "out Words[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -186,7 +185,7 @@ void init()
             out(machine.out, buffer, cpu.flag_debug);
         },
         { { SIZE8 } }));
-    S<Operation> Read16 = S<Operation>(new Operation(
+    Read16 = S<Operation>(new Operation(
         "Read Word", "RINT16", "in Words[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 value;
@@ -198,7 +197,7 @@ void init()
         },
         { { SIZE8 } }));
 
-    S<Operation> WriteUtf16 = S<Operation>(new Operation(
+    WriteUtf16 = S<Operation>(new Operation(
         "Write Utf-16", "WUTF16", "out S16 A",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             // TODO convert encoding

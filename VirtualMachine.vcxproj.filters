@@ -149,6 +149,9 @@
     <ClInclude Include="Operations\Sets\Extension\ext_u32.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="Operations\Sets\Extension\ext_u64.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE" />

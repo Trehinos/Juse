@@ -182,6 +182,7 @@
     <ClInclude Include="Models\U128.h" />
     <ClInclude Include="Operations\Sets\Extension\ext_u16.h" />
     <ClInclude Include="Operations\Sets\Extension\ext_u32.h" />
+    <ClInclude Include="Operations\Sets\Extension\ext_u64.h" />
     <ClInclude Include="Operations\Sets\Extension\ext_u8.h" />
     <ClInclude Include="Operations\Sets\Standard\allocation.h" />
     <ClInclude Include="Operations\Sets\Standard\branching.h" />

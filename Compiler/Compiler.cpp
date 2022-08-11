@@ -28,6 +28,8 @@ Juse::ByteSet Juse::Jumne::linkOperation(U16 opKey, Operation& operation, std::v
             set.push_back(byte);
         }
     }
+
+    return set;
 }
 
 std::optional<Juse::Operation> Juse::Jumne::findOperation(OperationMap operations, std::string jumne, U16& opKey)
@@ -139,9 +141,11 @@ Juse::Memory Juse::Jumne::Compiler::compile(std::vector<std::string> lines)
         Utility::MachineMemory::write(*memory, set, address);
         Utility::MachineMemory::forward(pool, segment, addr, set.size());
     }
+
+    return *memory;
 }
 
-void test()
+void testCompiler()
 {
     using namespace Juse;
     OperationMap operations {};

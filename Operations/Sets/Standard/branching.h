@@ -6,16 +6,16 @@
 namespace Juse::Operations::Standard::Branching {
 void init();
 void add(OperationMap&);
- S<Operation> ShortJump;
- S<Operation> Jump;
- S<Operation> LongJump;
- S<Operation> Call;
- S<Operation> Return;
- S<Operation> LongCall;
- S<Operation> LongReturn;
- S<Operation> If;
- S<Operation> Skip;
- S<Operation> Next;
- S<Operation> NextDirect;
- S<Operation> End;
+ static S<Operation> ShortJump;
+ static S<Operation> Jump;
+ static S<Operation> LongJump;
+ static S<Operation> Call;
+ static S<Operation> Return;
+ static S<Operation> LongCall;
+ static S<Operation> LongReturn;
+ static S<Operation> If;
+ static S<Operation> Skip;
+ static S<Operation> Next;
+ static S<Operation> NextDirect;
+ static S<Operation> End;
 }

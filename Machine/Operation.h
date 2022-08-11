@@ -34,6 +34,7 @@ public:
     std::vector<Argument> getArgumentDefs();
     size_t length();
     void operator()(Machine&, Cpu&, Instruction&);
+    void operator()(Machine&, Cpu&, OperationArguments&);
 };
 
 } // namespace Juse

@@ -53,3 +53,8 @@ void Operation::operator()(Machine& machine, Cpu& cpu, Instruction& instruction)
 
     code(machine, cpu, operationArguments(instruction));
 }
+
+void Juse::Operation::operator()(Machine& machine, Cpu& cpu, OperationArguments& arguments)
+{
+    code(machine, cpu, arguments);
+}

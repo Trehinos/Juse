@@ -34,21 +34,21 @@ void add(OperationMap& operations)
     operations[0x1B00] = Write32;
     operations[0x1B01] = Read32;
 
-    operations[0x1B10] = Write32;
+    operations[0x1B10] = WriteUtf32;
 }
 
 void init()
 {
     // 18xx - U32 Moves & Casts
-    S<Operation> Set32 = S<Operation>(new Operation(
-        "Set Word", "SET32", "Words[A] = B",
+    Set32 = S<Operation>(new Operation(
+        "Set Quad", "SET32", "Quads[A] = B",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Juse::Operations::Unsigned::set(cpu.registers.quads, arguments);
         },
         { { SIZE8 }, { SIZE32 } }));
 
-    S<Operation> CopyFrom32 = S<Operation>(new Operation(
-        "Copy Word From", "COPYFROM32", "Words[A] = [B]",
+    CopyFrom32 = S<Operation>(new Operation(
+        "Copy Quad From", "COPYFROM32", "Quads[A] = [B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
             U32 address = U32(arguments[1].value);
@@ -57,8 +57,8 @@ void init()
         },
         { { SIZE8 }, { SIZE32 } }));
 
-    S<Operation> CopyTo32 = S<Operation>(new Operation(
-        "Copy Word To", "COPYTO32", "[A] = Words[B]",
+    CopyTo32 = S<Operation>(new Operation(
+        "Copy Quad To", "COPYTO32", "[A] = Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U32 address = U32(arguments[0].value);
             U8 register_index = U8(arguments[1].value);
@@ -66,51 +66,51 @@ void init()
         },
         { { SIZE32 }, { SIZE8 } }));
 
-    S<Operation> Copy32 = S<Operation>(new Operation(
-        "Copy Word", "COPY32", "Words[A] = Words[B]",
+    Copy32 = S<Operation>(new Operation(
+        "Copy Quad", "COPY32", "Quads[A] = Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::copy(cpu.registers.quads, arguments);
         },
         { { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Push32 = S<Operation>(new Operation(
-        "Push Word", "PUSH32", "push Words[A]",
+    Push32 = S<Operation>(new Operation(
+        "Push Quad", "PUSH32", "push Quads[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::push(cpu, cpu.registers.quads, arguments);
         },
         { { SIZE8 } }));
 
-    S<Operation> Pop32 = S<Operation>(new Operation(
-        "Pop Word", "POP32", "Words[A] = {pop}",
+    Pop32 = S<Operation>(new Operation(
+        "Pop Quad", "POP32", "Quads[A] = {pop}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::pop(cpu, cpu.registers.quads, arguments);
         },
         { { SIZE8 } }));
 
-    S<Operation> CastTo32 = S<Operation>(new Operation(
-        "Cast To Word", "CAST8TO32", "Words[A] = Bytes[A]:Bytes[B]",
+    CastTo32 = S<Operation>(new Operation(
+        "Cast To Quad", "CAST8TO32", "Quads[A] = Words[A]:Words[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rW = U8(arguments[0].value);
             U8 rBA = U8(arguments[1].value);
             U8 rBB = U8(arguments[2].value);
-            cpu.registers.quads[rW] = cpu.registers.words[rBA] << sizes.at(SIZE8) | cpu.registers.words[rBB];
+            cpu.registers.quads[rW] = cpu.registers.words[rBA] << sizes.at(SIZE16) | cpu.registers.words[rBB];
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> CastFrom32 = S<Operation>(new Operation(
-        "Cast From Word", "CAST32TO8", "Bytes[A]:Bytes[B] = Words[A]",
+    CastFrom32 = S<Operation>(new Operation(
+        "Cast From Quad", "CAST32TO8", "Words[A]:Words[B] = Quads[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rBA = U8(arguments[0].value);
             U8 rBB = U8(arguments[1].value);
             U8 rW = U8(arguments[2].value);
             U32 w = cpu.registers.quads[rW];
-            cpu.registers.words[rBA] = U8((w & MASK_16TOP8) >> sizes.at(SIZE8));
-            cpu.registers.words[rBB] = U8(w & MASK_BOTTOM8);
+            cpu.registers.words[rBA] = U16(U32(w & MASK_32TOP16) >> sizes.at(SIZE8));
+            cpu.registers.words[rBB] = U16(w & MASK_BOTTOM16);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Copy32If = S<Operation>(new Operation(
-        "Copy Word If", "COPY32IF", "?A : Words[B]",
+    Copy32If = S<Operation>(new Operation(
+        "Copy Quad If", "COPY32IF", "?A : Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             CompareFlag flag = CompareFlag(U8(arguments[0].value));
             if (cpu.registers.compareFlags[flag]) {
@@ -121,36 +121,36 @@ void init()
         { { SIZE8 }, { SIZE8 } }));
 
     // 19xx - U32 Operations
-    S<Operation> Add32 = S<Operation>(new Operation(
-        "Add", "ADD32", "Words[A] = Words[B] + Words[C] CR Words[D]",
+    Add32 = S<Operation>(new Operation(
+        "Add", "ADD32", "Quads[A] = Quads[B] + Quads[C] CR Quads[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::add<U32, U64>(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Substract32 = S<Operation>(new Operation(
-        "Substract", "SUB32", "Words[A] = Words[B] - Words[C]",
+    Substract32 = S<Operation>(new Operation(
+        "Substract", "SUB32", "Quads[A] = Quads[B] - Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::substract<U32, U64>(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Multiply32 = S<Operation>(new Operation(
-        "Multiply", "MUL32", "Words[A] = Words[B] * Words[C] CR Words[D]",
+    Multiply32 = S<Operation>(new Operation(
+        "Multiply", "MUL32", "Quads[A] = Quads[B] * Quads[C] CR Quads[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::multiply<U32, U64>(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Divide32 = S<Operation>(new Operation(
-        "Divide", "DIV32", "Words[A] = Words[B] / Words[C]",
+    Divide32 = S<Operation>(new Operation(
+        "Divide", "DIV32", "Quads[A] = Quads[B] / Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::divide<U32, U64>(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Modulo32 = S<Operation>(new Operation(
-        "Modulo", "MOD32", "Words[A] = Words[B] % Words[C]",
+    Modulo32 = S<Operation>(new Operation(
+        "Modulo", "MOD32", "Quads[A] = Quads[B] % Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::modulo<U32, U64>(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
@@ -158,8 +158,8 @@ void init()
 
     // TODO : 1905 - ABS32
 
-    S<Operation> Random32 = S<Operation>(new Operation(
-        "Random", "RND32", "Words[A] = {rnd Words[B] Words[C]}",
+    Random32 = S<Operation>(new Operation(
+        "Random", "RND32", "Quads[A] = {rnd Quads[B] Quads[C]}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 index = U8(arguments[0].value);
             U32 min = cpu.registers.quads[U8(arguments[1].value)];
@@ -168,16 +168,16 @@ void init()
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    S<Operation> Compare32 = S<Operation>(new Operation(
-        "Compare", "CMP32", "Words[A] ? Words[B]",
+    Compare32 = S<Operation>(new Operation(
+        "Compare", "CMP32", "Quads[A] ? Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::compare(cpu.registers.quads, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 } }));
 
     // 1Bxx - U32 I/O
-    S<Operation> Write32 = S<Operation>(new Operation(
-        "Write Word", "WINT32", "out Words[A]",
+    Write32 = S<Operation>(new Operation(
+        "Write Quad", "WINT32", "out Quads[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
             std::stringstream buffer {};
@@ -185,8 +185,8 @@ void init()
             out(machine.out, buffer, cpu.flag_debug);
         },
         { { SIZE8 } }));
-    S<Operation> Read32 = S<Operation>(new Operation(
-        "Read Word", "RINT32", "in Words[A]",
+    Read32 = S<Operation>(new Operation(
+        "Read Quad", "RINT32", "in Quads[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U32 value;
             std::stringstream buffer;
@@ -197,7 +197,7 @@ void init()
         },
         { { SIZE8 } }));
 
-    S<Operation> WriteUtf32 = S<Operation>(new Operation(
+    WriteUtf32 = S<Operation>(new Operation(
         "Write Utf-32", "WUTF32", "out S32 A",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             // TODO convert encoding

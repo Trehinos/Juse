@@ -3,14 +3,14 @@
 #include <ranges>
 #include <string_view>
 
-#include "operations.h"
-
 #include "Sets/Standard/branching.h"
 #include "Sets/Standard/move.h"
 #include "Sets/Standard/allocation.h"
 #include "Sets/Standard/thread.h"
 #include "Sets/Extension/ext_u8.h"
 #include "Sets/Extension/ext_u16.h"
+#include "Sets/Extension/ext_u32.h"
+#include "Sets/Extension/ext_u64.h"
 
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
@@ -36,6 +36,18 @@ std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
 
 void Juse::init(Juse::Cpu& cpu, const std::string type)
 {
+    static bool juseInitiated = false;
+    if (!juseInitiated) {
+        juseInitiated = true;
+        Operations::Standard::Branching::init();
+        Operations::Standard::Move::init();
+        Operations::Standard::Allocation::init();
+        Operations::Standard::Thread::init();
+        Operations::ExtU8::init();
+        Operations::ExtU16::init();
+        Operations::ExtU32::init();
+        Operations::ExtU64::init();
+    }
     cpu.initOperations();
     loadOperationsSets(cpu.operations, type);
 }
@@ -73,10 +85,10 @@ void Juse::loadOperationsSets(OperationMap& operations, const std::string types)
             Operations::ExtU16::add(operations);
         }
         if (c == "u32" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU32(operations);
+            Operations::ExtU32::add(operations);
         }
         if (c == "u64" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU64(operations);
+            Operations::ExtU64::add(operations);
         }
         if (c == "str") {
             //Operations::StandardExtensions::ext_string(operations);

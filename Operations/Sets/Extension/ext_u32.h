@@ -50,25 +50,25 @@ namespace Operations {
     namespace ExtU32 {
         void init();
         void add(OperationMap& operations);
-        S<Operation> Set32;
-        S<Operation> CopyFrom32;
-        S<Operation> CopyTo32;
-        S<Operation> Copy32;
-        S<Operation> Push32;
-        S<Operation> Pop32;
-        S<Operation> CastTo32;
-        S<Operation> CastFrom32;
-        S<Operation> Copy32If;
-        S<Operation> Add32;
-        S<Operation> Substract32;
-        S<Operation> Multiply32;
-        S<Operation> Divide32;
-        S<Operation> Modulo32;
-        S<Operation> Random32;
-        S<Operation> Compare32;
-        S<Operation> Write32;
-        S<Operation> Read32;
-        S<Operation> WriteUtf32;
+        static S<Operation> Set32;
+        static S<Operation> CopyFrom32;
+        static S<Operation> CopyTo32;
+        static S<Operation> Copy32;
+        static S<Operation> Push32;
+        static S<Operation> Pop32;
+        static S<Operation> CastTo32;
+        static S<Operation> CastFrom32;
+        static S<Operation> Copy32If;
+        static S<Operation> Add32;
+        static S<Operation> Substract32;
+        static S<Operation> Multiply32;
+        static S<Operation> Divide32;
+        static S<Operation> Modulo32;
+        static S<Operation> Random32;
+        static S<Operation> Compare32;
+        static S<Operation> Write32;
+        static S<Operation> Read32;
+        static S<Operation> WriteUtf32;
     }
 }
 }
