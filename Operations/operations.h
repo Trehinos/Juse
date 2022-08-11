@@ -15,19 +15,14 @@ std::string in(std::ostream&, std::istream&, bool);
 
 namespace Operations {
     namespace Standard {
-        void addBranching(Cpu&);
-        void addMoves(Cpu&);
-        void addLogic(Cpu&);
-        void addAllocations(Cpu&);
-        void addThreads(Cpu&);
     }
     namespace StandardExtensions {
-        void addExtU8(Cpu&);
-        void addExtU16(Cpu&);
-        void addExtU32(Cpu&);
-        void addExtU64(Cpu&);
-        void addExtFloat(Cpu&);
-        void addExtTypes(Cpu&);
+        void addExtU8(OperationMap&);
+        void addExtU16(OperationMap&);
+        void addExtU32(OperationMap&);
+        void addExtU64(OperationMap&);
+        void addExtFloat(OperationMap&);
+        void addExtTypes(OperationMap&);
     }
 }
 
@@ -35,5 +30,5 @@ namespace Operations {
  * Create operations
  */
 void init(Cpu&, const std::string = "std/std_ext");
-void loadOperationsSets(Juse::Cpu&, const std::string);
+void loadOperationsSets(OperationMap&, const std::string = "std/std_ext");
 } // namespace Juse

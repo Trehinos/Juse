@@ -5,6 +5,13 @@
 
 #include "operations.h"
 
+#include "Sets/Standard/branching.h"
+#include "Sets/Standard/move.h"
+#include "Sets/Standard/allocation.h"
+#include "Sets/Standard/thread.h"
+#include "Sets/Extension/ext_u8.h"
+#include "Sets/Extension/ext_u16.h"
+
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
     if (debug) {
@@ -30,7 +37,7 @@ std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
 void Juse::init(Juse::Cpu& cpu, const std::string type)
 {
     cpu.initOperations();
-    loadOperationsSets(cpu, type);
+    loadOperationsSets(cpu.operations, type);
 }
 
 std::vector<std::string> split(std::string s, std::string delimiter)
@@ -49,34 +56,33 @@ std::vector<std::string> split(std::string s, std::string delimiter)
     return res;
 }
 
-void Juse::loadOperationsSets(Juse::Cpu& cpu, const std::string types)
+void Juse::loadOperationsSets(OperationMap& operations, const std::string types)
 {
     for (const auto& c : split(types, "/")) {
         if (c == "std") {
-            Operations::Standard::addBranching(cpu);
-            Operations::Standard::addMoves(cpu);
-            Operations::Standard::addLogic(cpu);
-            Operations::Standard::addAllocations(cpu);
-            Operations::Standard::addThreads(cpu);
+            Operations::Standard::Branching::add(operations);
+            Operations::Standard::Move::add(operations);
+            Operations::Standard::Allocation::add(operations);
+            Operations::Standard::Thread::add(operations);
             continue;
         }
         if (c == "u8" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU8(cpu);
+            Operations::ExtU8::add(operations);
         }
         if (c == "u16" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU16(cpu);
+            Operations::ExtU16::add(operations);
         }
         if (c == "u32" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU32(cpu);
+            Operations::StandardExtensions::addExtU32(operations);
         }
         if (c == "u64" || c == "std_ext") {
-            Operations::StandardExtensions::addExtU64(cpu);
+            Operations::StandardExtensions::addExtU64(operations);
         }
         if (c == "str") {
-            //Operations::StandardExtensions::ext_string(cpu);
+            //Operations::StandardExtensions::ext_string(operations);
         }
         if (c == "float") {
-            //Operations::StandardExtensions::ext_float(cpu);
+            //Operations::StandardExtensions::ext_float(operations);
         }
     }
 }

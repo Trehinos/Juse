@@ -150,25 +150,26 @@
     <ClCompile Include="Models\utility.cpp" />
     <ClCompile Include="Models\JTypes.cpp" />
     <ClCompile Include="Models\U128.cpp" />
-    <ClCompile Include="Operations\allocation.cpp" />
+    <ClCompile Include="Operations\Sets\Standard\allocation.cpp" />
     <ClCompile Include="Debug\Debug.cpp" />
     <ClCompile Include="Machine\Machine.cpp" />
     <ClCompile Include="Machine\Operation.cpp" />
-    <ClCompile Include="Operations\branching.cpp" />
-    <ClCompile Include="Operations\ext_u16.cpp" />
-    <ClCompile Include="Operations\ext_u32.cpp" />
-    <ClCompile Include="Operations\ext_u64.cpp" />
-    <ClCompile Include="Operations\ext_u8.cpp" />
+    <ClCompile Include="Operations\Sets\Standard\branching.cpp" />
+    <ClCompile Include="Operations\Sets\Extension\ext_u16.cpp" />
+    <ClCompile Include="Operations\Sets\Extension\ext_u32.cpp" />
+    <ClCompile Include="Operations\Sets\Extension\ext_u64.cpp" />
+    <ClCompile Include="Operations\Sets\Extension\ext_u8.cpp" />
     <ClCompile Include="Operations\logic.cpp" />
-    <ClCompile Include="Operations\move.cpp" />
+    <ClCompile Include="Operations\Sets\Standard\move.cpp" />
     <ClCompile Include="Operations\operations.cpp" />
-    <ClCompile Include="Operations\thread.cpp" />
+    <ClCompile Include="Operations\Sets\Standard\thread.cpp" />
     <ClCompile Include="Tests\arithmetic.cpp" />
     <ClCompile Include="Tests\game.cpp" />
     <ClCompile Include="Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler\Compiler.h" />
+    <ClInclude Include="Compiler\Parser\Parser.h" />
     <ClInclude Include="Debug\Debug.h" />
     <ClInclude Include="Juse.h" />
     <ClInclude Include="Machine\Cpu.h" />
@@ -179,9 +180,15 @@
     <ClInclude Include="Models\JTypes.h" />
     <ClInclude Include="Models\types.h" />
     <ClInclude Include="Models\U128.h" />
+    <ClInclude Include="Operations\Sets\Extension\ext_u16.h" />
+    <ClInclude Include="Operations\Sets\Extension\ext_u32.h" />
+    <ClInclude Include="Operations\Sets\Extension\ext_u8.h" />
+    <ClInclude Include="Operations\Sets\Standard\allocation.h" />
+    <ClInclude Include="Operations\Sets\Standard\branching.h" />
     <ClInclude Include="Operations\operations.h" />
-    <ClInclude Include="Operations\thread.h" />
-    <ClInclude Include="Operations\u_operations.h" />
+    <ClInclude Include="Operations\Sets\Standard\move.h" />
+    <ClInclude Include="Operations\Sets\Standard\thread.h" />
+    <ClInclude Include="Operations\Sets\Extension\u_operations.h" />
     <ClInclude Include="Tests\Tests.h" />
   </ItemGroup>
   <ItemGroup>

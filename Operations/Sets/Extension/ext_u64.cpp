@@ -1,6 +1,5 @@
 
-#include "operations.h"
-
+#include "../../operations.h"
 #include "u_operations.h"
 
 using Juse::IsWord;
@@ -51,16 +50,16 @@ void Unsigned::compare<U64>(GeneralRegisters<T>&, CompareFlags&, OperationArgume
 }
 
 /* 1Cxx-1Fxx */
-void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
+void Juse::Operations::StandardExtensions::addExtU64(OperationMap& operations)
 {
-    cpu.operations[0x1C00] = S<Operation>(new Operation(
+    operations[0x1C00] = S<Operation>(new Operation(
         "Set Long", "SET64", "Longs[A] = B",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Juse::Operations::Unsigned::set(cpu.registers.longs, arguments);
         },
         { { SIZE8 }, { SIZE64 } }));
 
-    cpu.operations[0x1C01] = S<Operation>(new Operation(
+    operations[0x1C01] = S<Operation>(new Operation(
         "Copy Long From", "COPYFROM64", "Longs[A] = [B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -70,7 +69,7 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE16 } }));
 
-    cpu.operations[0x1C02] = S<Operation>(new Operation(
+    operations[0x1C02] = S<Operation>(new Operation(
         "Copy Long To", "COPYTO64", "[A] = Longs[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 address = U16(arguments[0].value);
@@ -79,28 +78,28 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE16 }, { SIZE8 } }));
 
-    cpu.operations[0x1C03] = S<Operation>(new Operation(
+    operations[0x1C03] = S<Operation>(new Operation(
         "Copy Long", "COPY64", "Longs[A] = Longs[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::copy(cpu.registers.longs, arguments);
         },
         { { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1C04] = S<Operation>(new Operation(
+    operations[0x1C04] = S<Operation>(new Operation(
         "Push Long", "PUSH64", "push Longs[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::push(cpu, cpu.registers.longs, arguments);
         },
         { { SIZE8 } }));
 
-    cpu.operations[0x1C05] = S<Operation>(new Operation(
+    operations[0x1C05] = S<Operation>(new Operation(
         "Push Quad", "POP64", "Longs[A] = {pop}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::pop(cpu, cpu.registers.longs, arguments);
         },
         { { SIZE8 } }));
 
-    cpu.operations[0x1C06] = S<Operation>(new Operation(
+    operations[0x1C06] = S<Operation>(new Operation(
         "Cast To Long", "CAST32TO64", "Longs[A] = Quads[A]:Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rL = U8(arguments[0].value);
@@ -110,7 +109,7 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1C07] = S<Operation>(new Operation(
+    operations[0x1C07] = S<Operation>(new Operation(
         "Cast From Long", "CAST64TO32", "Quads[A]:Quads[B] = Longs[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rQA = U8(arguments[0].value);
@@ -122,7 +121,7 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1C08] = S<Operation>(new Operation(
+    operations[0x1C08] = S<Operation>(new Operation(
         "Copy Long If", "COPY64IF", "?A : Longs[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             CompareFlag flag = CompareFlag(U8(arguments[0].value));
@@ -133,35 +132,35 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1D00] = S<Operation>(new Operation(
+    operations[0x1D00] = S<Operation>(new Operation(
         "Add", "ADD64", "Quads[A] = Quads[B] + Quads[C] CR Quads[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::add<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1D01] = S<Operation>(new Operation(
+    operations[0x1D01] = S<Operation>(new Operation(
         "Substract", "SUB64", "Quads[A] = Quads[B] - Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::substract<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1D02] = S<Operation>(new Operation(
+    operations[0x1D02] = S<Operation>(new Operation(
         "Multiply", "MUL64", "Quads[A] = Quads[B] * Quads[C] CR Quads[D]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::multiply<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1D03] = S<Operation>(new Operation(
+    operations[0x1D03] = S<Operation>(new Operation(
         "Divide", "DIV64", "Quads[A] = Quads[B] / Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::divide<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1D04] = S<Operation>(new Operation(
+    operations[0x1D04] = S<Operation>(new Operation(
         "Modulo", "MOD64", "Quads[A] = Quads[B] % Quads[C]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::modulo<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
@@ -170,7 +169,7 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
 
     // TODO : 1505 - ABS16
 
-    cpu.operations[0x1D06] = S<Operation>(new Operation(
+    operations[0x1D06] = S<Operation>(new Operation(
         "Random", "RND64", "Quads[A] = {rnd Quads[B] Quads[C]}",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 index = U8(arguments[0].value);
@@ -180,14 +179,14 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
         },
         { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1DF0] = S<Operation>(new Operation(
+    operations[0x1DF0] = S<Operation>(new Operation(
         "Compare", "CMP64", "Quads[A] ? Quads[B]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::compare(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
         { { SIZE8 }, { SIZE8 } }));
 
-    cpu.operations[0x1F00] = S<Operation>(new Operation(
+    operations[0x1F00] = S<Operation>(new Operation(
         "Write Long", "WINT64", "out Longs[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -196,7 +195,7 @@ void Juse::Operations::StandardExtensions::addExtU64(Cpu& cpu)
             out(machine.out, buffer, cpu.flag_debug);
         },
         { { SIZE8 } }));
-    cpu.operations[0x1F01] = S<Operation>(new Operation(
+    operations[0x1F01] = S<Operation>(new Operation(
         "Read Long", "RINT64", "in Longs[A]",
         [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U64 value;

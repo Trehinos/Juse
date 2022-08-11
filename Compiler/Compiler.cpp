@@ -84,7 +84,6 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
             line = line.substr(8);
             size_t size = stoull(line);
             ret.assign(size, 0x00);
-            return ;
         }
         if (line.starts_with("#D")) {
             // #Dx{~n} (x € [B,W,Q,L] ; n € [0, 256])
@@ -93,9 +92,11 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
     }
     if (line.ends_with(":")) {
         labels.push_back(Label { addr, Utility::Strings::trim(line, " :") });
+        return ByteSet {};
     }
     if (line.starts_with(";")) {
         // ; comment
+        return ByteSet {};
     }
 
     Jumne::Instruction instr = parse(line);
@@ -104,6 +105,18 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
         return Juse::ByteSet {};
     }
     Operation op = operation.value();
+    size_t argIndex = 0;
+    for (std::string& argument : instr.arguments) {
+        if (argument.starts_with("&")) {
+            std::string lName = Utility::Strings::trim(argument, " &");
+            for (Label l : labels) {
+                if (l.defined and lName == l.label) {
+                    argument = std::to_string(l.address.datum);
+                    break;
+                }
+            }
+        }
+    }
     return linkOperation(opKey, op, instr.arguments);
 }
 
@@ -126,4 +139,15 @@ Juse::Memory Juse::Jumne::Compiler::compile(std::vector<std::string> lines)
         Utility::MachineMemory::write(*memory, set, address);
         Utility::MachineMemory::forward(pool, segment, addr, set.size());
     }
+}
+
+void test()
+{
+    using namespace Juse;
+    OperationMap operations {};
+    loadOperationsSets(operations);
+    Jumne::Compiler jasm { operations };
+    jasm.compile({ "goto 4",
+        "Bytes[0] = 1000",
+        "out Bytes[0]" });
 }

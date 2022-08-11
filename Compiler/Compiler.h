@@ -32,7 +32,9 @@ namespace Jumne {
 
     public:
         Compiler(OperationMap&);
+        std::vector<std::string> preProcess(std::vector<std::string>);
         Memory compile(std::vector<std::string>);
+        Memory build(std::vector<std::string>); // => compile(preProcess(...));
     };
 
 }

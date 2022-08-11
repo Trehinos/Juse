@@ -33,31 +33,31 @@
     <ClCompile Include="Debug\Debug.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\branching.cpp">
+    <ClCompile Include="Operations\Sets\Standard\branching.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\move.cpp">
+    <ClCompile Include="Operations\Sets\Standard\move.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Operations\logic.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\allocation.cpp">
+    <ClCompile Include="Operations\Sets\Standard\allocation.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\thread.cpp">
+    <ClCompile Include="Operations\Sets\Standard\thread.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\ext_u8.cpp">
+    <ClCompile Include="Operations\Sets\Extension\ext_u8.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\ext_u16.cpp">
+    <ClCompile Include="Operations\Sets\Extension\ext_u16.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\ext_u32.cpp">
+    <ClCompile Include="Operations\Sets\Extension\ext_u32.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Operations\ext_u64.cpp">
+    <ClCompile Include="Operations\Sets\Extension\ext_u64.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Tests\game.cpp">
@@ -110,7 +110,7 @@
     <ClInclude Include="Debug\Debug.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Operations\u_operations.h">
+    <ClInclude Include="Operations\Sets\Extension\u_operations.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Models\U128.h">
@@ -119,13 +119,34 @@
     <ClInclude Include="Models\JTypes.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Operations\thread.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Compiler\Compiler.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Models\utility.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Compiler\Parser\Parser.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Standard\branching.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Standard\move.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Standard\allocation.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Standard\thread.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Extension\ext_u8.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Extension\ext_u16.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Operations\Sets\Extension\ext_u32.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
