@@ -4,7 +4,6 @@
 #include <stdexcept>
 #include <utility>
 
-#include "../Models/types.h"
 #include "Cpu.h"
 
 namespace Juse {

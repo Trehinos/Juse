@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <fstream>
 
-#include "Machine.h"
+#include "../model/Machine.h"
 
 using namespace Juse;
 

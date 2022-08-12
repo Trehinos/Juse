@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Operation.h"
+#include "../model/Operation.h"
 
 using namespace Juse;
 

@@ -36,18 +36,6 @@ std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
 
 void Juse::init(Juse::Cpu& cpu, const std::string type)
 {
-    static bool juseInitiated = false;
-    if (!juseInitiated) {
-        juseInitiated = true;
-        Operations::Standard::Branching::init();
-        Operations::Standard::Move::init();
-        Operations::Standard::Allocation::init();
-        Operations::Standard::Thread::init();
-        Operations::ExtU8::init();
-        Operations::ExtU16::init();
-        Operations::ExtU32::init();
-        Operations::ExtU64::init();
-    }
     cpu.initOperations();
     loadOperationsSets(cpu.operations, type);
 }
@@ -70,6 +58,18 @@ std::vector<std::string> split(std::string s, std::string delimiter)
 
 void Juse::loadOperationsSets(OperationMap& operations, const std::string types)
 {
+    static bool juseInitiated = false;
+    if (!juseInitiated) {
+        juseInitiated = true;
+        Operations::Standard::Branching::init();
+        Operations::Standard::Move::init();
+        Operations::Standard::Allocation::init();
+        Operations::Standard::Thread::init();
+        Operations::ExtU8::init();
+        Operations::ExtU16::init();
+        Operations::ExtU32::init();
+        Operations::ExtU64::init();
+    }
     for (const auto& c : split(types, "/")) {
         if (c == "std") {
             Operations::Standard::Branching::add(operations);

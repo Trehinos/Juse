@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../Machine/Machine.h"
-#include "../Machine/Operation.h"
-#include "../Models/types.h"
+#include "../model/Machine.h"
+#include "../model/Operation.h"
 
 namespace Juse::Debug {
 void dumpState(Cpu&);

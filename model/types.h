@@ -67,7 +67,7 @@ const auto makeP = std::make_unique<T>;
 template <class T>
 const auto makeS = std::make_shared<T>;
 template <class T>
-S<T> share(T& t) { return makeS<T>(std::move(t)); }
+inline S<T> share(T& t) { return std::make_shared<T>(std::move(t)); }
 
 /*
 * SIZESXX where XX is a size in bits ; maps with size in bytes.
@@ -136,6 +136,20 @@ template <int size>
 using ByteArray = std::array<U8, size>;
 using ByteSet = std::vector<U8>;
 using Stack = std::stack<U8>;
+
+template <typename T>
+using R = std::reference_wrapper<T>;
+
+template <typename T>
+using Collection = std::vector<R<T>>;
+template <typename T, typename U>
+using Heap = std::map<R<T&>, R<U>>;
+
+template <typename T>
+inline R<T> wrap(T& v)
+{
+    return std::ref(v);
+}
 
 const size_t SEGMENT_SIZE = 1 << 16; // 64 KiB
 using Segment = ByteArray<SEGMENT_SIZE>;

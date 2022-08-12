@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Models/types.h"
+#include "types.h"
 
 namespace Juse {
 

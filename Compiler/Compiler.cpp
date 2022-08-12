@@ -1,15 +1,16 @@
 
-#include "Compiler.h"
 #include <algorithm>
 #include <cctype>
 #include <locale>
 
-#include "../Models/utility.h"
 #include "../Operations/operations.h"
+#include "../model/utility.h"
+
+#include "Compiler.h"
 
 Juse::ByteSet Juse::Jumne::linkOperation(U16 opKey, Operation& operation, std::vector<std::string> arguments)
 {
-    ByteSet set { U8(opKey & MASK_16TOP8 >> 8), U8(opKey & MASK_BOTTOM8) };
+    ByteSet set = word2set(opKey);
     size_t argIndex = 0;
     for (size_t index = 0; index < operation.length(); index++) {
         size_t argSize = operation.getArgumentDefs()[index].size;
@@ -17,11 +18,14 @@ Juse::ByteSet Juse::Jumne::linkOperation(U16 opKey, Operation& operation, std::v
         ByteSet argSet;
         if (argSize == SIZE8) {
             argSet = word2set(U8(argument));
-        } else if (argSize == SIZE16) {
+        }
+        else if (argSize == SIZE16) {
             argSet = word2set(U16(argument));
-        } else if (argSize == SIZE32) {
+        }
+        else if (argSize == SIZE32) {
             argSet = word2set(U32(argument));
-        } else if (argSize == SIZE64) {
+        }
+        else if (argSize == SIZE64) {
             argSet = word2set(U64(argument));
         }
         for (U8 byte : argSet) {
@@ -45,9 +49,9 @@ std::optional<Juse::Operation> Juse::Jumne::findOperation(OperationMap operation
 
 Juse::Jumne::Instruction Juse::Jumne::parse(std::string line)
 {
-    std::string buffer {};
-    std::string operationKey {};
-    std::vector<std::string> arguments {};
+    std::string buffer{};
+    std::string operationKey{};
+    std::vector<std::string> arguments{};
     bool operationOk = false;
 
     for (char c : line) {
@@ -62,7 +66,8 @@ Juse::Jumne::Instruction Juse::Jumne::parse(std::string line)
         if (c == ' ') {
             arguments.push_back(buffer);
             buffer = "";
-        } else {
+        }
+        else {
             buffer += c;
         }
     }
@@ -70,7 +75,7 @@ Juse::Jumne::Instruction Juse::Jumne::parse(std::string line)
         arguments.push_back(buffer);
     }
 
-    return Instruction { operationKey, arguments };
+    return Instruction{ operationKey, arguments };
 }
 
 Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
@@ -78,7 +83,7 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
     U16 opKey;
     line = Utility::Strings::trim(line);
     if (line.size() == 0) { // Empty line
-        return ByteSet {};
+        return ByteSet{};
     }
     if (line.starts_with("#")) { // Directives
         if (line.starts_with("#OFFSET ")) { // #OFFSET n
@@ -90,21 +95,21 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
         if (line.starts_with("#D")) {
             // #Dx{~n} (x € [B,W,Q,L] ; n € [0, 256])
         }
-        return ByteSet {};
+        return ByteSet{};
     }
     if (line.ends_with(":")) {
-        labels.push_back(Label { addr, Utility::Strings::trim(line, " :") });
-        return ByteSet {};
+        labels.push_back(Label{ addr, Utility::Strings::trim(line, " :") });
+        return ByteSet{};
     }
     if (line.starts_with(";")) {
         // ; comment
-        return ByteSet {};
+        return ByteSet{};
     }
 
     Jumne::Instruction instr = parse(line);
     std::optional<Operation> operation = findOperation(operations, instr.operationKey, opKey);
     if (operation == std::nullopt) {
-        return Juse::ByteSet {};
+        return Juse::ByteSet{};
     }
     Operation op = operation.value();
     size_t argIndex = 0;
@@ -122,9 +127,10 @@ Juse::ByteSet Juse::Jumne::Compiler::compileLine(Address addr, std::string line)
     return linkOperation(opKey, op, instr.arguments);
 }
 
-Juse::Jumne::Compiler::Compiler(OperationMap& op)
-    : operations(op)
-    , labels {}
+Juse::Jumne::Compiler::Compiler(Parser& parser, OperationMap& op)
+    : parser(parser)
+    , operations(op)
+    , labels{}
 {
 }
 
@@ -136,7 +142,7 @@ Juse::Memory Juse::Jumne::Compiler::compile(std::vector<std::string> lines)
     S<Memory> memory = makeS<Memory>();
 
     for (std::string line : lines) {
-        Address address { pool, segment, addr };
+        Address address{ pool, segment, addr };
         Juse::ByteSet set = compileLine(address, line);
         Utility::MachineMemory::write(*memory, set, address);
         Utility::MachineMemory::forward(pool, segment, addr, set.size());
@@ -148,10 +154,4 @@ Juse::Memory Juse::Jumne::Compiler::compile(std::vector<std::string> lines)
 void testCompiler()
 {
     using namespace Juse;
-    OperationMap operations {};
-    loadOperationsSets(operations);
-    Jumne::Compiler jasm { operations };
-    jasm.compile({ "goto 4",
-        "Bytes[0] = 1000",
-        "out Bytes[0]" });
 }

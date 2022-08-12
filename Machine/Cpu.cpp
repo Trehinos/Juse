@@ -2,9 +2,8 @@
 #include <functional>
 #include <iomanip>
 
-#include "Cpu.h"
-#include "Machine.h"
-#include "Operation.h"
+#include "../model/Machine.h"
+#include "../model/Operation.h"
 
 using namespace Juse;
 
