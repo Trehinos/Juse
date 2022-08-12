@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <tuple>
 
-#include "../Models/types.h"
+#include "types.h"
 
 namespace Juse {
 

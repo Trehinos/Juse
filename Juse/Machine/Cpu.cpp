@@ -2,8 +2,8 @@
 #include <functional>
 #include <iomanip>
 
-#include "../model/Machine.h"
-#include "../model/Operation.h"
+#include "../Machine.h"
+#include "../Operation.h"
 
 using namespace Juse;
 

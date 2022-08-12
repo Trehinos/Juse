@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Operations/operations.h"
+#include "../operations.h"
 
 namespace Juse::Tests {
 std::array<U8, 256> helloWorld();

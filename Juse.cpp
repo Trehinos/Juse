@@ -1,7 +1,7 @@
 ﻿
-#include "Juse.h"
-#include "Debug/Debug.h"
-#include "Tests/Tests.h"
+#include "Juse/Juse.h"
+#include "Juse/Debug/Debug.h"
+#include "Juse/Tests/Tests.h"
 
 using namespace std;
 using namespace Juse;

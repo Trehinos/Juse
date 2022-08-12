@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../model/Compiler.h"
+#include "../Compiler.h"
 
 namespace Juse {
 

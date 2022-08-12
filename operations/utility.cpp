@@ -1,5 +1,5 @@
 
-#include "utility.h"
+#include "../Juse/utility.h"
 
 void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, size_t steps)
 {

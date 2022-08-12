@@ -3,14 +3,14 @@
 #include <ranges>
 #include <string_view>
 
-#include "Sets/Standard/branching.h"
-#include "Sets/Standard/move.h"
-#include "Sets/Standard/allocation.h"
-#include "Sets/Standard/thread.h"
-#include "Sets/Extension/ext_u8.h"
-#include "Sets/Extension/ext_u16.h"
-#include "Sets/Extension/ext_u32.h"
-#include "Sets/Extension/ext_u64.h"
+#include "Standard/branching.h"
+#include "Standard/move.h"
+#include "Standard/allocation.h"
+#include "Standard/thread.h"
+#include "Extension/ext_u8.h"
+#include "Extension/ext_u16.h"
+#include "Extension/ext_u32.h"
+#include "Extension/ext_u64.h"
 
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
@@ -25,7 +25,7 @@ void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 
 std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
 {
-    std::string str {};
+    std::string str{};
     if (debug) {
         os << "  >> ";
     }

@@ -3,8 +3,8 @@
 #include <cctype>
 #include <locale>
 
-#include "../Operations/operations.h"
-#include "../model/utility.h"
+#include "../operations.h"
+#include "../utility.h"
 
 #include "Compiler.h"
 

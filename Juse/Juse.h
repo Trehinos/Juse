@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Operations/operations.h"
+#include "operations.h"
 
 namespace Juse {
 const std::string VERSION = "0.3.4";

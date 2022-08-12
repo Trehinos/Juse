@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../operations.h"
+#include "../../Juse/operations.h"
 #include "u_operations.h"
 
 namespace Juse {

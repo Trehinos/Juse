@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../model/Machine.h"
-#include "../model/Operation.h"
+#include "Machine.h"
+#include "Operation.h"
 
 namespace Juse {
 
