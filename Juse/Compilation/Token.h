@@ -10,33 +10,33 @@ namespace Juse::Compilation {
         struct Token;
 
         struct Token {
-            std::string type;
-            Token(std::string t = "")
+            S8 type;
+            Token(S8 t = "")
                 : type{ "token:" + t }
             {
             }
 
-            virtual bool matches(std::string)
+            virtual bool matches(S8)
             {
                 return false;
             }
         };
 
         struct Terminal : Token {
-            std::string value;
-            Terminal(std::string t, std::string v)
+            S8 value;
+            Terminal(S8 t, S8 v)
                 : Token{ "terminal:" + t }
                 , value{ v }
 
             {
             }
-            virtual bool matches(std::string str)
+            virtual bool matches(S8 str)
             {
                 return str == value;
             }
         };
         struct Operator : Terminal {
-            Operator(std::string v)
+            Operator(S8 v)
                 : Terminal{ "operator:" + v, v }
 
             {
@@ -44,12 +44,12 @@ namespace Juse::Compilation {
         }; 
         struct Optional : Token {
             Token& token;
-            Optional(std::string n, Token& t)
+            Optional(S8 n, Token& t)
                 : Token{ "optional:" + n }, token(t)
             {
             }
 
-            virtual bool matches(std::string s)
+            virtual bool matches(S8 s)
             {
                 if (s.size() == 0) {
                     return true;
@@ -60,23 +60,23 @@ namespace Juse::Compilation {
         };
         struct AllOf : Token {
             Collection<Token> values;
-            AllOf(std::string t, Collection<Token> values = {})
+            AllOf(S8 t, Collection<Token> values = {})
                 : Token{ "allOf:" + t }
                 , values(values)
             {
             }
-            AllOf(std::string t, std::vector<std::string> strs)
+            AllOf(S8 t, Vector<S8> strs)
                 : Token{ "allOf:" + t }
                 , values({})
             {
                 size_t index = 0;
-                for (std::string str : strs) {
+                for (S8 str : strs) {
                     Terminal token{ t + ":" + std::to_string(index++), str };
-                    values.push_back(wrap(token));
+                    values.push_back(ref(token));
                 }
             }
 
-            virtual bool matches(std::string str)
+            virtual bool matches(S8 str)
             {
                 for (auto& token : values) {
                     if (!token.get().matches(str)) {
@@ -88,23 +88,23 @@ namespace Juse::Compilation {
         };
         struct OneOf : Token {
             Collection<Token> values;
-            OneOf(std::string t, Collection<Token> values = {})
+            OneOf(S8 t, Collection<Token> values = {})
                 : Token{ "oneOf:" + t }
                 , values(values)
             {
             }
-            OneOf(std::string t, std::vector<std::string> strs)
+            OneOf(S8 t, Vector<S8> strs)
                 : Token{ "oneOf:" + t }
                 , values({})
             {
                 size_t index = 0;
-                for (std::string str : strs) {
+                for (S8 str : strs) {
                     Terminal token{ t + ":" + std::to_string(index++), str };
-                    values.push_back(wrap(token));
+                    values.push_back(ref(token));
                 }
             }
 
-            virtual bool matches(std::string str)
+            virtual bool matches(S8 str)
             {
                 for (auto& token : values) {
                     if (token.get().matches(str)) {
@@ -116,28 +116,28 @@ namespace Juse::Compilation {
         };
         struct Sequence : Token {
             Collection<Token> values;
-            Sequence(std::string t, Collection<Token> values = {})
+            Sequence(S8 t, Collection<Token> values = {})
                 : Token{ "sequence:" + t }
                 , values(values)
             {
             }
-            Sequence(std::string t, std::vector<std::string> strs)
+            Sequence(S8 t, Vector<S8> strs)
                 : Token{ "sequence:" + t }
                 , values({})
             {
                 size_t index = 0;
-                for (std::string str : strs) {
+                for (S8 str : strs) {
                     Terminal token{ t + ":" + std::to_string(index++), str };
-                    values.push_back(wrap(token));
+                    values.push_back(ref(token));
                 }
             }
 
-            virtual bool matches(std::string str)
+            virtual bool matches(S8 str)
             {
-                std::string::iterator strBegin = str.begin();
-                std::string::iterator strCursor = strBegin;
+                S8::iterator strBegin = str.begin();
+                S8::iterator strCursor = strBegin;
                 for (auto& token : values) {
-                    std::string cursorString;
+                    S8 cursorString;
                     copy(strBegin, strCursor++, cursorString.begin());
                     if (!token.get().matches(cursorString)) {
                         if (strCursor == str.end()) {
@@ -151,30 +151,30 @@ namespace Juse::Compilation {
             }
         };
         struct Regex : Token {
-            std::string expr;
+            S8 expr;
             std::regex regExpr;
-            Regex(std::string t, std::string re)
+            Regex(S8 t, S8 re)
                 : Token("regex:" + t)
                 , expr{ re }
                 , regExpr{ re }
             {
             }
-            virtual bool matches(std::string str)
+            virtual bool matches(S8 str)
             {
                 return std::regex_match(str, regExpr);
 
             }
         };
         struct MultiRegex : OneOf {
-            MultiRegex(std::string t, V<std::string> exprs = {})
+            MultiRegex(S8 t, Vector<S8> exprs = {})
                 : OneOf{ "concat:" + t }
             {
-                for (std::string expr : exprs) {
+                for (S8 expr : exprs) {
                     Regex token{ t, expr };
-                    values.push_back(wrap(token));
+                    values.push_back(ref(token));
                 }
             }
-            MultiRegex(std::string t, Collection<Regex> regexs = {})
+            MultiRegex(S8 t, Collection<Regex> regexs = {})
                 : OneOf{ "multiRegex:" + t }
             {
                 for (auto& regex : regexs) {
@@ -189,12 +189,12 @@ namespace Juse::Compilation {
             {
             }
 
-            bool matches(std::string str)
+            bool matches(S8 str)
             {
                 return token(str) != std::nullopt;
             }
 
-            O<Token> token(std::string str)
+            Opt<Token> token(S8 str)
             {
                 for (auto& token : tokens) {
                     if (token.get().matches(str)) {

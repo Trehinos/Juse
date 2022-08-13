@@ -17,21 +17,21 @@ struct OperationArgument {
 
 class Operation {
 
-    std::string name;
-    std::string mnemu;
-    std::string juse_lang;
-    std::vector<Argument> arguments;
+    S8 name;
+    S8 mnemu;
+    S8 juse_lang;
+    Vector<Argument> arguments;
     OperationFunction code;
 
 public:
-    Operation(std::string = {}, std::string = {}, std::string = {},
-        OperationFunction = {}, std::vector<Argument> = {});
-    std::string getName() { return name; }
-    std::string jumne() { return mnemu; }
-    std::string juseLang() { return juse_lang; }
+    Operation(S8 = {}, S8 = {}, S8 = {},
+        OperationFunction = {}, Vector<Argument> = {});
+    S8 getName() { return name; }
+    S8 jumne() { return mnemu; }
+    S8 juseLang() { return juse_lang; }
     U64 argument(Instruction&, size_t = 0);
     OperationArguments operationArguments(Instruction&);
-    std::vector<Argument> getArgumentDefs();
+    Vector<Argument> getArgumentDefs();
     size_t length();
     void operator()(Machine&, Cpu&, Instruction&);
     void operator()(Machine&, Cpu&, OperationArguments&);

@@ -10,13 +10,13 @@
 
 using namespace Juse;
 
-Juse::Jumne::JLabel::JLabel(std::string label, Juse::Address a) : Label{ label, true }, addr{ a } {
+Juse::Jumne::JLabel::JLabel(S8 label, Juse::Address a) : Label{ label, true }, addr{ a } {
     if (a.segment == a.pool && a.pool == a.datum && a.pool == 0) {
         defined = false;
     }
 }
 
-Juse::ByteSet linkOperation(U16 opKey, Operation& operation, std::vector<std::string> arguments)
+Juse::ByteSet linkOperation(U16 opKey, Operation& operation, Vector<S8> arguments)
 {
     ByteSet set = word2set(opKey);
     size_t argIndex = 0;
@@ -44,7 +44,7 @@ Juse::ByteSet linkOperation(U16 opKey, Operation& operation, std::vector<std::st
     return set;
 }
 
-std::optional<Juse::Operation> findOperation(OperationMap operations, std::string jumne, U16& opKey)
+std::optional<Juse::Operation> findOperation(OperationMap operations, S8 jumne, U16& opKey)
 {
     for (const auto& [opkey, operation] : operations) {
         if (operation->jumne() == jumne) {
@@ -55,7 +55,7 @@ std::optional<Juse::Operation> findOperation(OperationMap operations, std::strin
     return std::nullopt;
 }
 
-Juse::Jumne::JumneInstruction parse(std::string line)
+Juse::Jumne::JumneInstruction parse(S8 line)
 {
     Jumne::JumneArgument buffer{};
     Compilation::Symbol operationKey{""};
@@ -86,7 +86,7 @@ Juse::Jumne::JumneInstruction parse(std::string line)
     return Jumne::JumneInstruction{ operationKey, arguments };
 }
 /*
-Juse::ByteSet compileLine(Address addr, std::string line)
+Juse::ByteSet compileLine(Address addr, S8 line)
 {
     U16 opKey;
     line = Utility::Strings::trim(line);
@@ -121,9 +121,9 @@ Juse::ByteSet compileLine(Address addr, std::string line)
     }
     Operation op = operation.value();
     size_t argIndex = 0;
-    for (std::string& argument : instr.arguments) {
+    for (S8& argument : instr.arguments) {
         if (argument.starts_with("&")) {
-            std::string lName = Utility::Strings::trim(argument, " &");
+            S8 lName = Utility::Strings::trim(argument, " &");
             for (Label l : labels) {
                 if (l.defined and lName == l.label) {
                     argument = std::to_string(l.address.datum);
@@ -136,14 +136,14 @@ Juse::ByteSet compileLine(Address addr, std::string line)
 }
 */
 
-Juse::Memory compile(std::vector<std::string> lines)
+Juse::Memory compile(Vector<S8> lines)
 {
     U16 pool = 0;
     U32 segment = 0;
     U16 addr = 0;
-    S<Memory> memory = makeS<Memory>();
+    SPtr<Memory> memory = makeS<Memory>();
     /*
-    for (std::string line : lines) {
+    for (S8 line : lines) {
         Address address{ pool, segment, addr };
         Juse::ByteSet set = compileLine(address, line);
         Utility::MachineMemory::write(*memory, set, address);

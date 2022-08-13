@@ -50,25 +50,25 @@ namespace Operations {
     namespace ExtU16 {
         void init();
         void add(OperationMap& operations);
-        static S<Operation> Set16;
-        static S<Operation> CopyFrom16;
-        static S<Operation> CopyTo16;
-        static S<Operation> Copy16;
-        static S<Operation> Push16;
-        static S<Operation> Pop16;
-        static S<Operation> CastTo16;
-        static S<Operation> CastFrom16;
-        static S<Operation> Copy16If;
-        static S<Operation> Add16;
-        static S<Operation> Substract16;
-        static S<Operation> Multiply16;
-        static S<Operation> Divide16;
-        static S<Operation> Modulo16;
-        static S<Operation> Random16;
-        static S<Operation> Compare16;
-        static S<Operation> Write16;
-        static S<Operation> Read16;
-        static S<Operation> WriteUtf16;
+        static SPtr<Operation> Set16;
+        static SPtr<Operation> CopyFrom16;
+        static SPtr<Operation> CopyTo16;
+        static SPtr<Operation> Copy16;
+        static SPtr<Operation> Push16;
+        static SPtr<Operation> Pop16;
+        static SPtr<Operation> CastTo16;
+        static SPtr<Operation> CastFrom16;
+        static SPtr<Operation> Copy16If;
+        static SPtr<Operation> Add16;
+        static SPtr<Operation> Substract16;
+        static SPtr<Operation> Multiply16;
+        static SPtr<Operation> Divide16;
+        static SPtr<Operation> Modulo16;
+        static SPtr<Operation> Random16;
+        static SPtr<Operation> Compare16;
+        static SPtr<Operation> Write16;
+        static SPtr<Operation> Read16;
+        static SPtr<Operation> WriteUtf16;
     }
 }
 }

@@ -22,14 +22,14 @@ namespace Juse::Operations::Standard::Branching {
 
     void init()
     {
-        ShortJump = S<Operation>(new Operation(
+        ShortJump = SPtr<Operation>(new Operation(
             "Short Jump", "SHJUMP", "goto DP:DS:A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 target = MASK_BOTTOM8 & arguments[0].value;
             cpu.jump(cpu.pool(), cpu.segment(), target);
         },
             { { SIZE16 } }));
-        Jump = S<Operation>(new Operation(
+        Jump = SPtr<Operation>(new Operation(
             "Jump", "JUMP", "goto DP:A:B",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U32 segment = MASK_BOTTOM32 & arguments[0].value;
@@ -37,13 +37,13 @@ namespace Juse::Operations::Standard::Branching {
             cpu.jump(cpu.pool(), segment, target);
         },
             { { SIZE32 }, { SIZE16 } }));
-        LongJump = S<Operation>(new Operation(
+        LongJump = SPtr<Operation>(new Operation(
             "Long Jump", "LJUMP", "goto A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             cpu.longjump(arguments[0].value);
         },
             { { SIZE64 } }));
-        Call = S<Operation>(new Operation(
+        Call = SPtr<Operation>(new Operation(
             "Call", "CALL", "call A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 target = MASK_BOTTOM8 & arguments[0].value;
@@ -51,14 +51,14 @@ namespace Juse::Operations::Standard::Branching {
             cpu.jump(cpu.pool(), cpu.segment(), target);
         },
             { { SIZE16 } }));
-        Return = S<Operation>(new Operation(
+        Return = SPtr<Operation>(new Operation(
             "Return", "RET", "return",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 target = U16(cpu.pop() << 8) + cpu.pop();
             cpu.jump(cpu.pool(), cpu.segment(), target);
         },
             {}));
-        LongCall = S<Operation>(new Operation(
+        LongCall = SPtr<Operation>(new Operation(
             "Long Call", "LCALL", "call! A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U64 target = arguments[0].value;
@@ -66,14 +66,14 @@ namespace Juse::Operations::Standard::Branching {
             cpu.longjump(target);
         },
             { { SIZE64 } }));
-        LongReturn = S<Operation>(new Operation(
+        LongReturn = SPtr<Operation>(new Operation(
             "Long Return", "LRET", "return!",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U64 target = set2word(cpu.multiPop(SIZE64));
             cpu.longjump(target);
         },
             {}));
-        If = S<Operation>(new Operation(
+        If = SPtr<Operation>(new Operation(
             "If", "IF", "if A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 compareOperator = U8(arguments[0].value);
@@ -83,14 +83,14 @@ namespace Juse::Operations::Standard::Branching {
         },
             { { SIZE8 } }));
 
-        Skip = S<Operation>(new Operation(
+        Skip = SPtr<Operation>(new Operation(
             "Skip", "SKIP", "skip",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             cpu.flag_skip = true;
         },
             {}));
 
-        Next = S<Operation>(new Operation(
+        Next = SPtr<Operation>(new Operation(
             "Next", "NEXT", "next Words[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -100,7 +100,7 @@ namespace Juse::Operations::Standard::Branching {
         },
             { { SIZE8 } }));
 
-        NextDirect = S<Operation>(new Operation(
+        NextDirect = SPtr<Operation>(new Operation(
             "Next Direct", "NEXTD", "next A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 target = U16(arguments[0].value);
@@ -109,7 +109,7 @@ namespace Juse::Operations::Standard::Branching {
         },
             { { SIZE16 } }));
 
-        End = S<Operation>(new Operation(
+        End = SPtr<Operation>(new Operation(
             "End Program", "END", "end",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             cpu.flag_exit = true;

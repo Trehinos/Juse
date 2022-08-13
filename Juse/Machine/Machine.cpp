@@ -46,14 +46,14 @@ Machine::Machine(std::istream& ins, std::ostream& outs)
     cpus.push_back(Cpu {});
 }
 
-Machine Machine::loadFile(std::string filename)
+Machine Machine::loadFile(S8 filename)
 {
     std::ifstream file(filename, std::ios::binary);
     Machine machine(std::cin, std::cout);
     U16 pool = 0;
     U32 segment = 0;
     while (!file.eof()) {
-        S<Segment> current = machine.getSegment(pool, segment);
+        SPtr<Segment> current = machine.getSegment(pool, segment);
         for (U8& byte : *current) {
             if (file.eof())
                 break;
@@ -75,7 +75,7 @@ Machine Juse::Machine::fromData(Segment& segment)
 {
     Machine machine = Machine(std::cin, std::cout);
 
-    S<Segment> current = machine.getSegment(0, 0);
+    SPtr<Segment> current = machine.getSegment(0, 0);
     std::copy(segment.begin(), segment.end(), current->begin());
 
     return machine;
@@ -94,12 +94,12 @@ void Machine::createSegment(U16 pool_index, U32 segment_index)
     ((*memory)[pool_index])->insert({ segment_index, makeS<Segment>() });
 }
 
-S<Pool> Juse::Machine::getPool(U16 pool_index)
+SPtr<Pool> Juse::Machine::getPool(U16 pool_index)
 {
     return (*memory)[pool_index];
 }
 
-S<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
+SPtr<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
 {
     return (*getPool(pool_index))[segment_index];
 }

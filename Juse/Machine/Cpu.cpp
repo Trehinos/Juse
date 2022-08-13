@@ -132,7 +132,7 @@ void Cpu::cycle(Machine& machine, bool debug)
         flag_debug = debug;
 
         U16 identifier = 0;
-        S<Operation> current = getOperation(machine, identifier);
+        SPtr<Operation> current = getOperation(machine, identifier);
         if (current == NoOp) {
             return;
         }
@@ -221,7 +221,7 @@ U16 Cpu::segment() { return segment_pointer; }
 
 U16 Cpu::instruction() { return instruction_pointer; }
 
-S<Operation> Cpu::getOperation(Machine& machine, U16& id)
+SPtr<Operation> Cpu::getOperation(Machine& machine, U16& id)
 {
     ByteSet identifier = machine.read(*this, 2);
     id = U16(set2word(identifier));
@@ -233,7 +233,7 @@ S<Operation> Cpu::getOperation(Machine& machine, U16& id)
     return operations[id];
 }
 
-S<Operation> Cpu::NoOp = S<Operation>(new Operation(
+SPtr<Operation> Cpu::NoOp = SPtr<Operation>(new Operation(
     "Nothing", "NOP", "",
     [](Machine&, Cpu&, OperationArguments) {},
     {}));

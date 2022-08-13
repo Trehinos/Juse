@@ -2,9 +2,9 @@
 
 using Juse::Types::IsScalar;
 
-std::string Juse::Types::Scalar::toString() const
+Juse::S8 Juse::Types::Scalar::toString() const
 {
-    return std::string { "" };
+    return S8 { "" };
 }
 
 bool Juse::Types::Scalar::equals(const Scalar s) const
@@ -23,7 +23,7 @@ Juse::Types::Number::Number(Juse::I64 i)
 }
 
 template <IsScalar T>
-Juse::Types::Array<T>::Array(const std::vector<T> v)
+Juse::Types::Array<T>::Array(const Vector<T> v)
     : data(v)
 {
 }
@@ -40,13 +40,13 @@ void Juse::Types::Array<T>::add(const T element)
 }
 
 template <IsScalar T>
-std::vector<T> Juse::Types::Collection<T>::toVector() const
+Juse::Vector<T> Juse::Types::Collection<T>::toVector() const
 {
-    return std::vector<T> {};
+    return Vector<T> {};
 }
 
 template <IsScalar T>
-std::vector<T> Juse::Types::Array<T>::toVector() const
+Juse::Vector<T> Juse::Types::Array<T>::toVector() const
 {
     return data;
 }
@@ -56,7 +56,7 @@ void test()
     using namespace Juse;
     using namespace Juse::Types;
 
-    Array<Scalar> types {};
+    Juse::Vector<Scalar> types {};
     Number n(I64(4));
-    types.toVector().push_back(n);
+    types.push_back(n);
 }

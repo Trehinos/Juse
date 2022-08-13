@@ -20,9 +20,9 @@
             - `CompareFlags`
             - `IsAnyOf<T, U...>`
             - `P<T>`
-            - `S<T>`
+            - `SPtr<T>`
             - `makeP<T>`
-            - `makeS<T>`
+            - `makeSPtr<T>`
             - `share<T>(T&)`
             - `sizes`
             - `U8`

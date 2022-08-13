@@ -10,23 +10,23 @@ namespace Juse {
 
         struct JLabel : Label {
             Address addr;
-            JLabel(std::string, Address = {});
+            JLabel(S8, Address = {});
         };
 
         using namespace Juse::Compilation::Token;
 
-        using JumneArgument = std::string;
-        using JumneArguments = V<JumneArgument>;
+        using JumneArgument = S8;
+        using JumneArguments = Vector<JumneArgument>;
 
         struct JumneInstruction {
             Symbol operation;
             JumneArguments arguments;
         };
 
-        JumneInstruction parse(std::string);
-        P<O<R<Operation>>, OperationArguments> find(OperationMap&, JumneInstruction&);
-        ByteSet bytesFrom(O<R<Operation>>, OperationArguments&);
-        inline ByteSet compileJumne(OperationMap& map, std::string line)
+        JumneInstruction parse(S8);
+        Pair<Opt<Ref<Operation>>, OperationArguments> find(OperationMap&, JumneInstruction&);
+        ByteSet bytesFrom(Wrap<Operation>, OperationArguments&);
+        inline ByteSet compileJumne(OperationMap& map, S8 line)
         {
             auto parsed = parse(line);
             auto found = find(map, parsed);
@@ -34,22 +34,22 @@ namespace Juse {
         }
 
         class JumnePreprocessor : Preprocessor {
-            M<std::string, std::string> defines;
+            Map<S8, S8> defines;
 
         protected:
-            virtual void define(std::string);
-            virtual void def(std::string, std::string);
+            virtual void define(S8);
+            virtual void def(S8, S8);
 
         public:
             virtual SourceCode transform(SourceCode);
         };
 
-        class JumneAssembler : Assembler 
+        class JumneAssembler : Assembler
         {};
 
         class JumneCompiler : Compiler {
             OperationMap operations;
-            std::vector<Label> labels;
+            Vector<Label> labels;
 
         public:
             JumneCompiler(JumnePreprocessor&, JumneAssembler&);

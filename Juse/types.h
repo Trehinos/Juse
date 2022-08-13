@@ -36,24 +36,24 @@
 namespace Juse {
     /* Usual types */
     template <class T>
-    using U = std::unique_ptr<T>;
+    using UPtr = std::unique_ptr<T>;
     template <class T>
-    using S = std::shared_ptr<T>;
+    using SPtr = std::shared_ptr<T>;
     template <typename T>
-    using R = std::reference_wrapper<T>;
+    using Ref = std::reference_wrapper<T>;
     template <typename T>
-    using O = std::optional<T>;
+    using Opt = std::optional<T>;
     template <typename T>
-    using W = O<R<T>>;
+    using Wrap = Opt<Ref<T>>;
 
     template <typename T, typename U>
-    using P = std::pair<T, U>;
+    using Pair = std::pair<T, U>;
     template <typename T, typename U>
-    using M = std::map<T, U>;
+    using Map = std::map<T, U>;
     template <typename T>
-    using V = std::vector<T>;
+    using Vector = std::vector<T>;
     template <typename T, size_t s>
-    using A = std::array<T, s>;
+    using Array = std::array<T, s>;
 
     /*
     * Utility concept for some templates.
@@ -73,7 +73,7 @@ namespace Juse {
     /*
     * Inverse of SIZESXX : returns the size in bits.
     */
-    const M<size_t, size_t> sizes = {
+    const Map<size_t, size_t> sizes = {
         { SIZE8, 8 }, { SIZE16, 16 }, { SIZE32, 32 }, { SIZE64, 64 }, { SIZE128, 128 }
     };
 
@@ -108,10 +108,10 @@ namespace Juse {
     using StringStream = std::basic_stringstream<T>;
     template <IsChar T = CH8>
     using String = std::basic_stringstream<T>;
-    using SS8 = StringStream<CH8>;
+    using SS8 = std::stringstream;
     using SS16 = StringStream<CH16>;
     using SS32 = StringStream<CH32>;
-    using S8 = String<CH8>;
+    using S8 = std::string;
     using S16 = String<CH16>;
     using S32 = String<CH32>;
 
@@ -130,37 +130,48 @@ namespace Juse {
     template <class T>
     const auto makeS = std::make_shared<T>;
     template <class T>
-    inline U<T> unique(T& t) { return std::make_unique<T>(std::move(t)); }
+    inline UPtr<T> unique(T& t) { return std::make_unique<T>(std::move<T>(t)); }
     template <class T>
-    inline S<T> share(T& t) { return std::make_shared<T>(std::move(t)); }
+    inline SPtr<T> share(T& t) { return std::make_shared<T>(std::move<T>(t)); }
     template <typename T>
-    inline R<T> wrap(T& v) { return std::ref(v); }
+    inline Ref<T> ref(T& v) { return std::ref<T>(v); }
     template <typename T>
-    inline O<T> opt(T v) { return std::make_optional<T>(v); }
+    inline Opt<T> opt(T v) { return std::make_optional<T>(v); }
     template <typename T>
-    inline W<T> optref(T& v) { return W<T>{opt(wrap(v))}; }
+    inline Wrap<T> wrap(T& v) { return Wrap<T>{opt<Ref<T>>(ref<T>(v))}; }
 
     template <typename T>
-    inline R<T> ref(T v) { return std::ref(v); }
+    inline Ref<T> toref(T v) { return std::ref<T>(v); }
     template <typename T>
-    inline T& rawref(R<T> v) { return v.get(); }
+    inline T optval(Opt<T> v) { return v.has_value() ? v.value() : T{}; }
+    template <typename T>
+    inline T& rawref(Ref<T> v) { return v.get(); }
+    template <typename T>
+    inline T& rawwrap(Wrap<T> v)
+    {
+        return rawref<T>(
+            v.has_value()
+            ? optval<Ref<T>>(v)
+            : toref<T>(T{})
+            );
+    }
 
     template <typename T, typename U>
-    inline P<T, U> pair(T& v1, U& v2) { return std::make_pair(v1, v2); }
+    inline Pair<T, U> pair(T& v1, U& v2) { return std::make_pair(v1, v2); }
 
     template <int size>
-    using ByteArray = A<U8, size>;
-    using ByteSet = V<U8>;
+    using ByteArray = Array<U8, size>;
+    using ByteSet = Vector<U8>;
     using Stack = std::stack<U8>;
 
     template <typename T>
-    using Collection = V<R<T>>;
+    using Collection = Vector<Ref<T>>;
 
     template <typename T, typename U>
-    using RefHeap = M<T, R<U>>;
+    using RefHeap = Map<T, Ref<U>>;
 
     template <typename T, typename U>
-    using HeapMap = M<T, S<U>>;
+    using HeapMap = Map<T, SPtr<U>>;
 
     const size_t SEGMENT_SIZE = 1 << 16; // 64 KiB
     using Segment = ByteArray<SEGMENT_SIZE>;
@@ -168,7 +179,7 @@ namespace Juse {
     using Memory = HeapMap<U16, Pool>;
 
     template <IsWord Type>
-    using GeneralRegisters = A<Type, 256>;
+    using GeneralRegisters = Array<Type, 256>;
 
     class Operation;
     using OperationMap = HeapMap<U16, Operation>;
@@ -224,7 +235,7 @@ namespace Juse {
         SN = 9, // signe negative
         ERR = 255
     };
-    using CompareFlags = M<CompareFlag, bool>;
+    using CompareFlags = Map<CompareFlag, bool>;
 
     class Machine;
 
@@ -237,4 +248,4 @@ namespace Juse {
     using FunctionType = void(Machine&, Cpu&, OperationArguments);
     using OperationFunction = std::function<FunctionType>;
 
-} // namespace Juse
+} // namespace Juses

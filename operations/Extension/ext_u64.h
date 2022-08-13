@@ -50,24 +50,24 @@ namespace Juse {
         namespace ExtU64 {
             void init();
             void add(OperationMap& operations);
-            static S<Operation> Set64;
-            static S<Operation> CopyFrom64;
-            static S<Operation> CopyTo64;
-            static S<Operation> Copy64;
-            static S<Operation> Push64;
-            static S<Operation> Pop64;
-            static S<Operation> CastTo64;
-            static S<Operation> CastFrom64;
-            static S<Operation> Copy64If;
-            static S<Operation> Add64;
-            static S<Operation> Substract64;
-            static S<Operation> Multiply64;
-            static S<Operation> Divide64;
-            static S<Operation> Modulo64;
-            static S<Operation> Random64;
-            static S<Operation> Compare64;
-            static S<Operation> Write64;
-            static S<Operation> Read64;
+            static SPtr<Operation> Set64;
+            static SPtr<Operation> CopyFrom64;
+            static SPtr<Operation> CopyTo64;
+            static SPtr<Operation> Copy64;
+            static SPtr<Operation> Push64;
+            static SPtr<Operation> Pop64;
+            static SPtr<Operation> CastTo64;
+            static SPtr<Operation> CastFrom64;
+            static SPtr<Operation> Copy64If;
+            static SPtr<Operation> Add64;
+            static SPtr<Operation> Substract64;
+            static SPtr<Operation> Multiply64;
+            static SPtr<Operation> Divide64;
+            static SPtr<Operation> Modulo64;
+            static SPtr<Operation> Random64;
+            static SPtr<Operation> Compare64;
+            static SPtr<Operation> Write64;
+            static SPtr<Operation> Read64;
         }
     }
 }

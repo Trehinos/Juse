@@ -9,7 +9,7 @@ namespace Juse::Compilation {
         Collection<Token::Rule> rules;
         Parser(Collection<Token::Rule> r = {}) : rules(r) {}
     public:
-        virtual Collection<Token::Token> parse(std::string) = 0;
+        virtual Collection<Token::Token> parse(S8) = 0;
     };
 
 
@@ -18,14 +18,14 @@ namespace Juse::Compilation {
 
         Terminal SPACE{ "space", " " };
         Terminal NL{ "newline", "\n " };
-        OneOf SEPARATOR{ "separators", { wrap(SPACE), wrap(NL) } };
+        OneOf SEPARATOR{ "separators", { ref(SPACE), ref(NL) } };
 
         Operator OP_PLUS{ "+" };
 
         Regex ALPHA{ "alpha", "[A-Za-z]" };
         Regex NUMERIC{ "numeric", "[0-9]" };
 
-        OneOf ALPHANUM{ "alphaOrNum", { wrap(ALPHA), wrap(NUMERIC) } };
+        OneOf ALPHANUM{ "alphaOrNum", { ref(ALPHA), ref(NUMERIC) } };
     }
 
 }

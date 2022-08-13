@@ -11,14 +11,14 @@ namespace Juse {
     };
 
     void out(std::ostream&, SS8&, bool);
-    std::string in(std::ostream&, std::istream&, bool);
+    S8 in(std::ostream&, std::istream&, bool);
 
     namespace Operations {
         /*
          * Create operations
          */
-        void initCpu(Cpu&, const std::string = "std/std_ext");
+        void initCpu(Cpu&, const S8 = "std/std_ext");
         void initSets();
-        void loadSets(OperationMap&, const std::string = "std/std_ext");
+        void loadSets(OperationMap&, const S8 = "std/std_ext");
     }
 } // namespace Juse

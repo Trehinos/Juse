@@ -60,7 +60,7 @@ public:
     Registers registers;
     Stack stack;
 
-    static S<Operation> NoOp;
+    static SPtr<Operation> NoOp;
     static Duration duration(U32);
     static bool tick(U32, TimePoint, TimePoint);
     OperationMap operations;
@@ -81,7 +81,7 @@ public:
     void run(Machine&, bool = false);
     void cycle(Machine&, bool = false);
 
-    S<Operation> getOperation(Machine&, U16&);
+    SPtr<Operation> getOperation(Machine&, U16&);
 
     void push(U8);
     U8 pop();

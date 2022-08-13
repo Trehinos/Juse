@@ -34,14 +34,14 @@ namespace Juse::Operations::ExtU8 {
 
     void init()
     {
-        Set8 = S<Operation>(new Operation(
+        Set8 = SPtr<Operation>(new Operation(
             "Set Byte", "SET8", "Bytes[A] = B",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Juse::Operations::Unsigned::set(cpu.registers.bytes, arguments);
         },
             { { SIZE8 }, { SIZE8 } }));
 
-        CopyFrom8 = S<Operation>(new Operation(
+        CopyFrom8 = SPtr<Operation>(new Operation(
             "Copy Byte From", "COPYFROM8", "Bytes[A] = [B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -51,7 +51,7 @@ namespace Juse::Operations::ExtU8 {
         },
             { { SIZE8 }, { SIZE16 } }));
 
-        CopyTo8 = S<Operation>(new Operation(
+        CopyTo8 = SPtr<Operation>(new Operation(
             "Copy Byte To", "COPYTO8", "[A] = Bytes[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 address = U16(arguments[0].value);
@@ -60,28 +60,28 @@ namespace Juse::Operations::ExtU8 {
         },
             { { SIZE16 }, { SIZE8 } }));
 
-        Copy8 = S<Operation>(new Operation(
+        Copy8 = SPtr<Operation>(new Operation(
             "Copy Byte", "COPY8", "Bytes[A] = Bytes[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::copy(cpu.registers.bytes, arguments);
         },
             { { SIZE8 }, { SIZE8 } }));
 
-        Push8 = S<Operation>(new Operation(
+        Push8 = SPtr<Operation>(new Operation(
             "Push Byte", "PUSH8", "push Bytes[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::push(cpu, cpu.registers.bytes, arguments);
         },
             { { SIZE8 } }));
 
-        Pop8 = S<Operation>(new Operation(
+        Pop8 = SPtr<Operation>(new Operation(
             "Pop Byte", "POP8", "Bytes[A] = {pop}",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::pop(cpu, cpu.registers.bytes, arguments);
         },
             { { SIZE8 } }));
 
-        Copy8If = S<Operation>(new Operation(
+        Copy8If = SPtr<Operation>(new Operation(
             "Copy Byte If", "COPY8IF", "?A : Bytes[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             CompareFlag flag = CompareFlag(U8(arguments[0].value));
@@ -92,38 +92,38 @@ namespace Juse::Operations::ExtU8 {
         },
             { { SIZE8 }, { SIZE8 } }));
 
-        Add8 = S<Operation>(new Operation(
+        Add8 = SPtr<Operation>(new Operation(
             "Add", "ADD8", "Bytes[A] = Bytes[B] + Bytes[C] CR Bytes[D]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::add<U8, U16>(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
-        Substract8 = S<Operation>(new Operation(
+        Substract8 = SPtr<Operation>(new Operation(
             "Substract", "SUB8", "Bytes[A] = Bytes[B] - Bytes[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::substract<U8, U16>(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
-        Multiply8 = S<Operation>(new Operation(
+        Multiply8 = SPtr<Operation>(new Operation(
             "Multiply", "MUL8", "Bytes[A] = Bytes[B] * Bytes[C] CR Bytes[D]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::multiply<U8, U16>(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
-        Divide8 = S<Operation>(new Operation(
+        Divide8 = SPtr<Operation>(new Operation(
             "Divide", "DIV8", "Bytes[A] = Bytes[B] / Bytes[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::divide<U8, U16>(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
-        Modulo8 = S<Operation>(new Operation(
+        Modulo8 = SPtr<Operation>(new Operation(
             "Modulo", "MOD8", "Bytes[A] = Bytes[B] % Bytes[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::modulo<U8, U16>(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Random8 = S<Operation>(new Operation(
+        Random8 = SPtr<Operation>(new Operation(
             "Random", "RND16", "Bytes[A] = {rnd Bytes[B] Bytes[C]}",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 index = U8(arguments[0].value);
@@ -133,28 +133,28 @@ namespace Juse::Operations::ExtU8 {
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Compare8 = S<Operation>(new Operation(
+        Compare8 = SPtr<Operation>(new Operation(
             "Compare", "CMP8", "Bytes[A] ? Bytes[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::compare(cpu.registers.bytes, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 } }));
 
-        Write8 = S<Operation>(new Operation(
+        Write8 = SPtr<Operation>(new Operation(
             "Write Byte", "WINT8", "out Bytes[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
-            std::stringstream buffer{};
+            SS8 buffer{};
             buffer << std::dec << +cpu.registers.bytes[register_index];
             out(machine.out, buffer, cpu.flag_debug);
         },
             { { SIZE8 } }));
 
-        Read8 = S<Operation>(new Operation(
+        Read8 = SPtr<Operation>(new Operation(
             "Read Byte", "RINT8", "in Bytes[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 value;
-            std::stringstream buffer;
+            SS8 buffer;
             U8 register_index = U8(arguments[0].value);
             buffer << in(machine.out, machine.in, cpu.flag_debug);
             buffer >> std::dec >> value;
@@ -162,12 +162,12 @@ namespace Juse::Operations::ExtU8 {
         },
             { { SIZE8 } }));
 
-        WriteAscii = S<Operation>(new Operation(
+        WriteAscii = SPtr<Operation>(new Operation(
             "Write Ascii", "WASCII", "out S8 A",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 address = U16(arguments[0].value);
             U16 offset = 0;
-            std::stringstream buffer{};
+            SS8 buffer{};
             CH8 character{};
             do {
                 character = CH8(U8(set2word(machine.readData(cpu, address + offset, SIZE8))));

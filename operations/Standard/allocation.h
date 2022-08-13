@@ -6,6 +6,6 @@
 namespace Juse::Operations::Standard::Allocation {
     void init();
     void add(OperationMap&);
-    static S<Operation> AllocatePool;
-    static S<Operation> AllocateSegment;
+    static SPtr<Operation> AllocatePool;
+    static SPtr<Operation> AllocateSegment;
 }

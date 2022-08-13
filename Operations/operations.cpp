@@ -12,6 +12,8 @@
 #include "Extension/ext_u32.h"
 #include "Extension/ext_u64.h"
 
+using namespace Juse;
+
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
     if (debug) {
@@ -23,9 +25,9 @@ void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
     }
 }
 
-std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
+S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
 {
-    std::string str{};
+    S8 str{};
     if (debug) {
         os << "  >> ";
     }
@@ -34,7 +36,7 @@ std::string Juse::in(std::ostream& os, std::istream& is, bool debug)
     return str;
 }
 
-void Juse::Operations::initCpu(Juse::Cpu& cpu, const std::string type)
+void Juse::Operations::initCpu(Juse::Cpu& cpu, const S8 type)
 {
     cpu.initOperations();
     loadSets(cpu.operations, type);
@@ -56,13 +58,13 @@ void Juse::Operations::initSets()
     }
 }
 
-std::vector<std::string> split(std::string s, std::string delimiter)
+Vector<S8> split(S8 s, S8 delimiter)
 {
     size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-    std::string token;
-    std::vector<std::string> res;
+    S8 token;
+    Vector<S8> res;
 
-    while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos) {
+    while ((pos_end = s.find(delimiter, pos_start)) != S8::npos) {
         token = s.substr(pos_start, pos_end - pos_start);
         pos_start = pos_end + delim_len;
         res.push_back(token);
@@ -72,7 +74,7 @@ std::vector<std::string> split(std::string s, std::string delimiter)
     return res;
 }
 
-void Juse::Operations::loadSets(OperationMap& operations, const std::string types)
+void Juse::Operations::loadSets(OperationMap& operations, const S8 types)
 {
     initSets();
     for (const auto& c : split(types, "/")) {

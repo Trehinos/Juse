@@ -45,7 +45,7 @@ concept IsFlagId = IsAnyOf<T, ExecutableHeader::FlagId>;
 
 template <IsFlagId... FlagId>
 bool specialFlagValue(ExecutableHeader header, FlagId... ids) {
-  std::vector<FlagId> v_ids{ids...};
+  Vector<FlagId> v_ids{ids...};
   for (ExecutableHeader::FlagId id : v_ids) {
   }
   return (header.special_flags << U8(id));
@@ -56,7 +56,7 @@ bool specialFlagValue<ExecutableHeader::FlagId>(ExecutableHeader,
                                                 FlagId... ids);
 
 class Program {
-  S<Memory> memory;
+  SPtr<Memory> memory;
   Program(Memory &mem) { memory = share(mem); }
 };
 

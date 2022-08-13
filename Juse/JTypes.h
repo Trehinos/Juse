@@ -8,7 +8,7 @@ namespace Types {
     };
 
     struct Scalar : public Type {
-        virtual std::string toString() const;
+        virtual S8 toString() const;
         virtual bool equals(const Scalar s) const;
     };
 
@@ -18,7 +18,7 @@ namespace Types {
     template <IsScalar T>
     struct Collection : public Scalar {
         virtual void add(const T element);
-        virtual std::vector<T> toVector() const;
+        virtual Vector<T> toVector() const;
     };
 
     class Number : public Scalar {
@@ -32,20 +32,20 @@ namespace Types {
     };
 
     class String : public Scalar {
-        std::string string;
+        S8 string;
 
     public:
-        String(std::string = "");
+        String(S8 = "");
     };
 
     template <IsScalar T>
     class Array : public Collection<T> {
-        std::vector<T> data;
+        Vector<T> data;
 
     public:
-        Array(std::vector<T> = {});
+        Array(Vector<T> = {});
         virtual void add(const T element);
-        virtual std::vector<T> toVector() const;
+        virtual Vector<T> toVector() const;
     };
 
 }

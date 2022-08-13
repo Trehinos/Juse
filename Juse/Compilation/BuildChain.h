@@ -10,13 +10,13 @@ namespace Juse {
 
         struct Symbol
         {
-            std::string base;
-            std::string prefix;
-            std::string suffix;
-            Symbol(std::string p, std::string b, std::string s) : base(b), prefix(p), suffix(s) {}
-            Symbol(std::string p, std::string b) : Symbol(p, b, "") {}
-            Symbol(std::string b) : Symbol("", b) {}
-            inline std::string get()
+            S8 base;
+            S8 prefix;
+            S8 suffix;
+            Symbol(S8 p, S8 b, S8 s) : base(b), prefix(p), suffix(s) {}
+            Symbol(S8 p, S8 b) : Symbol(p, b, "") {}
+            Symbol(S8 b) : Symbol("", b) {}
+            inline S8 get()
             {
                 return prefix + base + suffix;
             }
@@ -27,7 +27,7 @@ namespace Juse {
             bool defined = true;
             virtual Address address() = 0;
             Label(Symbol label, bool defined = true) : label(label), defined(defined) {}
-            Label(std::string label, bool defined = true) : Label{ Symbol{label}, defined } {}
+            Label(S8 label, bool defined = true) : Label{ Symbol{label}, defined } {}
         };
 
         struct Type
@@ -39,7 +39,7 @@ namespace Juse {
         struct Variable : public Type
         {
             Variable(Symbol& name) : Type(name) {}
-            Variable(std::string name) : Variable(Symbol{ name }) {}
+            Variable(S8 name) : Variable(Symbol{ name }) {}
             virtual T value()
             {
                 return v;
@@ -49,7 +49,7 @@ namespace Juse {
             T v;
         };
 
-        using SourceCode = V<std::string>;
+        using SourceCode = Vector<S8>;
 
         struct Transformer
         {
@@ -62,7 +62,7 @@ namespace Juse {
             BuildChain() : transformers{} {}
             BuildChain& chainWith(Transformer& t)
             {
-                transformers.push_back(wrap(t));
+                transformers.push_back(ref(t));
                 return *this;
             }
 

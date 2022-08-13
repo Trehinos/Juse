@@ -26,18 +26,18 @@ public:
     std::ostream& out;
     std::istream& in;
 
-    std::vector<Cpu> cpus;
-    S<Memory> memory;
+    Vector<Cpu> cpus;
+    SPtr<Memory> memory;
 
     Machine(std::istream&, std::ostream&);
-    static Machine loadFile(std::string);
+    static Machine loadFile(S8);
     static Machine fromData(Segment&);
 
     void createPool(U16);
     void createSegment(U16, U32);
 
-    S<Pool> getPool(U16);
-    S<Segment> getSegment(U16, U32);
+    SPtr<Pool> getPool(U16);
+    SPtr<Segment> getSegment(U16, U32);
 
     ByteSet read(Cpu&, size_t = 1);
     ByteSet readAt(Cpu&, U64, size_t = 1);

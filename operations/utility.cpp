@@ -19,18 +19,18 @@ void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, s
         }
     }
 }
-Juse::S<Juse::Pool> Juse::Utility::MachineMemory::pool(Memory& memory, U16 poolIndex)
+Juse::SPtr<Juse::Pool> Juse::Utility::MachineMemory::pool(Memory& memory, U16 poolIndex)
 {
     return memory.at(poolIndex);
 }
-Juse::S<Juse::Segment> Juse::Utility::MachineMemory::segment(Pool& pool, U32 segmentIndex)
+Juse::SPtr<Juse::Segment> Juse::Utility::MachineMemory::segment(Pool& pool, U32 segmentIndex)
 {
     return pool.at(segmentIndex);
 }
 
 void Juse::Utility::MachineMemory::write(Memory& memory, ByteSet set, Address addr)
 {
-    S<Pool> p = pool(memory, addr.pool);
+    SPtr<Pool> p = pool(memory, addr.pool);
     for (U8 byte : set) { 
         (*segment(*p, addr.segment))[addr.datum++] = byte;
     }

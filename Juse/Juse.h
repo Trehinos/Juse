@@ -3,17 +3,17 @@
 #include "operations.h"
 
 namespace Juse {
-const std::string VERSION = "0.3.4";
+const S8 VERSION = "0.3.4";
 
-std::tuple<std::string, std::map<std::string, std::string>>
+std::tuple<S8, Map<S8, S8>>
 parseArgs(int argc, char* argv[])
 {
     if (argc < 2) {
         return {};
     }
 
-    std::string program {};
-    std::map<std::string, std::string> options;
+    S8 program {};
+    Map<S8, S8> options;
     options["mode"] = "normal";
     options["compile"] = "none";
     options["display"] = "none";
@@ -21,7 +21,7 @@ parseArgs(int argc, char* argv[])
     bool in_flag = false;
     char flag_buffer = 0;
     for (size_t i = 1; i < argc; i++) {
-        std::string current { argv[i] };
+        S8 current { argv[i] };
         if (!in_flag) {
             if (current[0] == '-') {
                 in_flag = true;

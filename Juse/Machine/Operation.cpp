@@ -10,7 +10,7 @@ std::ostream& Juse::operator<<(std::ostream& os, const U8 c)
     return os;
 }
 
-Operation::Operation(std::string name, std::string mnemu, std::string juse_lang, OperationFunction code, std::vector<Argument> arguments)
+Operation::Operation(S8 name, S8 mnemu, S8 juse_lang, OperationFunction code, Vector<Argument> arguments)
     : name(name)
     , mnemu(mnemu)
     , juse_lang(juse_lang)
@@ -37,7 +37,7 @@ OperationArguments Operation::operationArguments(Instruction& instruction)
     return args;
 }
 
-std::vector<Argument> Juse::Operation::getArgumentDefs() { return arguments; }
+Vector<Argument> Juse::Operation::getArgumentDefs() { return arguments; }
 
 size_t Operation::length()
 {

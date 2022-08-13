@@ -38,14 +38,14 @@ namespace Juse::Operations::ExtU64 {
     void init()
     {
         // 1Cxx - U64 Moves & Casts
-        Set64 = S<Operation>(new Operation(
+        Set64 = SPtr<Operation>(new Operation(
             "Set Word", "SET64", "Words[A] = B",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Juse::Operations::Unsigned::set(cpu.registers.longs, arguments);
         },
             { { SIZE8 }, { SIZE64 } }));
 
-        CopyFrom64 = S<Operation>(new Operation(
+        CopyFrom64 = SPtr<Operation>(new Operation(
             "Copy Word From", "COPYFROM64", "Words[A] = [B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
@@ -55,7 +55,7 @@ namespace Juse::Operations::ExtU64 {
         },
             { { SIZE8 }, { SIZE64 } }));
 
-        CopyTo64 = S<Operation>(new Operation(
+        CopyTo64 = SPtr<Operation>(new Operation(
             "Copy Word To", "COPYTO64", "[A] = Words[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U16 address = U16(arguments[0].value);
@@ -64,28 +64,28 @@ namespace Juse::Operations::ExtU64 {
         },
             { { SIZE64 }, { SIZE8 } }));
 
-        Copy64 = S<Operation>(new Operation(
+        Copy64 = SPtr<Operation>(new Operation(
             "Copy Word", "COPY64", "Words[A] = Words[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::copy(cpu.registers.longs, arguments);
         },
             { { SIZE8 }, { SIZE8 } }));
 
-        Push64 = S<Operation>(new Operation(
+        Push64 = SPtr<Operation>(new Operation(
             "Push Word", "PUSH64", "push Words[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::push(cpu, cpu.registers.longs, arguments);
         },
             { { SIZE8 } }));
 
-        Pop64 = S<Operation>(new Operation(
+        Pop64 = SPtr<Operation>(new Operation(
             "Pop Word", "POP64", "Words[A] = {pop}",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::pop(cpu, cpu.registers.longs, arguments);
         },
             { { SIZE8 } }));
 
-        CastTo64 = S<Operation>(new Operation(
+        CastTo64 = SPtr<Operation>(new Operation(
             "Cast To Word", "CAST8TO64", "Words[A] = Bytes[A]:Bytes[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rW = U8(arguments[0].value);
@@ -95,7 +95,7 @@ namespace Juse::Operations::ExtU64 {
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        CastFrom64 = S<Operation>(new Operation(
+        CastFrom64 = SPtr<Operation>(new Operation(
             "Cast From Word", "CAST64TO8", "Bytes[A]:Bytes[B] = Words[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 rBA = U8(arguments[0].value);
@@ -107,7 +107,7 @@ namespace Juse::Operations::ExtU64 {
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Copy64If = S<Operation>(new Operation(
+        Copy64If = SPtr<Operation>(new Operation(
             "Copy Word If", "COPY64IF", "?A : Words[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             CompareFlag flag = CompareFlag(U8(arguments[0].value));
@@ -119,35 +119,35 @@ namespace Juse::Operations::ExtU64 {
             { { SIZE8 }, { SIZE8 } }));
 
         // 1Dxx - U64 Operations
-        Add64 = S<Operation>(new Operation(
+        Add64 = SPtr<Operation>(new Operation(
             "Add", "ADD64", "Words[A] = Words[B] + Words[C] CR Words[D]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::add<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Substract64 = S<Operation>(new Operation(
+        Substract64 = SPtr<Operation>(new Operation(
             "Substract", "SUB64", "Words[A] = Words[B] - Words[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::substract<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Multiply64 = S<Operation>(new Operation(
+        Multiply64 = SPtr<Operation>(new Operation(
             "Multiply", "MUL64", "Words[A] = Words[B] * Words[C] CR Words[D]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::multiply<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Divide64 = S<Operation>(new Operation(
+        Divide64 = SPtr<Operation>(new Operation(
             "Divide", "DIV64", "Words[A] = Words[B] / Words[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::divide<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Modulo64 = S<Operation>(new Operation(
+        Modulo64 = SPtr<Operation>(new Operation(
             "Modulo", "MOD64", "Words[A] = Words[B] % Words[C]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::modulo<U64, U128>(cpu.registers.longs, cpu.registers.compareFlags, arguments);
@@ -156,7 +156,7 @@ namespace Juse::Operations::ExtU64 {
 
         // TODO : 1D05 - ABS64
 
-        Random64 = S<Operation>(new Operation(
+        Random64 = SPtr<Operation>(new Operation(
             "Random", "RND64", "Words[A] = {rnd Words[B] Words[C]}",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 index = U8(arguments[0].value);
@@ -166,7 +166,7 @@ namespace Juse::Operations::ExtU64 {
         },
             { { SIZE8 }, { SIZE8 }, { SIZE8 } }));
 
-        Compare64 = S<Operation>(new Operation(
+        Compare64 = SPtr<Operation>(new Operation(
             "Compare", "CMP64", "Words[A] ? Words[B]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             Operations::Unsigned::compare(cpu.registers.longs, cpu.registers.compareFlags, arguments);
@@ -174,20 +174,20 @@ namespace Juse::Operations::ExtU64 {
             { { SIZE8 }, { SIZE8 } }));
 
         // 1Fxx - U64 I/O
-        Write64 = S<Operation>(new Operation(
+        Write64 = SPtr<Operation>(new Operation(
             "Write Word", "WINT64", "out Words[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U8 register_index = U8(arguments[0].value);
-            std::stringstream buffer{};
+            SS8 buffer{};
             buffer << std::dec << cpu.registers.longs[register_index];
             out(machine.out, buffer, cpu.flag_debug);
         },
             { { SIZE8 } }));
-        Read64 = S<Operation>(new Operation(
+        Read64 = SPtr<Operation>(new Operation(
             "Read Word", "RINT64", "in Words[A]",
             [](Machine& machine, Cpu& cpu, OperationArguments arguments) {
             U64 value;
-            std::stringstream buffer;
+            SS8 buffer;
             U8 register_index = U8(arguments[0].value);
             buffer << in(machine.out, machine.in, cpu.flag_debug);
             buffer >> std::dec >> value;

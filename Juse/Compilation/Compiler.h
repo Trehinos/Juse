@@ -12,16 +12,16 @@ namespace Juse::Compilation
     using VariableU64 = Variable<U64>;
     using VariableS8 = Variable<S8>;
 
-    using SymbolMap = M<Symbol, Type&>;
+    using SymbolMap = Map<Symbol, Type&>;
 
     class Preprocessor : public Transformer {
-        RefHeap<std::string, Symbol> defines;
+        RefHeap<S8, Symbol> defines;
         SymbolMap allocations;
         Parser& directiveParser;
 
     protected:
         Preprocessor(Parser&);
-        virtual void define(std::string);
+        virtual void define(S8);
         template <class T&> void d(Variable<T>&);
 
     public:
@@ -41,7 +41,7 @@ namespace Juse::Compilation
     {
         Compiler(Preprocessor& p, Assembler& a): BuildChain{}
         {
-            chainWith(p).chainWith(a);
+            chainWith(p).chainWith(a); 
         }
     };
 }

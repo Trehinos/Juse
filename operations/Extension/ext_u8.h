@@ -50,23 +50,23 @@ namespace Operations {
     namespace ExtU8 {
         void init();
         void add(OperationMap& operations);
-        static S<Operation> Set8;
-        static S<Operation> CopyFrom8;
-        static S<Operation> CopyTo8;
-        static S<Operation> Copy8;
-        static S<Operation> Push8;
-        static S<Operation> Pop8;
-        static S<Operation> Copy8If;
-        static S<Operation> Add8;
-        static S<Operation> Substract8;
-        static S<Operation> Multiply8;
-        static S<Operation> Divide8;
-        static S<Operation> Modulo8;
-        static S<Operation> Random8;
-        static S<Operation> Compare8;
-        static S<Operation> Write8;
-        static S<Operation> Read8;
-        static S<Operation> WriteAscii;
+        static SPtr<Operation> Set8;
+        static SPtr<Operation> CopyFrom8;
+        static SPtr<Operation> CopyTo8;
+        static SPtr<Operation> Copy8;
+        static SPtr<Operation> Push8;
+        static SPtr<Operation> Pop8;
+        static SPtr<Operation> Copy8If;
+        static SPtr<Operation> Add8;
+        static SPtr<Operation> Substract8;
+        static SPtr<Operation> Multiply8;
+        static SPtr<Operation> Divide8;
+        static SPtr<Operation> Modulo8;
+        static SPtr<Operation> Random8;
+        static SPtr<Operation> Compare8;
+        static SPtr<Operation> Write8;
+        static SPtr<Operation> Read8;
+        static SPtr<Operation> WriteAscii;
     }
 }
 }
