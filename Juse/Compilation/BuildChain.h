@@ -2,11 +2,11 @@
 
 #include <any>
 
-#include "types.h"
+#include "../types.h"
 
 namespace Juse {
 
-    namespace Compiler {
+    namespace Compilation {
 
         struct Symbol
         {
@@ -49,7 +49,7 @@ namespace Juse {
             T v;
         };
 
-        using SourceCode = std::vector<std::string>;
+        using SourceCode = V<std::string>;
 
         struct Transformer
         {
@@ -70,7 +70,7 @@ namespace Juse {
             {
                 SourceCode output = code;
                 for (Transformer& transformer : transformers) {
-                    output = transformer.transform(output);
+                    output = transformer.transform(code);
                 }
                 return output;
             }

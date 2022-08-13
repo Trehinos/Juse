@@ -4,7 +4,7 @@
 
 #include "Parser.h"
 
-namespace Juse::Compiler
+namespace Juse::Compilation
 {
     using VariableU8 = Variable<U8>;
     using VariableU16 = Variable<U16>;
@@ -12,10 +12,10 @@ namespace Juse::Compiler
     using VariableU64 = Variable<U64>;
     using VariableS8 = Variable<S8>;
 
-    using SymbolMap = std::map<Symbol, Type&>;
+    using SymbolMap = M<Symbol, Type&>;
 
     class Preprocessor : public Transformer {
-        Heap<std::string, Symbol> defines;
+        RefHeap<std::string, Symbol> defines;
         SymbolMap allocations;
         Parser& directiveParser;
 

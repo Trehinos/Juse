@@ -38,7 +38,7 @@ int main(int argc, char* argv[])
 
     // Init machine
     auto machine = Machine::loadFile(program);
-    init(machine.cpus[0]);
+    Operations::initCpu(machine.cpus[0]);
     if (help) {
         Debug::dumpOperations(machine.cpus[0]);
         return 0;

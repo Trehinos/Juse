@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include "../types.h"
 
 namespace Juse {
 
@@ -35,6 +35,7 @@ public:
     size_t length();
     void operator()(Machine&, Cpu&, Instruction&);
     void operator()(Machine&, Cpu&, OperationArguments&);
+    void operator()(Machine&, Cpu&, OperationArguments);
 };
 
 } // namespace Juse

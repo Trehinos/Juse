@@ -144,9 +144,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Juse\Compiler\Compiler.cpp" />
+    <ClCompile Include="compilers\Jumne.cpp" />
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Juse\Machine\Cpu.cpp" />
+    <ClCompile Include="Juse\Tests\Tests.cpp" />
     <ClCompile Include="operations\utility.cpp" />
     <ClCompile Include="Juse\JTypes.cpp" />
     <ClCompile Include="Juse\U128.cpp" />
@@ -167,16 +168,16 @@
     <ClCompile Include="Juse\Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Juse\Compiler\Compiler.h" />
-    <ClInclude Include="Juse\BuildChain.h" />
-    <ClInclude Include="Juse\Compiler.h" />
-    <ClInclude Include="Juse\Parser.h" />
-    <ClInclude Include="Juse\Symbol.h" />
+    <ClInclude Include="compilers\Jumne.h" />
+    <ClInclude Include="Juse\Compilation\BuildChain.h" />
+    <ClInclude Include="Juse\Compilation\Compiler.h" />
+    <ClInclude Include="Juse\Compilation\Parser.h" />
+    <ClInclude Include="Juse\Compilation\Token.h" />
     <ClInclude Include="Juse\Debug\Debug.h" />
     <ClInclude Include="Juse\Juse.h" />
-    <ClInclude Include="Juse\Cpu.h" />
-    <ClInclude Include="Juse\Machine.h" />
-    <ClInclude Include="Juse\Operation.h" />
+    <ClInclude Include="Juse\Machine\Cpu.h" />
+    <ClInclude Include="Juse\Machine\Machine.h" />
+    <ClInclude Include="Juse\Machine\Operation.h" />
     <ClInclude Include="Juse\utility.h" />
     <ClInclude Include="Juse\Executable.h" />
     <ClInclude Include="Juse\JTypes.h" />

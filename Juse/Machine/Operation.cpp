@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../Operation.h"
+#include "Operation.h"
 
 using namespace Juse;
 
@@ -55,6 +55,11 @@ void Operation::operator()(Machine& machine, Cpu& cpu, Instruction& instruction)
 }
 
 void Juse::Operation::operator()(Machine& machine, Cpu& cpu, OperationArguments& arguments)
+{
+    code(machine, cpu, arguments);
+}
+
+void Juse::Operation::operator()(Machine& machine, Cpu& cpu, OperationArguments arguments)
 {
     code(machine, cpu, arguments);
 }

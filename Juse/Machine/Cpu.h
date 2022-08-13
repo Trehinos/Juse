@@ -2,7 +2,7 @@
 
 #include <thread>
 
-#include "types.h"
+#include "../types.h"
 
 namespace Juse {
 

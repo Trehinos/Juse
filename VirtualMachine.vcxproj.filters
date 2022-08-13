@@ -72,10 +72,13 @@
     <ClCompile Include="Juse\JTypes.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Juse\Compiler\Compiler.cpp">
+    <ClCompile Include="compilers\Jumne.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="operations\utility.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Juse\Tests\Tests.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,13 +92,13 @@
     <ClInclude Include="Juse\types.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Cpu.h">
+    <ClInclude Include="Juse\Machine\Cpu.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Machine.h">
+    <ClInclude Include="Juse\Machine\Machine.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Operation.h">
+    <ClInclude Include="Juse\Machine\Operation.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Juse\operations.h">
@@ -116,13 +119,13 @@
     <ClInclude Include="Juse\JTypes.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Compiler\Compiler.h">
+    <ClInclude Include="compilers\Jumne.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Juse\utility.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Parser.h">
+    <ClInclude Include="Juse\Compilation\Parser.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="operations\Standard\branching.h">
@@ -149,13 +152,13 @@
     <ClInclude Include="operations\Extension\ext_u64.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Symbol.h">
+    <ClInclude Include="Juse\Compilation\Token.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\BuildChain.h">
+    <ClInclude Include="Juse\Compilation\BuildChain.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\Compiler.h">
+    <ClInclude Include="Juse\Compilation\Compiler.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

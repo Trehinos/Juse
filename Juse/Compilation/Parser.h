@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Symbol.h"
+#include "Token.h"
 
-namespace Juse {
+namespace Juse::Compilation {
 
     class Parser {
     protected:
-        Symbol::Grammar grammar;
-        Parser(Symbol::Grammar g = {}) : grammar(g) {}
+        Collection<Token::Rule> rules;
+        Parser(Collection<Token::Rule> r = {}) : rules(r) {}
     public:
-        virtual Collection<Symbol::Token> parse(std::string);
+        virtual Collection<Token::Token> parse(std::string) = 0;
     };
 
 
-    namespace Jumne::Tokens {
-        using namespace Symbol;
+    namespace Tokens {
+        using namespace Token;
 
         Terminal SPACE{ "space", " " };
         Terminal NL{ "newline", "\n " };

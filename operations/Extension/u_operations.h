@@ -2,8 +2,8 @@
 
 #include <random>
 
-#include "../../Juse/Machine.h"
-#include "../../Juse/Operation.h"
+#include "../../Juse/Machine/Machine.h"
+#include "../../Juse/Machine/Operation.h"
 
 namespace Juse {
 
