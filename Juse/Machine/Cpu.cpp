@@ -4,6 +4,7 @@
 
 #include "Machine.h"
 #include "Operation.h"
+#include "../utility.h"
 
 using namespace Juse;
 
@@ -38,7 +39,7 @@ Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& op
 Duration Cpu::duration(U32 frequency)
 {
     I64 duration = 1000000000 / frequency;
-    return Duration { duration };
+    return Duration{ duration };
 }
 
 bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
@@ -48,16 +49,16 @@ bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
 }
 
 Cpu::Cpu()
-    : registers {}
+    : registers{}
     , pool_pointer(0)
     , segment_pointer(0)
     , instruction_pointer(0)
     , stack()
-    , data_pool { 0 }
-    , data_segment { 0 }
-    , address_pointer { 0 }
-    , address_offset { 0 }
-    , address_increment { 0 }
+    , data_pool{ 0 }
+    , data_segment{ 0 }
+    , address_pointer{ 0 }
+    , address_offset{ 0 }
+    , address_increment{ 0 }
     , flag_exit(false)
     , flag_debug(false)
     , flag_skip(false)
@@ -75,21 +76,9 @@ Cpu::Cpu()
     registers.compareFlags[CompareFlag::ERR] = false;
 }
 
-void Cpu::forward(Memory& memory)
+void Cpu::forward(size_t s)
 {
-    if (instruction_pointer == UINT16_MAX) {
-        instruction_pointer = 0;
-        Pool p = *memory[pool()];
-        if (segment_pointer >= p.size()) {
-            segment_pointer = 0;
-            if (pool_pointer >= memory.size())
-                pool_pointer = 0;
-            else
-                pool_pointer++;
-        } else
-            segment_pointer++;
-    } else
-        instruction_pointer++;
+    Utility::MachineMemory::forward(pool_pointer, segment_pointer, instruction_pointer, s);
 }
 
 U64 Cpu::instructionPointer()
@@ -194,25 +183,23 @@ void Cpu::multiPush(ByteSet set)
 
 ByteSet Cpu::multiPop(size_t nb_bytes)
 {
-    ByteSet bytes {};
+    ByteSet bytes{};
     for (size_t i = 0; i < nb_bytes; i++) {
         bytes.insert(bytes.begin(), pop());
     }
     return bytes;
 }
 
-U8 Cpu::dataAt(Memory& memory, U64 address)
+U8 Cpu::dataAt(Machine& m, U64 address)
 {
-    Address a = Address::from(address);
-    return (*(*memory[a.pool])[a.segment])[a.datum];
+    return m.data(address);
 }
 
-U8 Cpu::data(Memory& memory) { return dataAt(memory, instructionPointer()); }
+U8 Cpu::data(Machine& m) { return m.data(this->instructionPointer()); }
 
-void Juse::Cpu::set(Memory& memory, U64 address, U8 datum)
+void Juse::Cpu::set(Machine& m, U64 address, U8 datum)
 {
-    Address a = Address::from(address);
-    (*(*memory[a.pool])[a.segment])[a.datum] = datum;
+    return m.writeAt(address, word2set(datum));
 }
 
 U16 Cpu::pool() { return pool_pointer; }

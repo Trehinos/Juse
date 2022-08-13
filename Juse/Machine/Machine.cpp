@@ -104,42 +104,48 @@ SPtr<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
     return (*getPool(pool_index))[segment_index];
 }
 
+/*
+* Read & Forward
+*/
 ByteSet Machine::read(Cpu& cpu, size_t nb_bytes)
 {
-    ByteSet bytes {};
-    for (size_t i = 0; i < nb_bytes; i++) {
-        bytes.push_back(cpu.data(*memory));
-        cpu.forward(*memory);
-    }
-    return bytes;
+    ByteSet set = readAt(cpu.instructionPointer(), nb_bytes);
+    cpu.forward(nb_bytes);
+    return set;
 }
 
-ByteSet Machine::readAt(Cpu& cpu, U64 address, size_t nb_bytes)
+U8 Machine::data(U64 address)
+{
+    Address a = Address::from(address);
+    return (*getSegment(a.pool, a.segment))[a.datum];
+}
+
+ByteSet Machine::readAt(U64 address, size_t nb_bytes)
 {
     ByteSet bytes {};
     for (U64 i = address; i < address + nb_bytes; i++) {
-        bytes.push_back(cpu.dataAt(*memory, i));
+        bytes.push_back(data(i));
     }
     return bytes;
 }
 
 ByteSet Machine::readData(Cpu& cpu, U16 address, size_t nb_bytes)
 {
-    return readAt(cpu, Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
+    return readAt(Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
 }
 
-void Juse::Machine::writeAt(Cpu& cpu, U64 address, ByteSet set)
+void Juse::Machine::writeAt(U64 address, ByteSet set)
 {
+    Address a = Address::from(address);
     for (U8 byte : set) {
-        cpu.set(*memory, address, byte);
+        (*getSegment(a.pool, a.segment))[a.datum] = byte;
+        a.datum++;
     }
 }
 
 void Juse::Machine::writeData(Cpu& cpu, U16 address, ByteSet set)
 {
-    for (U8 byte : set) {
-        cpu.set(*memory, Address::with(cpu.data_pool, cpu.data_segment, address), byte);
-    }
+    writeAt(Address::with(cpu.data_pool, cpu.data_segment, cpu.offseted()), set);
 }
 
 void Machine::run(bool debug)

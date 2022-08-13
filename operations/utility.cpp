@@ -5,8 +5,8 @@ void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, s
 {
     U32 tmpAddr = U32(addr);
     tmpAddr += U32(steps);
-    if (addr >= UINT16_MAX) {
-        addr = tmpAddr % UINT16_MAX;
+    addr = tmpAddr % UINT16_MAX;
+    if (tmpAddr >= UINT16_MAX) {
         if (segment == UINT32_MAX) {
             segment = 0;
             if (pool == UINT16_MAX) {
