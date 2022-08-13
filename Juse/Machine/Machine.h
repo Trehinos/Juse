@@ -43,7 +43,7 @@ namespace Juse {
         SPtr<Segment> getSegment(U16, U32);
         U8 data(U64);
         ByteSet readAt(U64, size_t = 1);
-        ByteSet read(Cpu&, size_t = 1);
+        ByteSet readAndForward(Cpu&, size_t = 1);
         ByteSet readData(Cpu&, U16, size_t = 1);
     };
 } // namespace Juse

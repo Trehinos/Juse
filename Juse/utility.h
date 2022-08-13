@@ -27,7 +27,7 @@ namespace Utility {
     }
 
     struct MachineMemory {
-        static void forward(U16&, U32&, U16&, size_t);
+        static void forward(U16&, U32&, U16&, U16);
         static void write(Memory&, ByteSet, Address);
         static SPtr<Pool> pool(Memory&, U16);
         static SPtr<Segment> segment(Pool&, U32);

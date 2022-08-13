@@ -2,6 +2,7 @@
 #include <fstream>
 
 #include "Machine.h"
+#include "../utility.h"
 
 using namespace Juse;
 
@@ -96,18 +97,18 @@ void Machine::createSegment(U16 pool_index, U32 segment_index)
 
 SPtr<Pool> Juse::Machine::getPool(U16 pool_index)
 {
-    return (*memory)[pool_index];
+    return Utility::MachineMemory::pool(*memory, pool_index);
 }
 
 SPtr<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
 {
-    return (*getPool(pool_index))[segment_index];
+    return Utility::MachineMemory::segment(*getPool(pool_index), segment_index);
 }
 
 /*
 * Read & Forward
 */
-ByteSet Machine::read(Cpu& cpu, size_t nb_bytes)
+ByteSet Machine::readAndForward(Cpu& cpu, size_t nb_bytes)
 {
     ByteSet set = readAt(cpu.instructionPointer(), nb_bytes);
     cpu.forward(nb_bytes);

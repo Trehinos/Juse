@@ -1,7 +1,10 @@
 
-#include "../Juse/utility.h"
+#include "utility.h"
 
-void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, size_t steps)
+/* 
+    Forward circular memory[pool][segment][addr] += steps;
+*/
+void Juse::Utility::MachineMemory::forward(U16& pool, U32& segment, U16& addr, U16 steps)
 {
     U32 tmpAddr = U32(addr);
     tmpAddr += U32(steps);

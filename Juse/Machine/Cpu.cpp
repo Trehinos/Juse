@@ -26,7 +26,7 @@ void Juse::debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, In
 Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier)
 {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
-    ByteSet toAdd = machine.read(cpu, operation.length() - 2);
+    ByteSet toAdd = machine.readAndForward(cpu, operation.length() - 2);
     for (U8 add : toAdd) {
         instruction.data.push_back(add);
     }
@@ -210,7 +210,7 @@ U16 Cpu::instruction() { return instruction_pointer; }
 
 SPtr<Operation> Cpu::getOperation(Machine& machine, U16& id)
 {
-    ByteSet identifier = machine.read(*this, 2);
+    ByteSet identifier = machine.readAndForward(*this, 2);
     id = U16(set2word(identifier));
 
     if (!operations.contains(id)) {

@@ -148,7 +148,7 @@
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Juse\Machine\Cpu.cpp" />
     <ClCompile Include="Juse\Tests\Tests.cpp" />
-    <ClCompile Include="operations\utility.cpp" />
+    <ClCompile Include="Juse\utility.cpp" />
     <ClCompile Include="Juse\JTypes.cpp" />
     <ClCompile Include="Juse\U128.cpp" />
     <ClCompile Include="operations\Standard\allocation.cpp" />

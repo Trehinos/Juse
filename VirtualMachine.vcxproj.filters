@@ -75,7 +75,7 @@
     <ClCompile Include="compilers\Jumne.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="operations\utility.cpp">
+    <ClCompile Include="Juse\utility.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Juse\Tests\Tests.cpp">
