@@ -26,7 +26,7 @@ void Juse::debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, In
 Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier)
 {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
-    ByteSet toAdd = machine.readAndForward(cpu, operation.length() - 2);
+    ByteSet toAdd = machine.readAndForward(cpu, U16(operation.length() - 2));
     for (U8 add : toAdd) {
         instruction.data.push_back(add);
     }
@@ -76,7 +76,7 @@ Cpu::Cpu()
     registers.compareFlags[CompareFlag::ERR] = false;
 }
 
-void Cpu::forward(size_t s)
+void Cpu::forward(U16 s)
 {
     Utility::MachineMemory::forward(pool_pointer, segment_pointer, instruction_pointer, s);
 }

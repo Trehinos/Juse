@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <fstream>
+#include <istream>
 
 #include "Machine.h"
 #include "../utility.h"
@@ -47,10 +48,8 @@ Machine::Machine(std::istream& ins, std::ostream& outs)
     cpus.push_back(Cpu {});
 }
 
-Machine Machine::loadFile(S8 filename)
+void Juse::copyStreamInMemory(Machine& machine, std::istream& file)
 {
-    std::ifstream file(filename, std::ios::binary);
-    Machine machine(std::cin, std::cout);
     U16 pool = 0;
     U32 segment = 0;
     while (!file.eof()) {
@@ -60,7 +59,7 @@ Machine Machine::loadFile(S8 filename)
                 break;
             file.read(reinterpret_cast<char*>(&byte), sizeof(U8));
         }
-        if (!file.eof()) { 
+        if (!file.eof()) {
             if (++segment == UINT32_MAX) {
                 pool++;
                 segment = 0;
@@ -68,6 +67,13 @@ Machine Machine::loadFile(S8 filename)
             machine.createSegment(pool, segment);
         }
     }
+}
+
+Machine Machine::loadFile(S8 filename)
+{
+    std::ifstream file(filename, std::ios::binary);
+    Machine machine(std::cin, std::cout);
+    copyStreamInMemory(machine, file);
 
     return machine;
 }
@@ -108,7 +114,7 @@ SPtr<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
 /*
 * Read & Forward
 */
-ByteSet Machine::readAndForward(Cpu& cpu, size_t nb_bytes)
+ByteSet Machine::readAndForward(Cpu& cpu, U16 nb_bytes)
 {
     ByteSet set = readAt(cpu.instructionPointer(), nb_bytes);
     cpu.forward(nb_bytes);
@@ -121,7 +127,7 @@ U8 Machine::data(U64 address)
     return (*getSegment(a.pool, a.segment))[a.datum];
 }
 
-ByteSet Machine::readAt(U64 address, size_t nb_bytes)
+ByteSet Machine::readAt(U64 address, U16 nb_bytes)
 {
     ByteSet bytes {};
     for (U64 i = address; i < address + nb_bytes; i++) {
@@ -130,7 +136,7 @@ ByteSet Machine::readAt(U64 address, size_t nb_bytes)
     return bytes;
 }
 
-ByteSet Machine::readData(Cpu& cpu, U16 address, size_t nb_bytes)
+ByteSet Machine::readData(Cpu& cpu, U16 address, U16 nb_bytes)
 {
     return readAt(Address::with(cpu.data_pool, cpu.data_segment, address), nb_bytes);
 }

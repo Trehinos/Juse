@@ -1,6 +1,7 @@
 #pragma once
 
 #include <random>
+#include <cmath>
 
 #include "../../Juse/Machine/Machine.h"
 #include "../../Juse/Machine/Operation.h"
@@ -68,7 +69,7 @@ void calculate(GeneralRegisters<T>& registers, CompareFlags& flags, OperationArg
         flags[CompareFlag::OF] = r.overflow != 0;
         registers[U8(arguments[3].value)] = r.overflow;
     }
-    T signMask = T(T(0b10000000) << T(sizeof(T) - 8));
+    T signMask = T(T(0b10000000) << T(std::llabs(sizeof(T) - 8)));
     flags[CompareFlag::SN] = (signMask & r.result) > 0;
 }
 

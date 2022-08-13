@@ -69,30 +69,33 @@ namespace Juse {
 
         Cpu();
         void initOperations();
-        void forward(size_t=1);
+        SPtr<Operation> getOperation(Machine&, U16&);
+
+        void forward(U16=1);
         void jump(U16, U32, U16);
         void longjump(U64);
-        void push(U8);
-        void multiPush(ByteSet);
-        void run(Machine&, bool = false);
-        void cycle(Machine&, bool = false);
-
-        std::thread start(Machine&, bool);
-        SPtr<Operation> getOperation(Machine&, U16&);
-        U64 instructionPointer();
-        U64 addressPointer();
-        U16 offseted();
-        U8 dataAt(Machine&, U64);
-        U8 data(Machine&);
-        U8 pop();
-        bool shouldExit();
-        ByteSet multiPop(size_t);
-
-        void set(Machine&, U64, U8);
-
         U16 pool();
         U16 segment();
         U16 instruction();
+        U64 instructionPointer();
+        U64 addressPointer();
+        U16 offseted();
+
+        void push(U8);
+        void multiPush(ByteSet);
+        U8 pop();
+        ByteSet multiPop(size_t);
+
+        void set(Machine&, U64, U8);
+        U8 dataAt(Machine&, U64);
+        U8 data(Machine&);
+
+        void run(Machine&, bool = false);
+        void cycle(Machine&, bool = false);
+        std::thread start(Machine&, bool);
+
+        bool shouldExit();
+
     };
 
 } // namespace Juse
