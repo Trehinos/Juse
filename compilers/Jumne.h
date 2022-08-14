@@ -33,7 +33,7 @@ namespace Juse {
             return bytesFrom(found.first, found.second);
         }
 
-        class JumnePreprocessor : Preprocessor {
+        class JumnePreprocessor : public virtual Preprocessor {
             Map<S8, S8> defines;
 
         protected:
@@ -41,18 +41,24 @@ namespace Juse {
             virtual void def(S8, S8);
 
         public:
+            JumnePreprocessor() : Preprocessor() {}
             virtual SourceCode transform(SourceCode);
         };
 
-        class JumneAssembler : Assembler
-        {};
-
-        class JumneCompiler : Compiler {
+        class JumneAssembler : public virtual Assembler
+        {
             OperationMap operations;
             Vector<Label> labels;
+        public:
+            JumneAssembler(OperationMap& m, Parser& p) : Assembler() {}
+            SourceCode transform(SourceCode&);
+        };
+
+        class JumneCompiler : public virtual Compiler {
 
         public:
-            JumneCompiler(JumnePreprocessor&, JumneAssembler&);
+            JumneCompiler(JumnePreprocessor& p, JumneAssembler& a) : Compiler(p, a) {}
+            static JumneCompiler create();
             virtual SourceCode transform(SourceCode);
         };
 

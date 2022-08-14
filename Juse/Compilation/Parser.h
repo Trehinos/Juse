@@ -7,25 +7,25 @@ namespace Juse::Compilation {
     class Parser {
     protected:
         Collection<Token::Rule> rules;
-        Parser(Collection<Token::Rule> r = {}) : rules(r) {}
     public:
-        virtual Collection<Token::Token> parse(S8) = 0;
+        virtual Collection<Token::Token> parse(S8) { return {}; }
+        Parser(Collection<Token::Rule> r = {}) : rules(r) {}
     };
 
 
     namespace Tokens {
         using namespace Token;
 
-        Terminal SPACE{ "space", " " };
-        Terminal NL{ "newline", "\n " };
-        OneOf SEPARATOR{ "separators", { ref(SPACE), ref(NL) } };
+        static Terminal SPACE{ "space", " " };
+        static Terminal NL{ "newline", "\n " };
+        static OneOf SEPARATOR{ "separators", { ref(SPACE), ref(NL) } };
 
-        Operator OP_PLUS{ "+" };
+        static Operator OP_PLUS{ "+" };
 
-        Regex ALPHA{ "alpha", "[A-Za-z]" };
-        Regex NUMERIC{ "numeric", "[0-9]" };
+        static Regex ALPHA{ "alpha", "[A-Za-z]" };
+        static Regex NUMERIC{ "numeric", "[0-9]" };
 
-        OneOf ALPHANUM{ "alphaOrNum", { ref(ALPHA), ref(NUMERIC) } };
+        static OneOf ALPHANUM{ "alphaOrNum", { ref(ALPHA), ref(NUMERIC) } };
     }
 
 }

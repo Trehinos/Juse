@@ -130,9 +130,9 @@ namespace Juse {
     template <class T>
     const auto makeS = std::make_shared<T>;
     template <class T>
-    inline UPtr<T> unique(T& t) { return std::make_unique<T>(std::move<T>(t)); }
+    inline UPtr<T> unique(T& t) { return std::make_unique<T>(t); }
     template <class T>
-    inline SPtr<T> share(T& t) { return std::make_shared<T>(std::move<T>(t)); }
+    inline SPtr<T> share(T& t) { return std::make_shared<T>(t); }
     template <typename T>
     inline Ref<T> ref(T& v) { return std::ref<T>(v); }
     template <typename T>
@@ -140,8 +140,6 @@ namespace Juse {
     template <typename T>
     inline Wrap<T> wrap(T& v) { return Wrap<T>{opt<Ref<T>>(ref<T>(v))}; }
 
-    template <typename T>
-    inline Ref<T> toref(T v) { return std::ref<T>(v); }
     template <typename T>
     inline T optval(Opt<T> v) { return v.has_value() ? v.value() : T{}; }
     template <typename T>
@@ -157,7 +155,7 @@ namespace Juse {
     }
 
     template <typename T, typename U>
-    inline Pair<T, U> pair(T& v1, U& v2) { return std::make_pair(v1, v2); }
+    inline Pair<T, U> pair(T v1, U v2) { return std::make_pair(v1, v2); }
 
     template <int size>
     using ByteArray = Array<U8, size>;
@@ -187,9 +185,9 @@ namespace Juse {
     struct Address {
         U16 pool;
         U32 segment;
-        U16 datum;
+        U16 addr16;
 
-        U64 compose() { return (U64(pool) << 48) + (U64(segment) << 16) + datum; }
+        U64 compose() { return (U64(pool) << 48) + (U64(segment) << 16) + addr16; }
 
         static U64 with(U16 p, U32 s, U16 d) { return Address{ p, s, d }.compose(); }
 
@@ -197,9 +195,9 @@ namespace Juse {
         {
             U16 pool = U16((address & 0xFFFF000000000000) >> 48);
             U32 segment = U32((address & 0x0000FFFFFFFF0000) >> 16);
-            U16 datum = U16(address & 0x000000000000FFFF);
+            U16 addr16 = U16(address & 0x000000000000FFFF);
 
-            return Address{ pool, segment, datum };
+            return Address{ pool, segment, addr16 };
         }
     };
 

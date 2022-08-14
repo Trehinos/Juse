@@ -17,7 +17,7 @@ namespace Juse {
         /*
          * Create operations
          */
-        void initCpu(Cpu&, const S8 = "std/std_ext");
+        void initCpu(Cpu&, const S8 = "std/std_ext", U32 = Cpu::BASE_FREQUENCY);
         void initSets();
         void loadSets(OperationMap&, const S8 = "std/std_ext");
     }

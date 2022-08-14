@@ -6,8 +6,8 @@
 
 namespace Juse {
 
-    Instruction getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier);
-    void debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, Instruction& instruction);
+    Instruction getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, U16 identifier);
+    void debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, Instruction& instruction);
 
     struct Registers {
         GeneralRegisters<U8> bytes;
@@ -44,7 +44,7 @@ namespace Juse {
         U16 instruction_pointer;
 
     public:
-        const U32 BASE_FREQUENCY = 4000;
+        static const U32 BASE_FREQUENCY = 4000;
 
         /* Move operations location */
         U16 data_pool;

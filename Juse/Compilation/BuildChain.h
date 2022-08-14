@@ -53,7 +53,17 @@ namespace Juse {
 
         struct Transformer
         {
-            virtual SourceCode transform(SourceCode&) = 0;
+            virtual S8 transformLine(S8& line)
+            {
+                return line;
+            }
+            virtual SourceCode transform(SourceCode& code)
+            {
+                SourceCode target{};
+                for (S8& line : code) {
+                    target.push_back(transformLine(line));
+                }
+            }
         };
 
         class BuildChain : public Transformer {

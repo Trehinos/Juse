@@ -18,7 +18,7 @@ namespace Juse::Operations::Standard::Thread {
         if (freq != 0)
             thread.config_frequency = freq;
 
-        thread.jump(address.pool, address.segment, address.datum);
+        thread.jump(address.pool, address.segment, address.addr16);
         thread.start(machine, cpu.flag_debug);
         machine.cpus.push_back(thread);
     }

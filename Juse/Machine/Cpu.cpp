@@ -8,25 +8,26 @@
 
 using namespace Juse;
 
-void Juse::debugInstruction(Machine& machine, Cpu& cpu, Operation& operation, Instruction& instruction)
+void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, Instruction& instruction)
 {
-    if (cpu.flag_debug) {
+    if (cpu->flag_debug) {
         for (U8 byte : instruction.data) {
             machine.out << std::setw(2) << std::hex << (int)(unsigned char)byte;
         }
-        machine.out << " : " << operation.getName() << " ";
+        machine.out << " : " << operation->getName() << " ";
 
         size_t index = 0;
-        for (Argument argument : operation.getArgumentDefs()) {
-            machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation.argument(instruction, index++) << " ";
+        for (Argument argument : operation->getArgumentDefs()) {
+            machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation->argument(instruction, index++) << " ";
         }
     }
 }
 
-Instruction Juse::getInstructionFromId(Machine& machine, Cpu& cpu, Operation& operation, U16 identifier)
+Instruction Juse::getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, U16 identifier)
 {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
-    ByteSet toAdd = machine.readAndForward(cpu, U16(operation.length() - 2));
+    std::cout << "(ID:" << identifier << ")";
+    ByteSet toAdd = machine.readAndForward(cpu, U16(operation->length() - 2));
     for (U8 add : toAdd) {
         instruction.data.push_back(add);
     }
@@ -105,9 +106,7 @@ void Cpu::jump(U16 pool, U32 segment, U16 instruction)
 void Cpu::longjump(U64 address)
 {
     Address a = Address::from(address);
-    pool_pointer = a.pool;
-    segment_pointer = a.segment;
-    instruction_pointer = a.datum;
+    jump(a.pool, a.segment, a.addr16);
 }
 
 bool Cpu::shouldExit() { return flag_exit; }
@@ -122,7 +121,8 @@ void Cpu::cycle(Machine& machine, bool debug)
 
         U16 identifier = 0;
         SPtr<Operation> current = getOperation(machine, identifier);
-        if (current == NoOp) {
+
+        if (current == NoOp || identifier == 0) {
             return;
         }
 
@@ -131,7 +131,7 @@ void Cpu::cycle(Machine& machine, bool debug)
             machine.out << (int)(instruction_pointer - 2) << " : ";
         }
 
-        Instruction instruction = getInstructionFromId(machine, *this, *current, identifier);
+        Instruction instruction = getInstructionFromId(machine, this, current.get(), identifier);
 
         if (flag_skip) {
             if (debug) {
@@ -210,14 +210,15 @@ U16 Cpu::instruction() { return instruction_pointer; }
 
 SPtr<Operation> Cpu::getOperation(Machine& machine, U16& id)
 {
-    ByteSet identifier = machine.readAndForward(*this, 2);
+    ByteSet identifier = machine.readAndForward(this, 2);
     id = U16(set2word(identifier));
 
     if (!operations.contains(id)) {
-        return Cpu::NoOp;
+        id = 0;
+        return NoOp;
     }
 
-    return operations[id];
+    return operations.at(id);
 }
 
 SPtr<Operation> Cpu::NoOp = SPtr<Operation>(new Operation(

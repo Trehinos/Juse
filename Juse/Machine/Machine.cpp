@@ -20,7 +20,7 @@ U64 Juse::set2word(ByteSet bytes)
 template <IsWord T>
 ByteSet Juse::word2set(T byte)
 {
-    ByteSet set {};
+    ByteSet set{};
     size_t size = sizeof(byte);
     size_t offset = 0;
     U64 mask = 0xFF;
@@ -38,42 +38,21 @@ template ByteSet Juse::word2set<U32>(U32);
 template ByteSet Juse::word2set<U64>(U64);
 
 Machine::Machine(std::istream& ins, std::ostream& outs)
-    : memory {}
-    , cpus {}
-    , in { ins }
-    , out { outs }
+    : memory{}
+    , cpus{}
+    , in{ ins }
+    , out{ outs }
 {
     memory = makeS<Memory>();
     createSegment(0, 0);
-    cpus.push_back(Cpu {});
-}
-
-void Juse::copyStreamInMemory(Machine& machine, std::istream& file)
-{
-    U16 pool = 0;
-    U32 segment = 0;
-    while (!file.eof()) {
-        SPtr<Segment> current = machine.getSegment(pool, segment);
-        for (U8& byte : *current) {
-            if (file.eof())
-                break;
-            file.read(reinterpret_cast<char*>(&byte), sizeof(U8));
-        }
-        if (!file.eof()) {
-            if (++segment == UINT32_MAX) {
-                pool++;
-                segment = 0;
-            }
-            machine.createSegment(pool, segment);
-        }
-    }
+    cpus.push_back(Cpu{});
 }
 
 Machine Machine::loadFile(S8 filename)
 {
     std::ifstream file(filename, std::ios::binary);
     Machine machine(std::cin, std::cout);
-    copyStreamInMemory(machine, file);
+    Utility::MachineMemory::copyStreamInMemory(machine, file);
 
     return machine;
 }
@@ -103,37 +82,32 @@ void Machine::createSegment(U16 pool_index, U32 segment_index)
 
 SPtr<Pool> Juse::Machine::getPool(U16 pool_index)
 {
-    return Utility::MachineMemory::pool(*memory, pool_index);
+    return Utility::MachineMemory::pool(memory, pool_index);
 }
 
 SPtr<Segment> Juse::Machine::getSegment(U16 pool_index, U32 segment_index)
 {
-    return Utility::MachineMemory::segment(*getPool(pool_index), segment_index);
+    return Utility::MachineMemory::segment(getPool(pool_index), segment_index);
 }
 
 /*
 * Read & Forward
 */
-ByteSet Machine::readAndForward(Cpu& cpu, U16 nb_bytes)
+ByteSet Machine::readAndForward(Cpu* cpu, U16 nb_bytes)
 {
-    ByteSet set = readAt(cpu.instructionPointer(), nb_bytes);
-    cpu.forward(nb_bytes);
+    ByteSet set = readAt(cpu->instructionPointer(), nb_bytes);
+    cpu->forward(nb_bytes);
     return set;
-}
-
-U8 Machine::data(U64 address)
-{
-    Address a = Address::from(address);
-    return (*getSegment(a.pool, a.segment))[a.datum];
 }
 
 ByteSet Machine::readAt(U64 address, U16 nb_bytes)
 {
-    ByteSet bytes {};
-    for (U64 i = address; i < address + nb_bytes; i++) {
-        bytes.push_back(data(i));
-    }
-    return bytes;
+    return Utility::MachineMemory::read(memory, Address::from(address), nb_bytes);
+}
+
+U8 Machine::data(U64 address)
+{
+    return U8(set2word(readAt(address, 1)));
 }
 
 ByteSet Machine::readData(Cpu& cpu, U16 address, U16 nb_bytes)
@@ -143,16 +117,12 @@ ByteSet Machine::readData(Cpu& cpu, U16 address, U16 nb_bytes)
 
 void Juse::Machine::writeAt(U64 address, ByteSet set)
 {
-    Address a = Address::from(address);
-    for (U8 byte : set) {
-        (*getSegment(a.pool, a.segment))[a.datum] = byte;
-        a.datum++;
-    }
+    Utility::MachineMemory::write(memory, set, Address::from(address));
 }
 
 void Juse::Machine::writeData(Cpu& cpu, U16 address, ByteSet set)
 {
-    writeAt(Address::with(cpu.data_pool, cpu.data_segment, cpu.offseted()), set);
+    writeAt(Address::with(cpu.data_pool, cpu.data_segment, address), set);
 }
 
 void Machine::run(bool debug)

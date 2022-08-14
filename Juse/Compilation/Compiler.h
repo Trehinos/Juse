@@ -14,34 +14,33 @@ namespace Juse::Compilation
 
     using SymbolMap = Map<Symbol, Type&>;
 
-    class Preprocessor : public Transformer {
-        RefHeap<S8, Symbol> defines;
-        SymbolMap allocations;
-        Parser& directiveParser;
-
-    protected:
-        Preprocessor(Parser&);
-        virtual void define(S8);
-        template <class T&> void d(Variable<T>&);
+    class Preprocessor : public virtual Transformer {
 
     public:
-        virtual SourceCode transform(SourceCode&);
+        Preprocessor() : Transformer{} {}
+        /*
+        * Define a new symbol linked to a string.
+        */
+        virtual void define(Symbol, S8) = 0;
+
+        /*
+        * Define a new space for static allocations.
+        */
+        virtual void d(Address, Type&) = 0;
+
     };
 
-    class Assembler : public Transformer {
-        Parser& instructionParser;
-        OperationMap& operations;
-        Collection<Label> labels;
-
+    class Assembler : public virtual Transformer {
     public:
-        virtual SourceCode transform(SourceCode&);
+        Assembler() : Transformer{} {}
     };
 
-    class Compiler : public BuildChain
+    class Compiler : public virtual BuildChain
     {
-        Compiler(Preprocessor& p, Assembler& a): BuildChain{}
+    public:
+        Compiler(Preprocessor& p, Assembler& a) : BuildChain{}
         {
-            chainWith(p).chainWith(a); 
+            chainWith(p).chainWith(a);
         }
     };
 }

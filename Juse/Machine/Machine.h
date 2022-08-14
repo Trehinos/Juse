@@ -20,8 +20,6 @@ namespace Juse {
     template <IsWord T>
     ByteSet word2set(T);
 
-    void copyStreamInMemory(Machine&, std::istream&);
-
     class Machine {
 
     public:
@@ -35,6 +33,8 @@ namespace Juse {
         static Machine loadFile(S8);
         static Machine fromData(Segment&);
 
+        void createCpu();
+
         void createPool(U16);
         void createSegment(U16, U32);
         void writeAt(U64, ByteSet);
@@ -46,6 +46,6 @@ namespace Juse {
         U8 data(U64);
         ByteSet readAt(U64, U16 = 1);
         ByteSet readData(Cpu&, U16, U16 = 1);
-        ByteSet readAndForward(Cpu&, U16 = 1);
+        ByteSet readAndForward(Cpu*, U16 = 1);
     };
 } // namespace Juse

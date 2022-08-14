@@ -3,6 +3,8 @@
 #include <ranges>
 #include <string_view>
 
+#include "../Juse/utility.h"
+
 #include "Standard/branching.h"
 #include "Standard/move.h"
 #include "Standard/allocation.h"
@@ -11,8 +13,6 @@
 #include "Extension/ext_u16.h"
 #include "Extension/ext_u32.h"
 #include "Extension/ext_u64.h"
-
-using namespace Juse;
 
 void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
 {
@@ -25,7 +25,7 @@ void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
     }
 }
 
-S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
+Juse::S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
 {
     S8 str{};
     if (debug) {
@@ -36,10 +36,11 @@ S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
     return str;
 }
 
-void Juse::Operations::initCpu(Juse::Cpu& cpu, const S8 type)
+void Juse::Operations::initCpu(Cpu& cpu, const S8 type, U32 frequency)
 {
     cpu.initOperations();
     loadSets(cpu.operations, type);
+    cpu.config_frequency = frequency;
 }
 
 void Juse::Operations::initSets()
@@ -58,26 +59,10 @@ void Juse::Operations::initSets()
     }
 }
 
-Vector<S8> split(S8 s, S8 delimiter)
-{
-    size_t pos_start = 0, pos_end, delim_len = delimiter.length();
-    S8 token;
-    Vector<S8> res;
-
-    while ((pos_end = s.find(delimiter, pos_start)) != S8::npos) {
-        token = s.substr(pos_start, pos_end - pos_start);
-        pos_start = pos_end + delim_len;
-        res.push_back(token);
-    }
-
-    res.push_back(s.substr(pos_start));
-    return res;
-}
-
 void Juse::Operations::loadSets(OperationMap& operations, const S8 types)
 {
     initSets();
-    for (const auto& c : split(types, "/")) {
+    for (const auto& c : Utility::Strings::split(types, "/")) {
         if (c == "std") {
             Operations::Standard::Branching::add(operations);
             Operations::Standard::Move::add(operations);

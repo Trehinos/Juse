@@ -11,7 +11,7 @@
 using namespace Juse;
 
 Juse::Jumne::JLabel::JLabel(S8 label, Juse::Address a) : Label{ label, true }, addr{ a } {
-    if (a.segment == a.pool && a.pool == a.datum && a.pool == 0) {
+    if (a.segment == a.pool && a.pool == a.addr16 && a.pool == 0) {
         defined = false;
     }
 }
@@ -126,7 +126,7 @@ Juse::ByteSet compileLine(Address addr, S8 line)
             S8 lName = Utility::Strings::trim(argument, " &");
             for (Label l : labels) {
                 if (l.defined and lName == l.label) {
-                    argument = std::to_string(l.address.datum);
+                    argument = std::to_string(l.address.addr16);
                     break;
                 }
             }
