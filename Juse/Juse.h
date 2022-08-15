@@ -3,7 +3,6 @@
 #include <fstream>
 
 #include "operations.h"
-#include "../compilers/Jumne.h"
 #include "utility.h"
 #include "Debug/Debug.h"
 

@@ -18,7 +18,8 @@ void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, In
 
         size_t index = 0;
         for (Argument argument : operation->getArgumentDefs()) {
-            machine.out << std::left << std::setfill('0') << std::setw(argument.size) << std::right << std::hex << operation->argument(instruction, index++) << " ";
+            machine.out << std::setfill('0') << std::setw(argument.size) << std::right
+                << std::hex << operation->argument(instruction, index++) << " ";
         }
     }
 }
@@ -26,7 +27,6 @@ void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, In
 Instruction Juse::getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, U16 identifier)
 {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
-    std::cout << "(ID:" << identifier << ")";
     ByteSet toAdd = machine.readAndForward(cpu, U16(operation->length() - 2));
     for (U8 add : toAdd) {
         instruction.data.push_back(add);

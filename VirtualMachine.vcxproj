@@ -144,7 +144,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="compilers\Jumne.cpp" />
     <ClCompile Include="Juse.cpp" />
     <ClCompile Include="Juse\Machine\Cpu.cpp" />
     <ClCompile Include="Juse\Tests\Tests.cpp" />
@@ -168,11 +167,6 @@
     <ClCompile Include="Juse\Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="compilers\Jumne.h" />
-    <ClInclude Include="Juse\Compilation\BuildChain.h" />
-    <ClInclude Include="Juse\Compilation\Compiler.h" />
-    <ClInclude Include="Juse\Compilation\Parser.h" />
-    <ClInclude Include="Juse\Compilation\Token.h" />
     <ClInclude Include="Juse\Debug\Debug.h" />
     <ClInclude Include="Juse\Juse.h" />
     <ClInclude Include="Juse\Machine\Cpu.h" />

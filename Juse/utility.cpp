@@ -63,25 +63,19 @@ void Juse::Utility::MachineMemory::write(SPtr<Memory> memory, ByteSet set, Addre
 {
     SPtr<Pool> p = pool(memory, addr.pool);
     Address a = addr;
-    std::cout << " [" << set.size() << "@" << a.addr16 << "W ";
     for (U8 byte : set) {
         segment(pool(memory, a.pool), a.segment)->at(a.addr16) = byte;
-        std::cout << (int)byte;
         forward(a);
     }
-    std::cout << "] ";
 }
 Juse::ByteSet Juse::Utility::MachineMemory::read(SPtr<Memory> memory, Address address, U16 nb_bytes)
 {
     ByteSet bytes{};
     Address a = address;
-    std::cout << " [" << nb_bytes << "@" << a.addr16 << "R ";
     for (U16 i = 0; i < nb_bytes; i++) {
         U8 byte = segment(pool(memory, a.pool), a.segment)->at(a.addr16);
-        std::cout << (int)byte;;
         bytes.push_back(byte);
         forward(a);
     }
-    std::cout << "] ";
     return bytes;
 }
