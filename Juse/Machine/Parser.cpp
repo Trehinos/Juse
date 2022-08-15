@@ -19,6 +19,7 @@ namespace Juse {
             else if (directive.starts_with(KEYWORD_DECLARE)) {
                 directive.erase(KEYWORD_DECLARE.size());
                 CH8 defType = directive.at(0);
+                directive.erase(1);
                 Declaration declaration{ addressPointer, 0 };
                 Declaration& d = declaration;
                 WordDeclaration<U8> wordU8{ addressPointer, 0 };
@@ -41,11 +42,17 @@ namespace Juse {
                 case 'L':
                     d = wordU64;
                     break;
+
                 default:
                     throw ParseError{ currentLine, addressPointer, "Invalid declaration type" };
                 }
-
-                // TODO --> value
+                if (directive.size() > 1) {
+                    if (directive.at(0) != ' ') {
+                        throw ParseError(currentLine, addressPointer, "Invalid declaration format");
+                    }
+                    directive.erase(1);
+                    d.fromString(directive);
+                }
 
                 declarations.push_back(d);
             }

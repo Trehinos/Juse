@@ -60,6 +60,9 @@ namespace Juse {
                 }
                 return output;
             }
+            virtual void fromString(std::string s)
+            {
+            }
             Declaration(Address a, U16 s) : address(a), size(s) {}
         private:
             U16 size;
@@ -68,9 +71,14 @@ namespace Juse {
         template <IsWord T>
         struct WordDeclaration : public Declaration {
             T value;
-            virtual ByteSet toValue()
+            ByteSet toValue()
             {
                 return word2set<T>(value);
+            }
+            void fromString(std::string s)
+            {
+                U64 v = std::stoull(s, 0);
+                value = T(v);
             }
             WordDeclaration(Address a, T v) : Declaration(a, sizeof(T)), value(v) {}
         };
