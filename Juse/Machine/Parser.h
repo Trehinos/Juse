@@ -12,11 +12,13 @@ namespace Juse {
 
         template <class T>
         struct Transformer {
-            T transform(T& v)
+            virtual T transform(T& v)
             {
                 return v;
             }
         };
+
+        using S8Transformer = Transformer<S8>;
 
         struct ParseError : std::exception
         {
@@ -30,9 +32,9 @@ namespace Juse {
             }
         };
 
-        struct Parser : Transformer<S8> {
-            Parser(): currentLine{0} {}
-            virtual SourceCode parse(SourceCode& code)
+        struct Parser : public virtual S8Transformer {
+            Parser() : S8Transformer{}, currentLine{ 0 } {}
+            SourceCode parse(SourceCode& code)
             {
                 SourceCode output{};
                 for (S8& line : code) {
@@ -89,11 +91,67 @@ namespace Juse {
             inline static const S8 KEYWORD_DEFINE = "DEFINE ";
             inline static const S8 KEYWORD_DECLARE = "D";
 
-            Address& addressPointer;
+            SPtr<Address> addressPointer;
             Collection<Declaration> declarations;
             Collection<Definition> definitions;
 
-            S8 transform(S8& line);
+            S8 transform(S8&);
+            Preprocessor() : Parser{}, addressPointer{ nullptr }, declarations{}, definitions{} {}
+        };
+
+        struct Assembler : public Parser {
+            Assembler() : Parser{} {}
+            Vector<Instruction> assemble(SourceCode code)
+            {
+                // Todo
+                return {};
+            }
+            static SPtr<Memory> toMemory(Vector<Instruction>& v)
+            {
+                Address a{};
+                SPtr<Memory> memory = makeS<Memory>();
+                for (Instruction& i : v) {
+                    Utility::MachineMemory::write(memory, i.data, a);
+                    Utility::MachineMemory::forward(a, U16(i.data.size()));
+                }
+                return memory;
+            }
+        };
+
+        struct Compiler {
+            Preprocessor& preprocessor;
+            Assembler& assembler;
+            SourceCode code;
+            SPtr<Memory> output;
+
+            Compiler(Preprocessor& p, Assembler& a, SourceCode code = {})
+                : preprocessor(p), assembler(a), code{code}, output{ nullptr }
+            {
+            }
+
+            inline Compiler* preprocess()
+            {
+                if (preprocessed) return this;
+                code = preprocessor.parse(code);
+                return this;
+            }
+            inline Compiler* assemble()
+            {
+                if (assembled) return this;
+                auto instructions = assembler.assemble(code);
+                output = Assembler::toMemory(instructions);
+                return this;
+            }
+            inline SPtr<Memory> compile(SourceCode& c)
+            {
+                code = c;
+                assembled = false;
+                preprocessed = false;
+                return output = preprocess()->assemble()->output;
+            }
+        private:
+            bool preprocessed = false;
+            bool assembled = false;
         };
     }
 }
