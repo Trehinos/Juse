@@ -63,7 +63,7 @@ namespace Juse {
             }
 
             // Init machine
-            auto machine = createMachine("std/std_ext", 1);
+            auto machine = createMachine("std/std_ext");
             loadRom(machine, program);
             if (help) {
                 Debug::dumpOperations(machine.cpus.at(0));

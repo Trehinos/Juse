@@ -59,7 +59,7 @@ void Juse::Operations::initSets()
     }
 }
 
-void Juse::Operations::loadSets(OperationMap& operations, const S8 types)
+void Juse::Operations::loadSets(OperationMap& operations, S8 types)
 {
     initSets();
     for (const auto& c : Utility::Strings::split(types, "/")) {
