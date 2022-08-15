@@ -19,38 +19,36 @@ namespace Juse {
             else if (directive.starts_with(KEYWORD_DECLARE)) {
                 directive.erase(KEYWORD_DECLARE.size());
                 CH8 defType = directive.at(0);
+                bool hasArguments = false;
                 directive.erase(1);
+                if (directive.size() > 0) {
+                    hasArguments = true;
+                    directive.erase(1);
+                    if (directive.at(0) != ' ' || directive.size() < 1) throw ParseError(currentLine, addressPointer, "Invalid declaration format");
+                }
+
                 Declaration declaration{ addressPointer, 0 };
                 Declaration& d = declaration;
-                WordDeclaration<U8> wordU8{ addressPointer, 0 };
-                WordDeclaration<U16> wordU16(addressPointer, 0);
-                WordDeclaration<U32> wordU32(addressPointer, 0);
-                WordDeclaration<U64> wordU64(addressPointer, 0);
                 switch (defType) {
                 case 'B':
-                    d = wordU8;
+                    d = WordDeclaration<U8>{ addressPointer, 0 };
                     break;
 
                 case 'W':
-                    d = wordU16;
+                    d = WordDeclaration<U16>{ addressPointer, 0 };
                     break;
 
                 case 'Q':
-                    d = wordU32;
+                    d = WordDeclaration<U32>{ addressPointer, 0 };
                     break;
 
                 case 'L':
-                    d = wordU64;
+                    d = WordDeclaration<U64>{ addressPointer, 0 };
                     break;
 
-                default:
-                    throw ParseError{ currentLine, addressPointer, "Invalid declaration type" };
+                default: throw ParseError{ currentLine, addressPointer, "Invalid declaration type" };
                 }
-                if (directive.size() > 1) {
-                    if (directive.at(0) != ' ') {
-                        throw ParseError(currentLine, addressPointer, "Invalid declaration format");
-                    }
-                    directive.erase(1);
+                if (hasArguments) {
                     d.fromString(directive);
                 }
 
