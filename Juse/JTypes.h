@@ -75,6 +75,22 @@ namespace Juse {
         using Integer32 = Integer<I32, U32>;
         using Integer64 = Integer<I64, U64>;
 
+        struct ArrayModel : public virtual Model
+        {
+            Collection<Model> values;
+            ArrayModel(U16 maxSize) : Model{"array"}, values{}, maxSize(maxSize) {};
+            void add(Model& m)
+            {
+                values.push_back(m);
+            }
+            Model& at(U16 index)
+            {
+                return values.at(index);
+            }
+        private:
+            U16 maxSize;
+        };
+
         struct StructModel : public virtual Model
         {
             ModelMap fields;
