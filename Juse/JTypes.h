@@ -5,26 +5,27 @@
 
 namespace Juse {
     namespace Types {
-        struct Type {
+        struct Model {
+            S8 typeName;
             inline virtual ByteSet toSet()
             {
                 return ByteSet{};
             }
-            Type() {}
+            Model(S8 typeName) : typeName(typeName) {}
         };
 
-        using ModelsHeap = HeapMap<S8, Type>;
+        using ModelMap = HeapMap<S8, Model>;
 
         template <IsWord T>
-        struct Word : public virtual Type
+        struct Word : public virtual Model
         {
             T data;
             inline ByteSet toSet()
             {
                 return word2set<T>(data);
             }
-            Word(T data) : Type{}, data{ data } {}
-            Word(ByteSet s) : Type{}, data{}
+            Word(T data) : Model{ "word" + sizeof(T) }, data{ data } {}
+            Word(ByteSet s) : Model{ "word" + sizeof(T) }, data{}
             {
                 data = set2word(s);
             }
@@ -36,26 +37,28 @@ namespace Juse {
         using Word64 = Word<U64>;
 
         template <IsChar T, IsWord U>
-        struct StringType : public virtual Type
+        struct StringModel : public virtual Model
         {
             String<T> data;
             inline ByteSet toSet()
             {
                 ByteSet set{};
                 for (T& c : data) {
-                    set.push_back(word2set(U(c));
+                    set.push_back(word2set(U(c)));
                 }
                 return set;
             }
-            String(String<T> str) : Type{}, data(str) {}
+            StringModel(String<T> str) : Model{ "string" + sizeof(T) }, data(str) {}
         };
 
-        using StringAscii = StringType<CH8, U8>;
-        using StringUtf16 = StringType<CH16, U16>;
-        using StringUtf32 = StringType<CH32, U32>;
+        using StringAscii = StringModel<CH8, U8>;
+        using StringUtf16 = StringModel<CH16, U16>;
+        using StringUtf32 = StringModel<CH32, U32>;
 
-        struct Object : public virtual Type
+        struct UserType : public virtual Model
         {
+            ModelMap fields;
+            // TODO
         };
 
     }

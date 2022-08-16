@@ -107,7 +107,7 @@ namespace Juse {
     template <IsChar T>
     using StringStream = std::basic_stringstream<T>;
     template <IsChar T = CH8>
-    using String = std::basic_stringstream<T>;
+    using String = std::basic_string<T>;
     using SS8 = std::stringstream;
     using SS16 = StringStream<CH16>;
     using SS32 = StringStream<CH32>;
