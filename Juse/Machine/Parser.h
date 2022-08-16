@@ -87,7 +87,7 @@ namespace Juse {
 
         using Definition = Pair<S8, S8>;
 
-        struct Preprocessor : public Parser {
+        struct Preprocessor : public virtual Parser {
             inline static const S8 KEYWORD_DEFINE = "DEFINE ";
             inline static const S8 KEYWORD_DECLARE = "D";
 
@@ -99,7 +99,7 @@ namespace Juse {
             Preprocessor() : Parser{}, addressPointer{ nullptr }, declarations{}, definitions{} {}
         };
 
-        struct Assembler : public Parser {
+        struct Assembler : public virtual Parser {
             Assembler() : Parser{} {}
             Vector<Instruction> assemble(SourceCode code)
             {

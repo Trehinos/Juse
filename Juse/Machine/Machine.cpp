@@ -10,7 +10,9 @@ using namespace Juse;
 U64 Juse::set2word(ByteSet bytes)
 {
     U64 word = 0;
+    size_t index = 0;
     for (U8 byte : bytes) {
+        if (++index > 8) break;
         word <<= 8;
         word += byte;
     }
