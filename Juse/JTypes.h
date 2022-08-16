@@ -40,7 +40,7 @@ namespace Juse {
         struct StringModel : public virtual Model
         {
             String<T> data;
-            inline ByteSet toSet()
+            ByteSet toSet()
             {
                 ByteSet set{};
                 for (T& c : data) {
@@ -55,10 +55,40 @@ namespace Juse {
         using StringUtf16 = StringModel<CH16, U16>;
         using StringUtf32 = StringModel<CH32, U32>;
 
-        struct UserType : public virtual Model
+        template <IsInteger T, IsWord U>
+        struct Integer : public virtual Model
+        {
+            T data;
+            inline ByteSet toSet()
+            {
+                return word2set<U>(U(data));
+            }
+            Integer(T data) : Model{ "integer" + sizeof(U) }, data{ data } {}
+            Integer(ByteSet s) : Model{ "integer" + sizeof(U) }, data{}
+            {
+                data = T(set2word(s));
+            }
+        };
+
+        using Integer8 = Integer<I8, U8>;
+        using Integer16 = Integer<I16, U16>;
+        using Integer32 = Integer<I32, U32>;
+        using Integer64 = Integer<I64, U64>;
+
+        struct StructModel : public virtual Model
         {
             ModelMap fields;
-            // TODO
+            StructModel(S8 n, ModelMap f = {}) : Model(n), fields(f) {}
+            ByteSet toSet()
+            {
+                ByteSet output{};
+                for (auto& [fieldName, field] : fields) {
+                    for (U8 byte : field.get()->toSet()) {
+                        output.push_back(byte);
+                    }
+                }
+                return output;
+            }
         };
 
     }
