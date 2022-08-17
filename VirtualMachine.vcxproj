@@ -149,7 +149,7 @@
     <ClCompile Include="Juse\Machine\Parser.cpp" />
     <ClCompile Include="Juse\Tests\Tests.cpp" />
     <ClCompile Include="Juse\utility.cpp" />
-    <ClCompile Include="Juse\JTypes.cpp" />
+    <ClCompile Include="Juse\Type\JTypes.cpp" />
     <ClCompile Include="Juse\U128.cpp" />
     <ClCompile Include="operations\Standard\allocation.cpp" />
     <ClCompile Include="Juse\Debug\Debug.cpp" />
@@ -176,7 +176,7 @@
     <ClInclude Include="Juse\Machine\Parser.h" />
     <ClInclude Include="Juse\utility.h" />
     <ClInclude Include="Juse\Executable.h" />
-    <ClInclude Include="Juse\JTypes.h" />
+    <ClInclude Include="Juse\Type\JTypes.h" />
     <ClInclude Include="Juse\types.h" />
     <ClInclude Include="Juse\U128.h" />
     <ClInclude Include="operations\Extension\ext_u16.h" />

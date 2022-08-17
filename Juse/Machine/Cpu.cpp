@@ -213,6 +213,11 @@ SPtr<Operation> Cpu::getOperation(Machine& machine, U16& id)
     ByteSet identifier = machine.readAndForward(this, 2);
     id = U16(set2word(identifier));
 
+    return findOperation(machine, id);
+}
+
+SPtr<Operation> Cpu::findOperation(Machine& machine, U16 id)
+{
     if (!operations.contains(id)) {
         id = 0;
         return NoOp;

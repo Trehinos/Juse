@@ -69,7 +69,7 @@
     <ClCompile Include="Juse\U128.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="Juse\JTypes.cpp">
+    <ClCompile Include="Juse\Type\JTypes.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
     <ClCompile Include="Juse\utility.cpp">
@@ -116,7 +116,7 @@
     <ClInclude Include="Juse\U128.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Juse\JTypes.h">
+    <ClInclude Include="Juse\Type\JTypes.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="Juse\utility.h">

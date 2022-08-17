@@ -70,6 +70,7 @@ namespace Juse {
         Cpu();
         void initOperations();
         SPtr<Operation> getOperation(Machine&, U16&);
+        SPtr<Operation> findOperation(Machine&, U16);
 
         void forward(U16=1);
         void jump(U16, U32, U16);
