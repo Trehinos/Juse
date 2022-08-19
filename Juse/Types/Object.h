@@ -18,7 +18,13 @@ namespace Juse::Types {
         }
         Object(ObjectModel* m, S8 name, ModelMap& fields, ParameterList& p) : TupleModel(name), model(m)
         {
-
+            for (auto& param : p) {
+                Wrap<Model> wm = field(param.get().name);
+                if (wm != std::nullopt) {
+                    Model& model = wm.value().get();
+                    model.fromSet(param.get().toSet());
+                }
+            }
         }
         Object(ObjectModel* m, S8 name, ModelMap& fields) : TupleModel(name), model(m) {}
     private:

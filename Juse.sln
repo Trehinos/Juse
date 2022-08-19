@@ -5,24 +5,6 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Juse", "VirtualMachine.vcxproj", "{8F2B536B-C0E3-4301-B493-AABC265EDC98}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MD", "MD", "{8C1C0D13-02D2-4A74-BA15-1834167B6777}"
-	ProjectSection(SolutionItems) = preProject
-		LICENSE = LICENSE
-		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EXAMPLES", "EXAMPLES", "{CDA66F35-875A-475C-AA3C-B2398B97275B}"
-	ProjectSection(SolutionItems) = preProject
-		ecalv3.xml = ecalv3.xml
-		example.asm = example.asm
-		example.ecal = example.ecal
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA1E9E3C-EF2D-41E0-BA70-4619843AA4E6}"
-	ProjectSection(SolutionItems) = preProject
-		NAMESPACES.md = NAMESPACES.md
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

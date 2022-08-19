@@ -6,12 +6,15 @@
 namespace Juse {
     namespace Types {
         struct Model {
-            S8 typeName;
+            S8 name;
             inline virtual ByteSet toSet()
             {
                 return ByteSet{};
             }
-            Model(S8 typeName = "") : typeName(typeName) {}
+            inline virtual void fromSet(ByteSet)
+            {
+            }
+            Model(S8 name = "") : name(name) {}
         };
 
         const struct Nil : public Model {

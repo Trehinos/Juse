@@ -16,6 +16,13 @@ namespace Juse::Types {
                 }
             }
             return output;
+        }   
+        Wrap<Model> field(S8 name)
+        {
+            if (fields.contains(name)) {
+                return wrap(*fields.at(name));
+            }
+            return std::nullopt;
         }
     };
 }
