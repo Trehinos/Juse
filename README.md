@@ -21,14 +21,15 @@ The instruction space distribution is inspired by the [RISC-V architecture](http
 But you can play with it if you are curious.
 
 - The goal : A **multipurpose virtual machine** written in modern C++
-    - The machine has to be **easy to understand** (variable length opcodes with 16 bits opkey),
+    - The machine has to be **easy to understand** (variable 8 bits aligned length opcodes with 16 bits opkey),
     - The project can be used as a framework to create a custom virtual machine with custom opcodes,
 - There are a lot of features todo :
     - OpKeys specification is not fixed,
     - 2 assemblers languages are planned,
     - For now, I stay focused on the C++ code structure : one of the goals of this project is to create a virtual machine which is **easy to understand** and **easy to extend**,
 
-*Only using `std::`*
+This implementation :
+*Uses only `std::`, `uint128_t` & [SFML](https://www.sfml-dev.org/index.php) (future)*
 
 ## Key features
 
