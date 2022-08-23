@@ -2,56 +2,35 @@
 
 #include <thread>
 
-#include "../types.h"
+#include "Registers.h"
+#include "../utility.h"
 
-namespace Juse {
+namespace Juse
+{
 
-    Instruction getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, U16 identifier);
+    Instruction getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, OperationId identifier);
     void debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, Instruction& instruction);
 
-    struct Registers {
-        GeneralRegisters<U8> bytes;
-        GeneralRegisters<U16> words;
-        GeneralRegisters<U32> quads;
-        GeneralRegisters<U64> longs;
-        CompareFlags compareFlags;
-
-        static CompareFlags createFlags()
-        {
-            CompareFlags flags{};
-            flags[CompareFlag::EQ] = false;
-            flags[CompareFlag::GT] = false;
-            flags[CompareFlag::LW] = false;
-            flags[CompareFlag::GE] = false;
-            flags[CompareFlag::LE] = false;
-            flags[CompareFlag::NE] = false;
-            flags[CompareFlag::Z0] = false;
-            flags[CompareFlag::CR] = false;
-            flags[CompareFlag::OF] = false;
-            flags[CompareFlag::SN] = false;
-            flags[CompareFlag::ERR] = false;
-            return flags;
-        }
-    };
-
-    class Cpu {
+    class Cpu
+    {
 
         /*
-       * Registers
-       */
-        U16 pool_pointer;
-        U32 segment_pointer;
-        U16 instruction_pointer;
+        * Registers
+        */
+        Address code;
 
     public:
-        static const U32 BASE_FREQUENCY = 4000;
+        static SPtr<Operation> NoOp;
+        static Duration duration(U32);
+        static bool tick(U32, TimePoint, TimePoint);
 
-        /* Move operations location */
-        U16 data_pool;
-        U32 data_segment;
-        U16 address_pointer;
-        U16 address_offset;
-        U16 address_increment;
+        /* Registers */
+        Address data_addr;
+        DataId address_offset;
+        DataId address_increment;
+
+        static const U32 BASE_FREQUENCY = 4000;
+        U32 config_frequency = BASE_FREQUENCY;
 
         bool flag_exit;
         bool flag_debug;
@@ -60,27 +39,22 @@ namespace Juse {
         Registers registers;
         Stack stack;
 
-        static SPtr<Operation> NoOp;
-        static Duration duration(U32);
-        static bool tick(U32, TimePoint, TimePoint);
         OperationMap operations;
-
-        U32 config_frequency;
 
         Cpu();
         void initOperations();
-        SPtr<Operation> getOperation(Machine&, U16&);
-        SPtr<Operation> findOperation(Machine&, U16);
+        SPtr<Operation> getOperation(Machine&, OperationId&);
+        SPtr<Operation> findOperation(Machine&, OperationId);
 
-        void forward(U16=1);
-        void jump(U16, U32, U16);
+        void forward(size_t = 1);
+        void jump(PoolId, SegmentId, DataId);
         void longjump(U64);
-        U16 pool();
-        U16 segment();
-        U16 instruction();
+        PoolId pool();
+        SegmentId segment();
+        DataId instruction();
         U64 instructionPointer();
         U64 addressPointer();
-        U16 offseted();
+        DataId offseted();
 
         void push(U8);
         void multiPush(ByteSet);

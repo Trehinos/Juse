@@ -7,10 +7,13 @@
 #include "operations.h"
 #include "utility.h"
 
-namespace Juse {
+namespace Juse
+{
 
-    struct ExecutableHeader {
-        enum class FlagId { // TODO : find usage ^^'
+    struct ExecutableHeader
+    {
+        enum class FlagId
+        { // TODO : find usage ^^'
             FLAG0 = 1,
             FLAG1 = 2,
             FLAG2 = 4,
@@ -21,10 +24,9 @@ namespace Juse {
             FLAG7 = 0x80,
         };
 
-        static U64 checksum(ByteSet set)
-        {
-            static const ByteSet SEED{ 0x19,0xa8,0x77,0x9f, 0x39,0x44,0xde,0xf0 };
-            ByteSet buffer{ 0,0,0,0, 0,0,0,0 };
+        static U64 checksum(ByteSet set) {
+            static const ByteSet SEED { 0x19,0xa8,0x77,0x9f, 0x39,0x44,0xde,0xf0 };
+            ByteSet buffer { 0,0,0,0, 0,0,0,0 };
             size_t i = 0;
             for (auto& byte : set) {
                 buffer.at(i) ^= (i > 1)
@@ -37,14 +39,16 @@ namespace Juse {
         }
 
         U64 start_address;
-        struct JuseMeta {
+        struct JuseMeta
+        {
             CH8 j;
             CH8 u;
             CH8 s;
             CH8 e;
             U16 version;
         } juse_meta;
-        struct ProgramMeta {
+        struct ProgramMeta
+        {
             ByteArray<16> guid;
             U16 version;
             U64 build_dt;
@@ -55,11 +59,9 @@ namespace Juse {
         U8 special_flags;
 
         ExecutableHeader()
-            : start_address{}, juse_meta{ 'j', 'u', 's', 'e' , {} },
-            program_meta{}, check_sum{}, segments_count{}, nullBytes{},
-            special_flags{}
-        {
-        }
+            : start_address {}, juse_meta { 'j', 'u', 's', 'e' , {} },
+            program_meta {}, check_sum {}, segments_count {}, nullBytes {},
+            special_flags {} { }
         ExecutableHeader(
             U64 start,
             U16 juseVersion,
@@ -67,10 +69,9 @@ namespace Juse {
             U64 checkSum,
             U8 specialFlags,
             Memory& memory
-        ) : start_address(start), juse_meta(JuseMeta{ 'j','u','s','e', juseVersion }),
-            program_meta(programMeta), check_sum{}, segments_count{}, nullBytes{},
-            special_flags(specialFlags)
-        {
+        ) : start_address(start), juse_meta(JuseMeta { 'j','u','s','e', juseVersion }),
+            program_meta(programMeta), check_sum {}, segments_count {}, nullBytes {},
+            special_flags(specialFlags) {
             segments_count = memory.at(0)->size();
             using Utility::MachineMemory;
             U64 sum = 0;
@@ -79,7 +80,7 @@ namespace Juse {
                 for (auto& segment : *pool.second) {
                     sum ^= checksum(MachineMemory::read(
                         share(memory),
-                        Address{ pool.first, segment.first, 0 },
+                        Address { pool.first, segment.first, 0 },
                         SEGMENT_SIZE
                     ));
                 }
@@ -92,9 +93,8 @@ namespace Juse {
     concept IsFlagId = IsAnyOf<T, ExecutableHeader::FlagId>;
 
     template <IsFlagId... FlagId>
-    bool areFlagsOn(ExecutableHeader header, FlagId... ids)
-    {
-        Vector<FlagId> v_ids{ ids... };
+    bool areFlagsOn(ExecutableHeader header, FlagId... ids) {
+        Vector<FlagId> v_ids { ids... };
         for (ExecutableHeader::FlagId id : v_ids) {
         }
         return (header.special_flags << U8(id));
@@ -104,22 +104,21 @@ namespace Juse {
     bool areFlagsOn<ExecutableHeader::FlagId>(ExecutableHeader,
         FlagId... ids);
 
-    class Program {
+    class Program
+    {
         SPtr<Memory> memory;
         Program(Memory& mem) { memory = share(mem); }
     };
 
-    class Executable {
+    class Executable
+    {
         ExecutableHeader header;
-        Executable(Program&)
-        {
-        };
+        Executable(Program&) { };
     };
 
-    void test_static(ExecutableHeader header)
-    {
+    void test_static(ExecutableHeader header) {
         bool flags0and1 = areFlagsOn(
-            ExecutableHeader{},
+            ExecutableHeader {},
             ExecutableHeader::FlagId::FLAG0,
             ExecutableHeader::FlagId::FLAG1
         );

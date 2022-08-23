@@ -3,7 +3,8 @@
 #include "../../Juse/operations.h"
 
 /* 00xx */
-namespace Juse::Operations::Standard::Branching {
+namespace Juse::Operations::Standard::Branching
+{
     void init();
     void add(OperationMap&);
     static SPtr<Operation> ShortJump;

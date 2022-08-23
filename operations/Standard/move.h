@@ -3,7 +3,8 @@
 #include "../../Juse/operations.h"
 
 /* 01xx */
-namespace Juse::Operations::Standard::Move {
+namespace Juse::Operations::Standard::Move
+{
     void init();
     void add(OperationMap&);
     static SPtr<Operation> SetDataPool;

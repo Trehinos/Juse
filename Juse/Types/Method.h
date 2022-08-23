@@ -36,7 +36,8 @@ namespace Juse::Types {
         }
         void operator()(Machine& m, Cpu& c, Data* thisModel)
         {
-            // TODO manage "this"
+            c.registers.longs.at(Registers::R64::MODEL_THIS) = thisModel->addr().compose();
+            c.registers.words.at(Registers::R16::MODEL_THIS) = thisModel->addr().address;
             for (Instruction& i : instructions) {
                 executeInstruction(m, c, i);
             }

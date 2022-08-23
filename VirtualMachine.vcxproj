@@ -169,12 +169,21 @@
     <ClCompile Include="Juse\Tests\hello_world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Juse\Base\Address.h" />
+    <ClInclude Include="Juse\Base\General.h" />
+    <ClInclude Include="Juse\Base\Integer.h" />
+    <ClInclude Include="Juse\Base\String.h" />
+    <ClInclude Include="Juse\Base\Structures.h" />
+    <ClInclude Include="Juse\Base\Types.h" />
+    <ClInclude Include="Juse\Base\Unsigned.h" />
     <ClInclude Include="Juse\Debug\Debug.h" />
     <ClInclude Include="Juse\Juse.h" />
     <ClInclude Include="Juse\Machine\Cpu.h" />
     <ClInclude Include="Juse\Machine\Machine.h" />
     <ClInclude Include="Juse\Machine\Operation.h" />
     <ClInclude Include="Juse\Machine\Parser.h" />
+    <ClInclude Include="Juse\Machine\Registers.h" />
+    <ClInclude Include="Juse\Machine\Thread.h" />
     <ClInclude Include="Juse\Types\Primitives.h" />
     <ClInclude Include="Juse\Types\Method.h" />
     <ClInclude Include="Juse\Types\Object.h" />

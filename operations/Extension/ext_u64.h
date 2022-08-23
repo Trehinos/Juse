@@ -3,7 +3,8 @@
 #include "../../Juse/operations.h"
 #include "u_operations.h"
 
-namespace Juse {
+namespace Juse
+{
     template <IsWord T>
     CompareFlags compare<U64>(T a, T b);
 
@@ -13,8 +14,10 @@ namespace Juse {
     template <IsWord T, IsWord U>
     void calculate<U64, U128>(GeneralRegisters<T>&, CompareFlags&, OperationArguments&, U, bool);
 
-    namespace Operations {
-        namespace Unsigned {
+    namespace Operations
+    {
+        namespace Unsigned
+        {
             template <IsWord T>
             void set<U64>(GeneralRegisters<T>&, OperationArguments&);
 
@@ -47,7 +50,8 @@ namespace Juse {
         }
 
         /* 18xx-1Bxx */
-        namespace ExtU64 {
+        namespace ExtU64
+        {
             void init();
             void add(OperationMap& operations);
             static SPtr<Operation> Set64;

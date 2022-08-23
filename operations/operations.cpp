@@ -14,8 +14,7 @@
 #include "Extension/ext_u32.h"
 #include "Extension/ext_u64.h"
 
-void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
-{
+void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug) {
     if (debug) {
         os << "  << ";
     }
@@ -25,9 +24,8 @@ void Juse::out(std::ostream& os, Juse::SS8& ss, bool debug)
     }
 }
 
-Juse::S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
-{
-    S8 str{};
+Juse::S8 Juse::in(std::ostream& os, std::istream& is, bool debug) {
+    S8 str {};
     if (debug) {
         os << "  >> ";
     }
@@ -36,15 +34,13 @@ Juse::S8 Juse::in(std::ostream& os, std::istream& is, bool debug)
     return str;
 }
 
-void Juse::Operations::initCpu(Cpu& cpu, const S8 type, U32 frequency)
-{
+void Juse::Operations::initCpu(Cpu& cpu, const S8 type, U32 frequency) {
     cpu.initOperations();
     loadSets(cpu.operations, type);
     cpu.config_frequency = frequency;
 }
 
-void Juse::Operations::initSets()
-{
+void Juse::Operations::initSets() {
     static bool juseInitiated = false;
     if (!juseInitiated) {
         juseInitiated = true;
@@ -59,8 +55,7 @@ void Juse::Operations::initSets()
     }
 }
 
-void Juse::Operations::loadSets(OperationMap& operations, S8 types)
-{
+void Juse::Operations::loadSets(OperationMap& operations, S8 types) {
     initSets();
     for (const auto& c : Utility::Strings::split(types, "/")) {
         if (c == "std") {

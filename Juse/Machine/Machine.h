@@ -6,7 +6,8 @@
 
 #include "Cpu.h"
 
-namespace Juse {
+namespace Juse
+{
 
     /*
      * set2word: returns a U64 from a ByteSet. The ByteSet MUST not be bigger
@@ -17,10 +18,11 @@ namespace Juse {
     /*
      *
      */
-    template <IsWord T>
+    template <IsWordOrAddr T>
     ByteSet word2set(T);
 
-    class Machine {
+    class Machine
+    {
 
     public:
         std::ostream& out;
@@ -35,17 +37,17 @@ namespace Juse {
 
         void createCpu();
 
-        void createPool(U16);
-        void createSegment(U16, U32);
+        void createPool(PoolId);
+        void createSegment(PoolId, SegmentId);
         void writeAt(U64, ByteSet);
-        void writeData(Cpu&, U16, ByteSet);
+        void writeData(Cpu&, DataId, ByteSet);
         void run(bool = false);
 
-        SPtr<Pool> getPool(U16);
-        SPtr<Segment> getSegment(U16, U32);
+        SPtr<Pool> getPool(PoolId);
+        SPtr<Segment> getSegment(PoolId, SegmentId);
         U8 data(U64);
-        ByteSet readAt(U64, U16 = 1);
-        ByteSet readData(Cpu&, U16, U16 = 1);
-        ByteSet readAndForward(Cpu*, U16 = 1);
+        ByteSet readAt(U64, size_t = 1);
+        ByteSet readData(Cpu&, DataId, size_t = 1);
+        ByteSet readAndForward(Cpu*, size_t = 1);
     };
 } // namespace Juse

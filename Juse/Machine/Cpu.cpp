@@ -4,15 +4,18 @@
 
 #include "Machine.h"
 #include "Operation.h"
-#include "../utility.h"
 
 using namespace Juse;
 
-void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, Instruction& instruction)
-{
+const Array<U8, 14> Registers::SCALAR_ARGS = Utility::Arrays::range<U8, 14>(0x02);
+const Array<U8, 15> Registers::FUNC_ARGS = Utility::Arrays::range<U8, 15>(0x10);
+const Array<U8, 16> Registers::VEC_RESULTS = Utility::Arrays::range<U8, 16>(0x20);
+const Array<U8, 64> Registers::VEC_ARGS = Utility::Arrays::range<U8, 64>(0x30);
+
+void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, Instruction& instruction) {
     if (cpu->flag_debug) {
         for (U8 byte : instruction.data) {
-            machine.out << std::setw(2) << std::hex << (int)(unsigned char)byte;
+            machine.out << std::setw(2) << std::hex << (int) (unsigned char) byte;
         }
         machine.out << " : " << operation->getName() << " ";
 
@@ -24,8 +27,7 @@ void Juse::debugInstruction(Machine& machine, Cpu* cpu, Operation* operation, In
     }
 }
 
-Instruction Juse::getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, U16 identifier)
-{
+Instruction Juse::getInstructionFromId(Machine& machine, Cpu* cpu, Operation* operation, OperationId identifier) {
     Instruction instruction = { ByteSet { U8((MASK_16TOP8 & identifier) >> 8), U8(MASK_BOTTOM8 & identifier) } };
     ByteSet toAdd = machine.readAndForward(cpu, U16(operation->length() - 2));
     for (U8 add : toAdd) {
@@ -37,34 +39,25 @@ Instruction Juse::getInstructionFromId(Machine& machine, Cpu* cpu, Operation* op
     return instruction;
 }
 
-Duration Cpu::duration(U32 frequency)
-{
+Duration Cpu::duration(U32 frequency) {
     I64 duration = 1000000000 / frequency;
-    return Duration{ duration };
+    return Duration { duration };
 }
 
-bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last)
-{
+bool Cpu::tick(U32 frequency, TimePoint time, TimePoint last) {
     Duration d = time - last;
     return d >= duration(frequency);
 }
 
 Cpu::Cpu()
-    : registers{}
-    , pool_pointer(0)
-    , segment_pointer(0)
-    , instruction_pointer(0)
+    : registers {}, code {}, data_addr {}
     , stack()
-    , data_pool{ 0 }
-    , data_segment{ 0 }
-    , address_pointer{ 0 }
-    , address_offset{ 0 }
-    , address_increment{ 0 }
+    , address_offset { 0 }
+    , address_increment { 0 }
     , flag_exit(false)
     , flag_debug(false)
     , flag_skip(false)
-    , config_frequency(BASE_FREQUENCY)
-{
+    , config_frequency(BASE_FREQUENCY) {
     registers.compareFlags[CompareFlag::EQ] = false;
     registers.compareFlags[CompareFlag::GT] = false;
     registers.compareFlags[CompareFlag::LW] = false;
@@ -77,49 +70,40 @@ Cpu::Cpu()
     registers.compareFlags[CompareFlag::ERR] = false;
 }
 
-void Cpu::forward(U16 s)
-{
-    Utility::MachineMemory::forward(pool_pointer, segment_pointer, instruction_pointer, s);
+void Cpu::forward(size_t s) {
+    code += s;
 }
 
-U64 Cpu::instructionPointer()
-{
-    return Address::with(pool_pointer, segment_pointer, instruction_pointer);
+U64 Cpu::instructionPointer() {
+    return code.compose();
 }
 
-U64 Cpu::addressPointer()
-{
-    return Address::with(data_pool, data_segment, offseted());
+U64 Cpu::addressPointer() {
+    return Address::with(data_addr.pool, data_addr.segment, offseted());
 }
 
-U16 Cpu::offseted()
-{
-    return address_pointer + address_offset;
+DataId Cpu::offseted() {
+    return data_addr.address + address_offset;
 }
 
-void Cpu::jump(U16 pool, U32 segment, U16 instruction)
-{
-    pool_pointer = pool;
-    segment_pointer = segment;
-    instruction_pointer = instruction;
+void Cpu::jump(PoolId pool, SegmentId segment, DataId instruction) {
+    code = Address(pool, segment, instruction);
 }
-void Cpu::longjump(U64 address)
-{
+void Cpu::longjump(U64 address) {
     Address a = Address::from(address);
-    jump(a.pool, a.segment, a.addr16);
+    jump(a.pool, a.segment, a.address);
 }
 
 bool Cpu::shouldExit() { return flag_exit; }
 
-void Cpu::cycle(Machine& machine, bool debug)
-{
+void Cpu::cycle(Machine& machine, bool debug) {
     static TimePoint time, last = Clock::now();
     time = Clock::now();
 
     if (tick(config_frequency, time, last)) {
         flag_debug = debug;
 
-        U16 identifier = 0;
+        OperationId identifier = 0;
         SPtr<Operation> current = getOperation(machine, identifier);
 
         if (current == NoOp || identifier == 0) {
@@ -128,7 +112,7 @@ void Cpu::cycle(Machine& machine, bool debug)
 
         if (debug) {
             machine.out << "@" << std::hex << std::right << std::setfill('0') << std::setw(4);
-            machine.out << (int)(instruction_pointer - 2) << " : ";
+            machine.out << (int) (code.address - 2) << " : ";
         }
 
         Instruction instruction = getInstructionFromId(machine, this, current.get(), identifier);
@@ -152,72 +136,63 @@ void Cpu::cycle(Machine& machine, bool debug)
     }
 }
 
-void Cpu::run(Machine& machine, bool debug)
-{
+void Cpu::run(Machine& machine, bool debug) {
     while (!shouldExit()) {
         cycle(machine, debug);
     }
 }
 
-std::thread Cpu::start(Machine& machine, bool debug)
-{
+std::thread Cpu::start(Machine& machine, bool debug) {
     std::thread thr(&Cpu::run, *this, std::ref(machine), debug);
     return thr;
 }
 
 void Cpu::push(U8 byte) { stack.push(byte); }
 
-U8 Cpu::pop()
-{
+U8 Cpu::pop() {
     U8 byte = stack.top();
     stack.pop();
     return byte;
 }
 
-void Cpu::multiPush(ByteSet set)
-{
+void Cpu::multiPush(ByteSet set) {
     for (U8 byte : set) {
         push(byte);
     }
 }
 
-ByteSet Cpu::multiPop(size_t nb_bytes)
-{
-    ByteSet bytes{};
+ByteSet Cpu::multiPop(size_t nb_bytes) {
+    ByteSet bytes {};
     for (size_t i = 0; i < nb_bytes; i++) {
         bytes.insert(bytes.begin(), pop());
     }
     return bytes;
 }
 
-U8 Cpu::dataAt(Machine& m, U64 address)
-{
+U8 Cpu::dataAt(Machine& m, U64 address) {
     return m.data(address);
 }
 
 U8 Cpu::data(Machine& m) { return m.data(this->instructionPointer()); }
 
-void Juse::Cpu::set(Machine& m, U64 address, U8 datum)
-{
+void Juse::Cpu::set(Machine& m, U64 address, U8 datum) {
     return m.writeAt(address, word2set(datum));
 }
 
-U16 Cpu::pool() { return pool_pointer; }
+PoolId Cpu::pool() { return code.pool; }
 
-U16 Cpu::segment() { return segment_pointer; }
+SegmentId Cpu::segment() { return code.segment; }
 
-U16 Cpu::instruction() { return instruction_pointer; }
+DataId Cpu::instruction() { return code.address; }
 
-SPtr<Operation> Cpu::getOperation(Machine& machine, U16& id)
-{
+SPtr<Operation> Cpu::getOperation(Machine& machine, OperationId& id) {
     ByteSet identifier = machine.readAndForward(this, 2);
-    id = U16(set2word(identifier));
+    id = OperationId(set2word(identifier));
 
     return findOperation(machine, id);
 }
 
-SPtr<Operation> Cpu::findOperation(Machine& machine, U16 id)
-{
+SPtr<Operation> Cpu::findOperation(Machine& machine, OperationId id) {
     if (!operations.contains(id)) {
         id = 0;
         return NoOp;
@@ -228,7 +203,7 @@ SPtr<Operation> Cpu::findOperation(Machine& machine, U16 id)
 
 SPtr<Operation> Cpu::NoOp = SPtr<Operation>(new Operation(
     "Nothing", "NOP", "",
-    [](Machine&, Cpu&, OperationArguments) {},
+    [] (Machine&, Cpu&, OperationArguments) { },
     {}));
 
 void Cpu::initOperations() { operations[0x0000] = NoOp; }

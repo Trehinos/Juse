@@ -15,8 +15,8 @@ namespace Juse
             inline virtual void fromSet(ByteSet)
             {
             }
-            inline virtual U16 size() { return U16(toSet().size()); }
-            Model(S8 name = "") : name(name) {}
+            inline virtual size_t size() { return toSet().size(); }
+            Model(S8 name = "") : name(name) { }
         };
 
         using ModelMap = HeapMap<S8, Model>;
@@ -24,13 +24,13 @@ namespace Juse
 
         const struct Nil : public Model
         {
-            Nil() : Model("nil") {}
+            Nil() : Model("nil") { }
             inline S8 toString() { return ""; }
         } nil;
 
         struct Null : public virtual Model
         {
-            Null() : Model("null") {}
+            Null() : Model("null") { }
             inline ByteSet toSet() { return ByteSet { 0 }; }
             inline S8 toString() { return ""; }
         };
@@ -38,12 +38,12 @@ namespace Juse
         struct Data : public virtual Model
         {
             Address address;
-            Data(S8 n, Address a = {}) : Model(n), address(a) {}
-            Data(Address a = {}) : Data { "data", a } {}
-            Address addr(U16 offset = 0)
+            Data(S8 n, Address a = {}) : Model(n), address(a) { }
+            Data(Address a = {}) : Data { "data", a } { }
+            Address addr(size_t offset = 0)
             {
                 Address a { address };
-                Utility::MachineMemory::forward(a, offset);
+                a += offset;
                 return a;
             }
             inline S8 toString() { return "{@" + std::to_string(address.compose()) + ":" + name + "}"; }
@@ -55,13 +55,13 @@ namespace Juse
 
         struct NullableData : public Data
         {
-            NullableData(S8 n = "", Address a = {}) : Data { "?" + n, a } {}
+            NullableData(S8 n = "", Address a = {}) : Data { "?" + n, a } { }
             inline void setToNull() { ByteSet set; set.assign(size(), 0); fromSet(set); }
         };
 
         struct Composed : public virtual Data
         {
-            Composed(S8 container, S8 content, Address a = {}) : Data { container + "<" + content + ">", a } {}
+            Composed(S8 container, S8 content, Address a = {}) : Data { container + "<" + content + ">", a } { }
             inline S8 toString() { auto s = toStringArray(); return "[" + Utility::Strings::join(s, ", ") + "]"; }
             inline virtual U16 count() { return 0; }
             inline virtual Vector<S8> toStringArray() { return {}; }

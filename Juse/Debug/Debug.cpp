@@ -6,22 +6,20 @@
 
 using namespace Juse;
 
-void Debug::dumpState(Cpu& cpu)
-{
+void Debug::dumpState(Cpu& cpu) {
     using namespace std;
     cout << "IP=" << cpu.instruction() << endl;
 }
 
-void Debug::dumpOperations(Cpu& cpu)
-{
+void Debug::dumpOperations(Cpu& cpu) {
     using namespace std;
     cout << cpu.operations.size() << " operations loaded." << endl;
     cout << "===============================================================================================================" << endl;
     cout << setfill(' ') << right << setw(4) << "OP  "
-         << " : " << setw(48) << left << "Jumne code"
-         << " | " << setw(32) << "JuseLang code" << " | Operation name" << endl;
+        << " : " << setw(48) << left << "Jumne code"
+        << " | " << setw(32) << "JuseLang code" << " | Operation name" << endl;
     cout << "===============================================================================================================" << endl;
-         
+
     for (Pair<U16, SPtr<Operation>> operation : cpu.operations) {
         SS8 arguments_str {};
 
@@ -32,14 +30,13 @@ void Debug::dumpOperations(Cpu& cpu)
         }
 
         cout << setfill('0') << right << hex << setw(4) << operation.first << " : "
-             << setfill(' ') << setw(48) << left << arguments_str.str() << " | "
-             << setw(32) << operation.second->juseLang()  << " | " << operation.second->getName() << endl;
+            << setfill(' ') << setw(48) << left << arguments_str.str() << " | "
+            << setw(32) << operation.second->juseLang() << " | " << operation.second->getName() << endl;
     }
     cout << "===============================================================================================================" << endl;
 }
 
-void Debug::dumpProgram(Machine& m, const U16 from, const U16 size, U32 segmentId, U16 poolID)
-{
+void Debug::dumpProgram(Machine& m, const U16 from, const U16 size, U32 segmentId, U16 poolID) {
     const size_t align = 32;
 
     using namespace std;

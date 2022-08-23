@@ -6,40 +6,36 @@
 #include "utility.h"
 #include "Debug/Debug.h"
 
-namespace Juse {
-    const S8 VERSION = "0.3.5";
+namespace Juse
+{
+    const S8 VERSION = "0.3.6";
 
     std::tuple<S8, Map<S8, S8>> parseArgs(int argc, char* argv[]);
 
-    struct Control {
+    struct Control
+    {
         static const int ERROR_MODE = 0x000F;
         static const int NOT_IMPLEMENTED_MODE = 0x0001;
 
         bool debug;
-        Control(bool d = false) : debug{ d } {}
-        static Machine createMachine(S8 cpuSet, U32 frequency = Cpu::BASE_FREQUENCY)
-        {
-            Machine m{ std::cin, std::cout };
+        Control(bool d = false) : debug { d } { }
+        static Machine createMachine(S8 cpuSet, U32 frequency = Cpu::BASE_FREQUENCY) {
+            Machine m { std::cin, std::cout };
             Operations::initCpu(m.cpus.at(0), cpuSet, frequency);
             return m;
         }
-        static void loadRom(Machine& machine, S8 fileName)
-        {
+        static void loadRom(Machine& machine, S8 fileName) {
             std::ifstream stream(fileName, std::ios::binary);
             Utility::MachineMemory::copyStreamInMemory(machine, stream);
         }
-        void runMachine(Machine& machine)
-        {
+        void runMachine(Machine& machine) {
             machine.run(debug);
         }
-        static void createCompiler()
-        {
-        }
+        static void createCompiler() { }
 
-        static int juseMain(S8 program, Map<S8, S8> options)
-        {
+        static int juseMain(S8 program, Map<S8, S8> options) {
             using namespace std;
-            
+
             // Options interpretations
             bool debug = options["mode"] == "debug";
             bool execute = debug || options["mode"] == "normal";
@@ -51,7 +47,7 @@ namespace Juse {
             cout << "Trehinos/Juse " << VERSION << "\n"
                 << "(c)2022 Trehinos\n " << endl;
 
-            Control juse{ debug };
+            Control juse { debug };
 
             if (usage) {
                 cout << "Usage : Juse {-h} | {-u} | {-d program.juse} | {-c program.asm > program.juse}" << endl;
@@ -89,13 +85,12 @@ namespace Juse {
     };
 
     std::tuple<S8, Map<S8, S8>>
-        parseArgs(int argc, char* argv[])
-    {
+        parseArgs(int argc, char* argv[]) {
         if (argc < 2) {
             return {};
         }
 
-        S8 program{};
+        S8 program {};
         Map<S8, S8> options;
         options["mode"] = "normal";
         options["compile"] = "none";
@@ -104,7 +99,7 @@ namespace Juse {
         bool in_flag = false;
         char flag_buffer = 0;
         for (size_t i = 1; i < argc; i++) {
-            S8 current{ argv[i] };
+            S8 current { argv[i] };
             if (!in_flag) {
                 if (current[0] == '-') {
                     in_flag = true;
@@ -132,15 +127,13 @@ namespace Juse {
                         break;
 
                     }
-                }
-                else {
+                } else {
                     if (program.size() > 0) {
                         throw std::invalid_argument("parseArgs, invalid argument error : Cannot specify multiple program names.");
                     }
                     program = current;
                 }
-            }
-            else {
+            } else {
             }
         }
 
